@@ -1,73 +1,43 @@
 # Frontend - TechLab Solutions
 
-Este repositorio contiene el código fuente de la aplicación de frontend para el proyecto **TechLab Solutions**. La aplicación ha sido inicializada y estructurada para servir como la interfaz de usuario principal de la plataforma.
+Este es el frontend para la plataforma de TechLab Solutions, construido con React. Proporciona la interfaz de usuario para que los clientes interactúen con los servicios y productos de TechLab.
 
-## Objetivo
+## ✨ Características Principales
 
-Proporcionar una interfaz de usuario (UI) clara, intuitiva y responsiva que permita a los usuarios explorar productos y servicios, gestionar su cuenta y realizar pedidos. La aplicación está diseñada para comunicarse con un backend a través de una API REST.
+- **Dashboard de Usuario:** Visualización de datos de PLC en tiempo real, gestión de dispositivos.
+- **Catálogo de Productos:** Navegación y compra de kits de PLC y otros productos.
+- **Páginas de Servicios:** Información y solicitud de servicios como impresión 3D.
+- **Autenticación de Usuarios:** Registro, inicio de sesión y gestión de perfiles de usuario.
+- **Diseño Responsivo:** Interfaz adaptable a dispositivos móviles y de escritorio.
 
----
+## 🚀 Pila Tecnológica
 
-## Pila Tecnológica
+- **React.js:** Para construir la interfaz de usuario.
+- **React Router:** Para el enrutamiento del lado del cliente.
+- **Axios:** Para la comunicación con la API del backend.
+- **CSS Modules / Styled-components (a definir):** Para el estilo de los componentes.
+- **Context API / Redux (a definir):** Para el manejo del estado global de la aplicación.
 
-La aplicación está construida con las siguientes tecnologías:
+## Pages y Componentes
 
-- **React.js:** Biblioteca principal para la construcción de la interfaz de usuario.
-- **React Router (`react-router-dom`):** Para la gestión de rutas y navegación dentro de la aplicación.
-- **Bootstrap:** Framework de CSS para un diseño responsivo y componentes de UI estilizados.
-- **Create React App:** Para la configuración inicial del proyecto y la gestión de scripts (`react-scripts`).
+La aplicación está estructurada en las siguientes páginas principales:
 
----
+- **/ (Home):** Página de inicio con una descripción general de TechLab Solutions.
+- **/login:** Formulario de inicio de sesión.
+- **/register:** Formulario de registro.
+- **/dashboard:** Panel de control del usuario para ver y gestionar sus PLCs.
+- **/products:** Catálogo de productos.
+- **/services:** Información sobre los servicios ofrecidos.
 
-## Estructura del Proyecto
+Los componentes reutilizables como `Navbar` y `Footer` se encuentran en el directorio `src/components`.
 
-Se ha establecido una estructura de directorios para organizar el código de manera escalable:
+## Conexión con el Backend
 
-```
-src/
-├── assets/         # Archivos estáticos como CSS globales, fuentes o imágenes.
-├── components/     # Componentes de React reutilizables (Navbar, Footer, etc.).
-├── pages/          # Componentes que representan páginas completas (Home, Login, Products, etc.).
-└── services/       # Lógica para la comunicación con la API del backend (próximo a implementar).
-```
+El frontend se comunica con la API del backend de TechLab Solutions para:
 
----
+- Autenticar usuarios.
+- Obtener y mostrar productos y servicios.
+- Enviar pedidos.
+- Obtener datos de los PLCs.
 
-## Comandos Disponibles
-
-En el directorio del proyecto, puedes ejecutar los siguientes comandos:
-
-### `npm install`
-Instala todas las dependencias del proyecto listadas en `package.json`.
-
-### `npm start`
-Ejecuta la aplicación en modo de desarrollo. Abre [http://localhost:3000](http://localhost:3000) para verla en tu navegador. La página se recargará automáticamente al realizar cambios.
-
-### `npm run build`
-Construye la aplicación para producción en la carpeta `build`. Empaqueta React de forma optimizada y prepara los archivos para el despliegue.
-
-### `npm test`
-Ejecuta el corredor de pruebas en modo interactivo.
-
----
-
-## Endpoints del Backend
-
-La aplicación está diseñada para interactuar con los siguientes endpoints del servidor:
-
-| Funcionalidad | Backend | Frontend | Comunicación |
-| :--- | :--- | :--- | :--- |
-| **Autenticación** | `POST /api/auth/login` <br> `POST /api/auth/register` | Formularios de Login/Registro | JWT + REST API |
-| **Productos** | `GET /api/products` | Catálogo de productos | REST API |
-| **Servicios** | `GET /api/services` <br> `POST /api/services/request` | Sección de servicios y formularios | REST API |
-| **Pedidos** | `POST /api/orders` <br> `GET /api/orders/user/:userId` | Carrito, Checkout e Historial | REST API |
-| **Subida de Archivos** | `POST /api/upload/request-url` | Componente de subida de archivos | REST API + Pre-signed URLs |
-
----
-
-## Próximos Pasos
-
-1.  **Implementar Servicios API:** Desarrollar las funciones en `src/services` para realizar las llamadas a los endpoints del backend.
-2.  **Gestión de Estado:** Integrar un manejador de estado (como Context API o Redux) para gestionar la información del usuario y el carrito de compras.
-3.  **Desarrollar UI de Páginas:** Construir la interfaz de usuario para el catálogo de productos, la lista de servicios y el panel de usuario.
-4.  **Conectar Componentes:** Vincular los componentes de la interfaz con la lógica de los servicios y el estado de la aplicación.
+La URL base de la API se configura en los servicios de la aplicación (actualmente apuntando a `http://localhost:5000/api`).

@@ -154,4 +154,3 @@ router.route('/').post(protect, admin, upload.single('image'), productValidation
 router.route('/:id').put(protect, admin, upload.single('image'), productValidationRules, updateProduct).delete(protect, admin, deleteProduct);
 
 module.exports = router;
-

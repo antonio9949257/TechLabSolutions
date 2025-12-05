@@ -1,7 +1,7 @@
-const { validationResult } = require('express-validator');
 const User = require('../models/User');
 const { minioClient } = require('../config/minio');
-const crypto = require('crypto');
+const bcrypt = require('bcryptjs'); // Import bcryptjs for password hashing
+const path = require('path'); // Import path module
 
 // @desc    Obtener el perfil del usuario actual
 // @route   GET /api/profile/me
@@ -12,34 +12,68 @@ const getMyProfile = async (req, res) => {
 };
 
 // @desc    Actualizar el perfil del usuario actual
-// @route   PUT /api/profile/me
+// @route   PUT /api/profile
 // @access  Private
 const updateMyProfile = async (req, res) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
-
   try {
+    const { v4: uuidv4 } = await import('uuid');
     const user = await User.findById(req.user._id);
 
     if (!user) {
       return res.status(404).json({ message: 'Usuario no encontrado' });
     }
 
-    // Actualizar campos de texto
-    user.name = req.body.name || user.name;
-    user.email = req.body.email || user.email;
+    const { name, email, password, nickname } = req.body;
 
-    // Manejar subida de nueva foto de perfil
+    // Manual Validation
+    if (name && name.trim() === '') {
+      return res.status(400).json({ message: 'El nombre no puede estar vacío.' });
+    }
+    if (email && !/^\S+@\S+\.\S+$/.test(email)) {
+      return res.status(400).json({ message: 'El email debe ser válido.' });
+    }
+    if (email && email !== user.email) {
+      const emailExists = await User.findOne({ email });
+      if (emailExists) {
+        return res.status(400).json({ message: 'Este email ya está registrado.' });
+      }
+    }
+    if (nickname && nickname.trim() === '') {
+      return res.status(400).json({ message: 'El nickname no puede estar vacío.' });
+    }
+    if (nickname && nickname !== user.nickname) {
+      const nicknameExists = await User.findOne({ nickname });
+      if (nicknameExists) {
+        return res.status(400).json({ message: 'Este nickname ya está en uso.' });
+      }
+    }
+
+    // Update fields
+    user.name = name || user.name;
+    user.email = email || user.email;
+    user.nickname = nickname || user.nickname;
+
+    // Handle password update
+    if (password) {
+      const salt = await bcrypt.genSalt(10);
+      user.password = await bcrypt.hash(password, salt);
+    }
+
+    // Handle profile picture upload
     if (req.file) {
+      const fileExtension = path.extname(req.file.originalname);
+      const metaData = {
+        'Content-Type': req.file.mimetype,
+      };
+      const filename = `profile-${user._id}-${uuidv4()}${fileExtension}`;
       const bucketName = process.env.MINIO_BUCKET_NAME;
-      const fileBuffer = req.file.buffer;
-      const fileName = `profile-${user._id}-${crypto.randomUUID()}`;
-      
-      await minioClient.putObject(bucketName, fileName, fileBuffer);
-      
-      user.profilePicture = `${process.env.MINIO_USE_SSL === 'true' ? 'https' : 'http'}://${process.env.MINIO_ENDPOINT}:${process.env.MINIO_PORT}/${bucketName}/${fileName}`;
+
+      await minioClient.putObject(bucketName, filename, req.file.buffer, req.file.size, metaData);
+
+      const protocol = process.env.MINIO_USE_SSL === 'true' ? 'https' : 'http';
+      const minioHost = process.env.MINIO_ENDPOINT;
+      const minioPort = process.env.MINIO_PORT;
+      user.profilePicture = `${protocol}://${minioHost}:${minioPort}/${bucketName}/${filename}`;
     }
 
     const updatedUser = await user.save();
@@ -50,6 +84,7 @@ const updateMyProfile = async (req, res) => {
         email: updatedUser.email,
         role: updatedUser.role,
         profilePicture: updatedUser.profilePicture,
+        nickname: updatedUser.nickname,
     });
 
   } catch (error) {

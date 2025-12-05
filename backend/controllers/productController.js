@@ -15,7 +15,7 @@ const getProducts = async (req, res) => {
 };
 
 // @desc    Crear un producto
-// @route   POST /api/products
+//// @route   POST /api/products
 // @access  Private/Admin
 const createProduct = async (req, res) => {
   const errors = validationResult(req);

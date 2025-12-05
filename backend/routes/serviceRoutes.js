@@ -9,6 +9,7 @@ const {
   deleteService,
 } = require('../controllers/serviceController');
 const { protect, admin } = require('../middleware/authMiddleware');
+const upload = require('../middleware/uploadMiddleware'); // Import the upload middleware
 
 // Reglas de validación para crear/actualizar un servicio
 const serviceValidationRules = [
@@ -72,7 +73,7 @@ const serviceValidationRules = [
 router
   .route('/')
   .get(getServices)
-  .post(protect, admin, serviceValidationRules, createService);
+  .post(protect, admin, upload.single('image'), createService);
 
 /**
  * @swagger
@@ -145,7 +146,7 @@ router
 router
   .route('/:id')
   .get(getServiceById)
-  .put(protect, admin, serviceValidationRules, updateService)
+  .put(protect, admin, upload.single('image'), updateService)
   .delete(protect, admin, deleteService);
 
 module.exports = router;

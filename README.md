@@ -1,54 +1,30 @@
-# TechLab Solutions - MVP Monolítico
+# TechLab Solutions - Arquitectura del Proyecto
 
-Este repositorio contiene el proyecto de PLC ESP32 de TechLab Solutions en una arquitectura monolítica, donde frontend, backend, firmware y documentación conviven en un mismo lugar.
+Este repositorio contiene el proyecto de PLC ESP32 de TechLab Solutions en una arquitectura monolítica. El objetivo es proporcionar una plataforma educativa completa que abarca desde el hardware del PLC hasta una interfaz web interactiva.
 
-## 🚀 Estructura del Repositorio
+## 🚀 Componentes Principales
 
-```
-techlab-solutions/
-├── backend/               # Node.js + Express
-├── frontend/              # React.js
-├── firmware/              # Código del ESP32 (Arduino/MicroPython)
-├── hardware/              # Diagramas, fotos, listas de componentes
-├── docs/                  # Tutoriales, manuales y documentación
-└── README.md
-```
+El proyecto se divide en los siguientes componentes principales:
 
----
+- **`backend/`**: Una API RESTful construida con **Node.js** y **Express**. Se encarga de toda la lógica de negocio, gestión de usuarios, procesamiento de pedidos y comunicación con la base de datos **MongoDB**. También se integra con un servicio de almacenamiento de objetos **MinIO** para los archivos. La documentación de la API se genera con **Swagger**.
 
-## 1️⃣ Backend (Node.js + Express)
+- **`frontend/`**: Una Single Page Application (SPA) desarrollada con **React.js**. Proporciona la interfaz de usuario para la interacción con la plataforma, incluyendo dashboards para el control de PLCs, catálogos de productos y gestión de perfiles de usuario.
 
-**Objetivo:** Servir como intermediario entre el ESP32 (PLC) y la aplicación web, manejando datos, usuarios, ventas y control remoto.
+- **`firmware/`**: El código que se ejecuta en los microcontroladores **ESP32**. Este firmware es responsable de la lógica de control en tiempo real, la lectura de sensores y la comunicación con el backend.
 
-#### Requerimientos:
-- **API:** REST o WebSocket para comunicación con el ESP32.
-- **Gestión de usuarios:** Registro, login y autenticación con roles (JWT).
-- **Gestión de kits y ventas:** CRUD para productos e integración con pasarelas de pago.
-- **Registro de datos:** Guardar lecturas del PLC para consultas históricas.
-- **Base de datos:** MongoDB o Firebase.
-- **Documentación:** API documentada con Swagger.
+- **`hardware/`**: Contiene los recursos de diseño de hardware, como esquemas de circuitos, diseños de PCB y listas de materiales para los kits de PLC.
 
----
+- **`docs/`**: Documentación general del proyecto, tutoriales y manuales de usuario.
 
-## 2️⃣ Frontend (React.js)
+## Diagrama de Arquitectura
 
-**Objetivo:** Proporcionar la interfaz de usuario para controlar los PLCs, ver lecturas, comprar kits y acceder a tutoriales.
+[Aquí se podría incluir un diagrama de la arquitectura general del sistema, mostrando cómo interactúan el frontend, el backend, el ESP32 y la base de datos.]
 
-#### Requerimientos:
-- **Dashboard de PLC:** Visualización y control en tiempo real.
-- **Sección de productos:** Catálogo visual con funcionalidad de compra.
-- **Sección de cursos:** Acceso a material educativo con control de acceso.
-- **Autenticación:** Formularios de login/registro integrados con el backend.
-- **Diseño:** Responsive, claro e intuitivo.
+## Flujo de Datos
 
----
+1.  El **ESP32** recopila datos de los sensores y los envía al **backend** a través de peticiones HTTP o WebSockets.
+2.  El **backend** procesa y almacena estos datos en **MongoDB**.
+3.  El **frontend** solicita los datos al **backend** para mostrarlos en el dashboard del usuario.
+4.  Las acciones del usuario en el **frontend** (como activar un relé) se envían al **backend**, que a su vez las retransmite al **ESP32** correspondiente.
 
-## 3️⃣ Firmware (ESP32)
-
-**Objetivo:** Ejecutar la lógica de control en el hardware del PLC, leer sensores y activar salidas.
-
----
-
-## 💡 Extra Tip
-
-Puedes usar branches separados dentro del repo para desarrollo de frontend, backend y firmware, simulando la independencia de repositorios separados mientras mantienes todo en un solo lugar para la fase inicial.
+Para más detalles técnicos sobre cada componente, por favor consulta los `README.md` específicos en sus respectivos directorios.

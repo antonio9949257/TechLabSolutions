@@ -17,12 +17,15 @@ const serviceSchema = mongoose.Schema(
     category: {
       type: String,
       required: [true, 'Por favor, especifica una categoría para el servicio'],
-      enum: ['Impresión 3D', 'CNC', 'Taller', 'Otro'],
+      enum: ['Impresión 3D', 'CNC', 'Taller', 'Prototipado / Fabricación', 'Otro'],
     },
     availability: {
       type: Boolean,
       required: true,
       default: true,
+    },
+    image: {
+      type: String,
     },
     // Campos adicionales para solicitudes de servicio podrían ir aquí o en un modelo separado
   },

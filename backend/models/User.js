@@ -6,6 +6,11 @@ const userSchema = mongoose.Schema(
       type: String,
       required: [true, 'Por favor, añade un nombre'],
     },
+    nickname: {
+      type: String,
+      unique: true,
+      sparse: true, // Allows null values to not violate unique constraint
+    },
     email: {
       type: String,
       required: [true, 'Por favor, añade un email'],
@@ -18,7 +23,7 @@ const userSchema = mongoose.Schema(
     role: {
       type: String,
       required: true,
-      enum: ['cliente', 'escuela', 'admin'],
+      enum: ['cliente', 'admin'],
       default: 'cliente',
     },
     profilePicture: {

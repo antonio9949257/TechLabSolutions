@@ -1,14 +1,35 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext'; // Import useAuth
+import { authenticatedFetch } from '../utils/api'; // Import authenticatedFetch
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
+  const { login } = useAuth(); // Use the login function from context
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Lógica de autenticación aquí
-    console.log('Login attempt with:', { email, password });
+    try {
+      const response = await authenticatedFetch('/users/login', {
+        method: 'POST',
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert('Inicio de sesión exitoso');
+        login(data); // Pass the entire data object to login
+        navigate('/');
+      } else {
+        alert(data.message || 'Credenciales inválidas');
+      }
+    } catch (error) {
+      console.error('Error de red:', error);
+      alert('Error de conexión con el servidor');
+    }
   };
 
   return (

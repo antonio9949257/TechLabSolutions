@@ -1,15 +1,33 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { authenticatedFetch } from '../utils/api'; // Import authenticatedFetch
 
 const Register = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Lógica de registro aquí
-    console.log('Register attempt with:', { name, email, password });
+    try {
+      const response = await authenticatedFetch('/users/register', { // Use authenticatedFetch
+        method: 'POST',
+        body: JSON.stringify({ name, email, password }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert('Registro exitoso');
+        navigate('/login');
+      } else {
+        alert(data.message || 'Error en el registro');
+      }
+    } catch (error) {
+      console.error('Error de red:', error);
+      alert('Error de conexión con el servidor');
+    }
   };
 
   return (
