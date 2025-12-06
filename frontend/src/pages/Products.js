@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { authenticatedFetch } from '../utils/api'; // Assuming authenticatedFetch can be used for public routes too
+import { Link } from 'react-router-dom';
+import { authenticatedFetch } from '../utils/api';
+import { useCart } from '../context/CartContext';
+import { useAuth } from '../context/AuthContext';
 
 const Products = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { addToCart } = useCart();
+  const { user } = useAuth();
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        // The /products route is public, so authenticatedFetch will work even without a token
         const response = await authenticatedFetch('/products');
         if (response.ok) {
           const data = await response.json();
@@ -29,6 +33,10 @@ const Products = () => {
     fetchProducts();
   }, []);
 
+  const handleAddToCart = (productId) => {
+    addToCart(productId, 1); // Add 1 unit by default
+  };
+
   if (loading) {
     return <div className="container mt-5">Cargando productos...</div>;
   }
@@ -46,7 +54,7 @@ const Products = () => {
         <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
           {products.map((product) => (
             <div className="col" key={product._id}>
-              <div className="card h-100">
+              <div className="card h-100 d-flex flex-column">
                 {product.image && (
                   <img
                     src={product.image}
@@ -55,19 +63,35 @@ const Products = () => {
                     style={{ height: '200px', objectFit: 'cover' }}
                   />
                 )}
-                <div className="card-body">
+                <div className="card-body d-flex flex-column">
                   <h5 className="card-title">{product.name}</h5>
-                  <p className="card-text">{product.description}</p>
-                  <p className="card-text">
-                    <strong>Precio: ${product.price.toFixed(2)}</strong>
-                  </p>
+                  <p className="card-text flex-grow-1">{product.description}</p>
                   <p className="card-text">
                     <small className="text-muted">Categoría: {product.category}</small>
                   </p>
+                  {user ? (
+                    <p className="card-text">
+                      <strong>Precio: ${product.price.toFixed(2)}</strong>
+                    </p>
+                  ) : null}
                 </div>
                 <div className="card-footer">
-                  {/* Add to cart button or more details link */}
-                  <button className="btn btn-primary">Añadir al Carrito</button>
+                  {user ? (
+                    user.role === 'cliente' && (
+                      <button
+                        className="btn btn-primary w-100"
+                        onClick={() => handleAddToCart(product._id)}
+                      >
+                        Añadir al Carrito
+                      </button>
+                    )
+                  ) : (
+                    <div className="text-center">
+                      <Link to="/login" className="btn btn-outline-primary w-100">
+                        Inicia sesión para ver precios
+                      </Link>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

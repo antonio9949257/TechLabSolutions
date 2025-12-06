@@ -12,6 +12,8 @@ ensureBucketExists(process.env.MINIO_BUCKET_NAME);
 
 const app = express();
 app.use(cors());
+app.use(express.json()); // Middleware to parse JSON bodies
+
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
@@ -22,6 +24,7 @@ app.use('/api/services', require('./routes/serviceRoutes'));
 app.use('/api/orders', require('./routes/orderRoutes'));
 app.use('/api/profile', require('./routes/profileRoutes'));
 app.use('/api/plc', require('./routes/plcRoutes'));
+app.use('/api/cart', require('./routes/cartRoutes'));
 
 // Error handling middleware
 app.use((err, req, res, next) => {

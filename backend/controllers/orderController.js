@@ -2,40 +2,57 @@ const { validationResult } = require('express-validator');
 const Order = require('../models/Order');
 const Product = require('../models/Product');
 const Service = require('../models/Service');
+const Cart = require('../models/Cart'); // Import Cart model
 
-// @desc    Crear una nueva orden
+// @desc    Crear una nueva orden desde el carrito
 // @route   POST /api/orders
 // @access  Private
 const createOrder = async (req, res) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
+  try {
+    const cart = await Cart.findOne({ user: req.user._id }).populate('items.product', 'name price stock');
+
+    if (!cart || cart.items.length === 0) {
+      return res.status(400).json({ message: 'No hay artículos en el carrito' });
+    }
+
+    const orderItems = cart.items.map(item => ({
+      product: item.product._id,
+      name: item.product.name,
+      qty: item.quantity,
+      price: item.product.price, // Use price from DB for security
+    }));
+
+    const totalPrice = orderItems.reduce((acc, item) => acc + item.price * item.qty, 0);
+
+    // Check stock for all items before creating the order
+    for (const item of cart.items) {
+      if (item.product.stock < item.quantity) {
+        return res.status(400).json({ message: `No hay stock suficiente para ${item.product.name}` });
+      }
+    }
+
+    const order = new Order({
+      user: req.user._id,
+      orderItems,
+      totalPrice,
+    });
+
+    const createdOrder = await order.save();
+
+    // Decrease stock for each product
+    for (const item of order.orderItems) {
+      await Product.updateOne({ _id: item.product }, { $inc: { stock: -item.qty } });
+    }
+
+    // Clear the user's cart
+    await Cart.deleteOne({ _id: cart._id });
+
+    res.status(201).json(createdOrder);
+
+  } catch (error) {
+    console.error('Error al crear la orden:', error);
+    res.status(500).json({ message: 'Error interno del servidor' });
   }
-
-  const { orderItems } = req.body;
-
-  if (!orderItems || orderItems.length === 0) {
-    return res.status(400).json({ message: 'No hay artículos en la orden' });
-  }
-
-  // Lógica para calcular el precio total en el backend
-  let totalPrice = 0;
-  for (const item of orderItems) {
-    // Aquí se podría verificar el precio contra la BD
-    totalPrice += item.price * item.qty;
-  }
-
-  const order = new Order({
-    user: req.user._id,
-    orderItems,
-    totalPrice,
-  });
-
-  const createdOrder = await order.save();
-
-  // Aquí se podría descontar el stock de los productos
-  
-  res.status(201).json(createdOrder);
 };
 
 // @desc    Obtener una orden por ID

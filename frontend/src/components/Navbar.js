@@ -1,9 +1,13 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext'; // Import useAuth
+import { useCart } from '../context/CartContext'; // Import useCart
 
 const Navbar = () => {
-  const { token, user, logout } = useAuth(); // Get token, user, and logout function
+  const { token, user, logout } = useAuth();
+  const { cart, toggleCart } = useCart();
+
+  const cartItemCount = cart?.items?.reduce((acc, item) => acc + item.quantity, 0) || 0;
 
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -29,6 +33,18 @@ const Navbar = () => {
                 <li className="nav-item">
                   <Link className="nav-link" to="/dashboard">Dashboard</Link>
                 </li>
+                {user && user.role === 'cliente' && (
+                  <li className="nav-item">
+                    <button
+                      className="nav-link btn btn-link"
+                      type="button"
+                      onClick={toggleCart}
+                    >
+                      <i className="fas fa-shopping-cart me-1"></i>
+                      Carrito ({cartItemCount})
+                    </button>
+                  </li>
+                )}
                 <li className="nav-item">
                   <Link className="nav-link" to="/profile">
                     {user && user.profilePicture ? (

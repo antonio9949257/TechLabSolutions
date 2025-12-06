@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { authenticatedFetch } from '../utils/api';
+import { useAuth } from '../context/AuthContext';
 
 const Services = () => {
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { user } = useAuth();
 
   useEffect(() => {
     const fetchServices = async () => {
@@ -58,8 +61,15 @@ const Services = () => {
                   <h5 className="card-title">{service.name}</h5>
                   <p className="card-text flex-grow-1">{service.description}</p>
                   <p className="card-text"><strong>Categoría:</strong> {service.category}</p>
-                  <p className="card-text"><strong>Precio:</strong> ${service.price.toFixed(2)}</p>
-                  {/* A futuro, aquí podría ir un botón para solicitar el servicio */}
+                  {user ? (
+                    <p className="card-text"><strong>Precio:</strong> ${service.price.toFixed(2)}</p>
+                  ) : (
+                    <div className="text-center mt-auto">
+                      <Link to="/login" className="btn btn-outline-primary w-100">
+                        Inicia sesión para ver precios
+                      </Link>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

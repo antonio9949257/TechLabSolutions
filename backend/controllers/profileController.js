@@ -7,8 +7,16 @@ const path = require('path'); // Import path module
 // @route   GET /api/profile/me
 // @access  Private
 const getMyProfile = async (req, res) => {
-  // req.user es establecido por el middleware 'protect'
-  res.json(req.user);
+  try {
+    const user = await User.findById(req.user._id).select('-password');
+    if (!user) {
+      return res.status(404).json({ message: 'Usuario no encontrado' });
+    }
+    res.json(user);
+  } catch (error) {
+    console.error('Error al obtener el perfil:', error);
+    res.status(500).json({ message: 'Error interno del servidor' });
+  }
 };
 
 // @desc    Actualizar el perfil del usuario actual

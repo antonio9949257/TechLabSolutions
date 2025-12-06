@@ -58,7 +58,7 @@ const orderValidationRules = [
  *       201:
  *         description: Orden creada exitosamente
  */
-router.route('/').post(protect, orderValidationRules, createOrder);
+router.route('/').post(protect, createOrder);
 
 /**
  * @swagger

@@ -1,0 +1,202 @@
+db.products.insertMany([
+  {
+    name: 'PLC Educativo basado en ESP32 (Versión 2)',
+    description: 'Controlador educativo basado en ESP32, relés integrados, entradas digitales/analógicas y protección optoacoplada. Ideal para prácticas de automatización.',
+    price: 375,
+    sku: 'PLC-ESP32-V2',
+    stock: 25,
+    category: 'PLC',
+    components: [],
+    image: 'http://localhost:9001/techlab/2ccb03c4-2afc-4c3a-85ab-e4250eb2db7b-IMG_20251202_123146.jpg'
+  },
+  {
+    name: 'Kit de Desarrollo IoT con ESP8266',
+    description: 'Kit completo para iniciar en el Internet de las Cosas. Incluye placa ESP8266, sensores y actuadores básicos.',
+    price: 250,
+    sku: 'KIT-IOT-ESP8266',
+    stock: 30,
+    category: 'Kits',
+    components: ['ESP8266', 'Sensor DHT11', 'LEDs', 'Protoboard'],
+    image: 'http://localhost:9001/techlab/2ccb03c4-2afc-4c3a-85ab-e4250eb2db7b-IMG_20251202_123146.jpg'
+  },
+  {
+    name: 'Módulo Sensor de Temperatura y Humedad DHT22',
+    description: 'Sensor digital de alta precisión para medir temperatura y humedad relativa. Compatible con Arduino y ESP32.',
+    price: 45,
+    sku: 'SEN-DHT22',
+    stock: 150,
+    category: 'Sensores',
+    components: [],
+    image: 'http://localhost:9001/techlab/2ccb03c4-2afc-4c3a-85ab-e4250eb2db7b-IMG_20251202_123146.jpg'
+  },
+  {
+    name: 'Shield de Prototipado para Arduino Uno',
+    description: 'Placa de expansión que facilita el montaje de circuitos y prototipos sobre un Arduino Uno.',
+    price: 25,
+    sku: 'SHIELD-PROTO-UNO',
+    stock: 80,
+    category: 'Shields',
+    components: [],
+    image: 'http://localhost:9001/techlab/2ccb03c4-2afc-4c3a-85ab-e4250eb2db7b-IMG_20251202_123146.jpg'
+  },
+  {
+    name: 'Fuente de Alimentación Regulable 5V/3.3V',
+    description: 'Módulo de alimentación para protoboard, con salidas seleccionables de 5V y 3.3V. Ideal para proyectos de electrónica.',
+    price: 35,
+    sku: 'PWR-PROTO-5V3V3',
+    stock: 120,
+    category: 'Fuentes',
+    components: [],
+    image: 'http://localhost:9001/techlab/2ccb03c4-2afc-4c3a-85ab-e4250eb2db7b-IMG_20251202_123146.jpg'
+  },
+  {
+    name: 'Módulo de Relés de 4 Canales',
+    description: 'Permite controlar hasta 4 dispositivos de alta potencia (AC/DC) desde un microcontrolador. Optoacoplado para seguridad.',
+    price: 60,
+    sku: 'MOD-RELAY-4CH',
+    stock: 90,
+    category: 'Módulos',
+    components: [],
+    image: 'http://localhost:9001/techlab/2ccb03c4-2afc-4c3a-85ab-e4250eb2db7b-IMG_20251202_123146.jpg'
+  },
+  {
+    name: 'Sensor de Movimiento PIR HC-SR501',
+    description: 'Sensor infrarrojo pasivo (PIR) para detectar movimiento de personas o animales. Ajustable en sensibilidad y tiempo.',
+    price: 20,
+    sku: 'SEN-PIR-SR501',
+    stock: 200,
+    category: 'Sensores',
+    components: [],
+    image: 'http://localhost:9001/techlab/2ccb03c4-2afc-4c3a-85ab-e4250eb2db7b-IMG_20251202_123146.jpg'
+  },
+  {
+    name: 'Pantalla OLED 0.96" I2C',
+    description: 'Display de 0.96 pulgadas con tecnología OLED y comunicación I2C. Color blanco o azul. Alto contraste y bajo consumo.',
+    price: 55,
+    sku: 'DISP-OLED-096',
+    stock: 110,
+    category: 'Displays',
+    components: [],
+    image: 'http://localhost:9001/techlab/2ccb03c4-2afc-4c3a-85ab-e4250eb2db7b-IMG_20251202_123146.jpg'
+  },
+  {
+    name: 'Módulo Lector de Tarjetas RFID RC522',
+    description: 'Lector/escritor de tarjetas y tags RFID en la frecuencia de 13.56MHz. Incluye tarjeta y llavero.',
+    price: 40,
+    sku: 'MOD-RFID-RC522',
+    stock: 130,
+    category: 'Módulos',
+    components: [],
+    image: 'http://localhost:9001/techlab/2ccb03c4-2afc-4c3a-85ab-e4250eb2db7b-IMG_20251202_123146.jpg'
+  },
+  {
+    name: 'Servomotor SG90',
+    description: 'Micro servomotor de 9g con rotación de 180 grados. Ideal para robótica y proyectos pequeños.',
+    price: 30,
+    sku: 'SERVO-SG90',
+    stock: 300,
+    category: 'Actuadores',
+    components: [],
+    image: 'http://localhost:9001/techlab/2ccb03c4-2afc-4c3a-85ab-e4250eb2db7b-IMG_20251202_123146.jpg'
+  },
+  {
+    name: 'Sensor Ultrasónico HC-SR04',
+    description: 'Mide distancias de 2cm a 400cm sin contacto. Ampliamente utilizado en robótica para evasión de obstáculos.',
+    price: 22,
+    sku: 'SEN-ULTRA-SR04',
+    stock: 250,
+    category: 'Sensores',
+    components: [],
+    image: 'http://localhost:9001/techlab/2ccb03c4-2afc-4c3a-85ab-e4250eb2db7b-IMG_20251202_123146.jpg'
+  },
+  {
+    name: 'Teclado Matricial 4x4',
+    description: 'Teclado de membrana con 16 botones, ideal para entrada de datos en proyectos con microcontroladores.',
+    price: 28,
+    sku: 'KEYPAD-4X4',
+    stock: 180,
+    category: 'Módulos',
+    components: [],
+    image: 'http://localhost:9001/techlab/2ccb03c4-2afc-4c3a-85ab-e4250eb2db7b-IMG_20251202_123146.jpg'
+  },
+  {
+    name: 'Módulo WiFi NRF24L01+',
+    description: 'Módulo de comunicación inalámbrica de 2.4GHz de ultra bajo consumo. Alcance de hasta 100 metros.',
+    price: 38,
+    sku: 'MOD-NRF24L01',
+    stock: 140,
+    category: 'Comunicaciones',
+    components: [],
+    image: 'http://localhost:9001/techlab/2ccb03c4-2afc-4c3a-85ab-e4250eb2db7b-IMG_20251202_123146.jpg'
+  },
+  {
+    name: 'Placa de Desarrollo STM32 "Blue Pill"',
+    description: 'Potente y económica placa de desarrollo con microcontrolador ARM Cortex-M3 de 32 bits.',
+    price: 70,
+    sku: 'DEV-STM32-BLUEPILL',
+    stock: 70,
+    category: 'Placas de Desarrollo',
+    components: [],
+    image: 'http://localhost:9001/techlab/2ccb03c4-2afc-4c3a-85ab-e4250eb2db7b-IMG_20251202_123146.jpg'
+  },
+  {
+    name: 'Driver para Motores L298N',
+    description: 'Controlador de puente H dual para motores DC o paso a paso. Soporta hasta 2A por canal.',
+    price: 48,
+    sku: 'DRV-L298N',
+    stock: 100,
+    category: 'Drivers',
+    components: [],
+    image: 'http://localhost:9001/techlab/2ccb03c4-2afc-4c3a-85ab-e4250eb2db7b-IMG_20251202_123146.jpg'
+  },
+  {
+    name: 'Módulo GPS NEO-6M',
+    description: 'Receptor GPS con antena cerámica integrada. Proporciona datos de geolocalización por puerto serie.',
+    price: 150,
+    sku: 'MOD-GPS-NEO6M',
+    stock: 50,
+    category: 'Comunicaciones',
+    components: [],
+    image: 'http://localhost:9001/techlab/2ccb03c4-2afc-4c3a-85ab-e4250eb2db7b-IMG_20251202_123146.jpg'
+  },
+  {
+    name: 'Sensor de Gas MQ-2',
+    description: 'Sensor para detectar concentraciones de GLP, i-butano, propano, metano, alcohol, hidrógeno y humo.',
+    price: 33,
+    sku: 'SEN-GAS-MQ2',
+    stock: 160,
+    category: 'Sensores',
+    components: [],
+    image: 'http://localhost:9001/techlab/2ccb03c4-2afc-4c3a-85ab-e4250eb2db7b-IMG_20251202_123146.jpg'
+  },
+  {
+    name: 'Módulo Bluetooth HC-05',
+    description: 'Módulo de comunicación serie por Bluetooth. Puede configurarse como maestro o esclavo.',
+    price: 65,
+    sku: 'MOD-BT-HC05',
+    stock: 115,
+    category: 'Comunicaciones',
+    components: [],
+    image: 'http://localhost:9001/techlab/2ccb03c4-2afc-4c3a-85ab-e4250eb2db7b-IMG_20251202_123146.jpg'
+  },
+  {
+    name: 'Kit de Resistencias Variadas (300 pcs)',
+    description: 'Paquete con 300 resistencias de carbón de 1/4W, con 30 valores diferentes (10 de cada uno).',
+    price: 50,
+    sku: 'KIT-RES-300',
+    stock: 200,
+    category: 'Componentes',
+    components: [],
+    image: 'http://localhost:9001/techlab/2ccb03c4-2afc-4c3a-85ab-e4250eb2db7b-IMG_20251202_123146.jpg'
+  },
+  {
+    name: 'Protoboard 830 Puntos',
+    description: 'Placa de prototipado sin soldadura con 830 puntos de conexión. Ideal para montar y probar circuitos temporalmente.',
+    price: 40,
+    sku: 'PROTO-830',
+    stock: 220,
+    category: 'Componentes',
+    components: [],
+    image: 'http://localhost:9001/techlab/2ccb03c4-2afc-4c3a-85ab-e4250eb2db7b-IMG_20251202_123146.jpg'
+  }
+]);
