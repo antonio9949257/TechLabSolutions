@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { authenticatedFetch } from '../utils/api';
 import { useAuth } from '../context/AuthContext';
 
@@ -27,7 +27,7 @@ const AdminServices = () => {
   // State for Create Service Modal visibility
   const [showCreateModal, setShowCreateModal] = useState(false);
 
-  const fetchServices = async () => {
+  const fetchServices = useCallback(async () => {
     if (user && user.role === 'admin') {
       try {
         const response = await authenticatedFetch('/services');
@@ -48,11 +48,11 @@ const AdminServices = () => {
       setLoading(false);
       setError('No tienes permisos para ver esta página.');
     }
-  };
+  }, [user]);
 
   useEffect(() => {
     fetchServices();
-  }, [user]);
+  }, [fetchServices]);
 
   const handleCreateService = async (e) => {
     e.preventDefault();

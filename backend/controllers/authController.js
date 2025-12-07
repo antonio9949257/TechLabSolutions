@@ -33,6 +33,7 @@ const registerUser = async (req, res) => {
     email,
     password: hashedPassword,
     role, // Usar el rol sanitizado
+    profilePicture: `https://ui-avatars.com/api/?name=${name.charAt(0)}&background=random`,
   });
 
   if (user) {
@@ -119,6 +120,7 @@ const createUser = async (req, res) => {
     email,
     password: hashedPassword,
     role,
+    profilePicture: `https://ui-avatars.com/api/?name=${name.charAt(0)}&background=random`,
   });
 
   if (user) {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { authenticatedFetch } from '../utils/api';
 import { useAuth } from '../context/AuthContext';
 
@@ -24,7 +24,7 @@ const AdminPanel = () => {
   const [editUserEmail, setEditUserEmail] = useState('');
   const [editUserRole, setEditUserRole] = useState('');
 
-  const fetchUsers = async () => {
+  const fetchUsers = useCallback(async () => {
     if (user && user.role === 'admin') {
       try {
         const response = await authenticatedFetch('/users'); // Call the new backend route
@@ -45,11 +45,11 @@ const AdminPanel = () => {
       setLoading(false);
       setError('No tienes permisos para ver esta página.');
     }
-  };
+  }, [user]);
 
   useEffect(() => {
     fetchUsers();
-  }, [user]);
+  }, [fetchUsers]);
 
   const handleCreateUser = async (e) => {
     e.preventDefault();

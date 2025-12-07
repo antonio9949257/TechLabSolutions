@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { authenticatedFetch } from '../utils/api';
 import { useAuth } from '../context/AuthContext';
 
@@ -31,7 +31,7 @@ const AdminProducts = () => {
   // State for Create Product Modal visibility
   const [showCreateModal, setShowCreateModal] = useState(false);
 
-  const fetchProducts = async () => {
+  const fetchProducts = useCallback(async () => {
     if (user && user.role === 'admin') {
       try {
         const response = await authenticatedFetch('/products');
@@ -52,11 +52,11 @@ const AdminProducts = () => {
       setLoading(false);
       setError('No tienes permisos para ver esta página.');
     }
-  };
+  }, [user]);
 
   useEffect(() => {
     fetchProducts();
-  }, [user]);
+  }, [fetchProducts]);
 
   const handleCreateProduct = async (e) => {
     e.preventDefault();

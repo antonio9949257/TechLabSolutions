@@ -1,7 +1,8 @@
 import React, { useEffect, useRef } from 'react';
 import { useCart } from '../context/CartContext';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Offcanvas } from 'bootstrap';
+import { Trash } from 'react-bootstrap-icons';
 
 const CartSidebar = () => {
   const { cart, loading, removeFromCart, updateCartItem, isCartOpen, closeCart } = useCart();
@@ -115,7 +116,7 @@ const CartSidebar = () => {
                       className="btn btn-outline-danger btn-sm ms-2"
                       onClick={() => removeFromCart(item.product._id)}
                     >
-                      <i className="fas fa-trash"></i>
+                      <Trash />
                     </button>
                   </div>
                 </li>
