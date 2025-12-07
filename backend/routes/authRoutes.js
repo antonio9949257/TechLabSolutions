@@ -1,8 +1,6 @@
 const express = require('express');
 const router = express.Router();
-// ... (other imports)
 
-// Add body parsers specifically for auth routes
 router.use(express.json({ limit: '50mb' }));
 router.use(express.urlencoded({ limit: '50mb', extended: false }));
 const {
@@ -10,12 +8,12 @@ const {
   loginUser,
   getMe,
   getAllUsers,
-  createUser, // Import new functions
+  createUser,
   updateUser,
   deleteUser,
 } = require('../controllers/authController');
 const { protect } = require('../middleware/authMiddleware');
-const { adminProtect } = require('../middleware/adminMiddleware'); // Import adminProtect
+const { adminProtect } = require('../middleware/adminMiddleware'); 
 
 /**
  * @swagger

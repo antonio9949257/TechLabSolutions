@@ -50,6 +50,9 @@ const Navbar = () => {
             <li className="nav-item">
               <Link className="nav-link" to="/services">Servicios</Link>
             </li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/projects">Proyectos</Link>
+            </li>
 
             {token ? ( // If user is logged in
               <>
@@ -92,6 +95,9 @@ const Navbar = () => {
                     </li>
                     <li className="nav-item">
                       <Link className="nav-link" to="/admin-services">Admin Servicios</Link>
+                    </li>
+                    <li className="nav-item">
+                      <Link className="nav-link" to="/admin-projects">Admin Proyectos</Link>
                     </li>
                   </>
                 )}

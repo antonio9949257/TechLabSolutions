@@ -27,6 +27,7 @@ app.use('/api/plc', require('./routes/plcRoutes'));
 app.use('/api/cart', require('./routes/cartRoutes'));
 app.use('/api/search', require('./routes/searchRoutes'));
 app.use('/api/quotes', require('./routes/quoteRoutes'));
+app.use('/api/projects', require('./routes/projectRoutes'));
 
 // Error handling middleware
 app.use((err, req, res, next) => {

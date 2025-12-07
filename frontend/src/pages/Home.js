@@ -1,14 +1,19 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext'; // Import useAuth
 import './Home.css'; // We'll create this for custom styles
 
 const Home = () => {
+  const { user } = useAuth(); // Get user from context
+
   return (
     <>
       {/* Hero Section */}
       <section className="hero-section text-white text-center py-5">
         <div className="container">
-          <h1 className="display-4 fw-bold mb-4">Innovación Tecnológica al Alcance de Todos</h1>
+          <h1 className="display-4 fw-bold mb-4">
+            {user ? `Bienvenido, ${user.name}` : 'Innovación Tecnológica al Alcance de Todos'}
+          </h1>
           <p className="lead mb-5 mx-auto" style={{ maxWidth: '800px' }}>
             Soluciones accesibles en automatización, electrónica e informática industrial
           </p>
