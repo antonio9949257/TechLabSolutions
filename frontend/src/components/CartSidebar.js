@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Offcanvas } from 'bootstrap';
 
 const CartSidebar = () => {
-  const { cart, removeFromCart, updateCartItem, isCartOpen, closeCart } = useCart();
+  const { cart, loading, removeFromCart, updateCartItem, isCartOpen, closeCart } = useCart();
   const offcanvasRef = useRef(null);
   const offcanvasInstance = useRef(null);
   const navigate = useNavigate();
@@ -84,7 +84,13 @@ const CartSidebar = () => {
         ></button>
       </div>
       <div className="offcanvas-body">
-        {cart && cart.items.length > 0 ? (
+        {loading ? (
+          <div className="d-flex justify-content-center align-items-center h-100">
+            <div className="spinner-border" role="status">
+              <span className="visually-hidden">Cargando...</span>
+            </div>
+          </div>
+        ) : cart && cart.items.length > 0 ? (
           <>
             <ul className="list-group list-group-flush">
               {cart.items.map((item) => (
