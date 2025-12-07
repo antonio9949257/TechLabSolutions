@@ -3,6 +3,7 @@ const router = express.Router();
 const { check } = require('express-validator');
 const {
   getProducts,
+  getProductById,
   createProduct,
   updateProduct,
   deleteProduct,
@@ -94,6 +95,25 @@ router.route('/').post(protect, admin, upload.single('image'), productValidation
 /**
  * @swagger
  * /api/products/{id}:
+ *   get:
+ *     summary: Obtiene un producto por su ID
+ *     tags: [Products]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: El ID del producto
+ *     responses:
+ *       200:
+ *         description: Detalles del producto
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Product'
+ *       404:
+ *         description: Producto no encontrado
  *   put:
  *     summary: Actualiza un producto por ID
  *     tags: [Products]
@@ -151,6 +171,6 @@ router.route('/').post(protect, admin, upload.single('image'), productValidation
  *       404:
  *         description: Producto no encontrado
  */
-router.route('/:id').put(protect, admin, upload.single('image'), productValidationRules, updateProduct).delete(protect, admin, deleteProduct);
+router.route('/:id').get(getProductById).put(protect, admin, upload.single('image'), productValidationRules, updateProduct).delete(protect, admin, deleteProduct);
 
 module.exports = router;

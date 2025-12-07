@@ -78,12 +78,17 @@ const Products = () => {
                 <div className="card-footer">
                   {user ? (
                     user.role === 'cliente' && (
-                      <button
-                        className="btn btn-primary w-100"
-                        onClick={() => handleAddToCart(product._id)}
-                      >
-                        Añadir al Carrito
-                      </button>
+                      <div className="d-flex gap-2">
+                        <Link to={`/products/${product._id}`} className="btn btn-outline-secondary flex-grow-1">
+                          Ver Detalles
+                        </Link>
+                        <button
+                          className="btn btn-primary flex-grow-1"
+                          onClick={() => handleAddToCart(product._id)}
+                        >
+                          Añadir al Carrito
+                        </button>
+                      </div>
                     )
                   ) : (
                     <div className="text-center">

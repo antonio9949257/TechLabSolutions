@@ -14,6 +14,10 @@ import AdminProducts from './pages/AdminProducts'; // Import AdminProducts
 import AdminServices from './pages/AdminServices';
 import Profile from './pages/Profile';
 import Checkout from './pages/Checkout'; // Import Checkout
+import SearchResults from './pages/SearchResults'; // Import SearchResults
+import ProductDetail from './pages/ProductDetail'; // Import ProductDetail
+import ServiceDetail from './pages/ServiceDetail'; // Import ServiceDetail
+import Quote from './pages/Quote'; // Import Quote
 import CartSidebar from './components/CartSidebar'; // Import CartSidebar
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
@@ -33,7 +37,11 @@ function App() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/products" element={<Products />} />
+                <Route path="/products/:id" element={<ProductDetail />} />
                 <Route path="/services" element={<Services />} />
+                <Route path="/services/:id" element={<ServiceDetail />} />
+                <Route path="/quote/:serviceId" element={<Quote />} />
+                <Route path="/search" element={<SearchResults />} />
 
                 {/* Protected Routes */}
                 <Route element={<ProtectedRoute allowedRoles={['admin', 'cliente']} />}>

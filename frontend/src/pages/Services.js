@@ -71,6 +71,16 @@ const Services = () => {
                     </div>
                   )}
                 </div>
+                <div className="card-footer">
+                  <div className="d-flex gap-2">
+                    <Link to={`/services/${service._id}`} className="btn btn-outline-secondary flex-grow-1">
+                      Ver Detalles
+                    </Link>
+                    <Link to={`/quote/${service._id}`} className="btn btn-primary flex-grow-1">
+                      Cotización
+                    </Link>
+                  </div>
+                </div>
               </div>
             </div>
           ))}

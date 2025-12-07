@@ -14,6 +14,24 @@ const getProducts = async (req, res) => {
   res.json(products);
 };
 
+// @desc    Obtener un producto por ID
+// @route   GET /api/products/:id
+// @access  Public
+const getProductById = async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id);
+
+    if (product) {
+      res.json(product);
+    } else {
+      res.status(404).json({ message: 'Producto no encontrado' });
+    }
+  } catch (error) {
+    console.error(`Error al obtener producto por ID: ${error.message}`);
+    res.status(500).json({ message: 'Error del servidor' });
+  }
+};
+
 // @desc    Crear un producto
 //// @route   POST /api/products
 // @access  Private/Admin
@@ -118,6 +136,7 @@ const deleteProduct = async (req, res) => {
 
 module.exports = {
   getProducts,
+  getProductById,
   createProduct,
   updateProduct,
   deleteProduct,
