@@ -14,6 +14,7 @@ import AdminProducts from './pages/AdminProducts'; // Import AdminProducts
 import AdminServices from './pages/AdminServices';
 import AdminProjects from './pages/AdminProjects'; // Import AdminProjects
 import AdminProjectForm from './pages/AdminProjectForm'; // Import AdminProjectForm
+import AdminCategories from './pages/AdminCategories'; // Import AdminCategories
 import Profile from './pages/Profile';
 import Checkout from './pages/Checkout'; // Import Checkout
 import SearchResults from './pages/SearchResults'; // Import SearchResults
@@ -64,6 +65,7 @@ function App() {
                   <Route path="/admin-projects" element={<AdminProjects />} />
                   <Route path="/admin-project-form" element={<AdminProjectForm />} />
                   <Route path="/admin-project-form/:id" element={<AdminProjectForm />} />
+                  <Route path="/admin-categories" element={<AdminCategories />} />
                 </Route>
 
               </Routes>

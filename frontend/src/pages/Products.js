@@ -55,23 +55,23 @@ const Products = () => {
           {products.map((product) => (
             <div className="col" key={product._id}>
               <div className="card h-100 d-flex flex-column">
-                {product.image && (
+                {product.img_url && (
                   <img
-                    src={product.image}
+                    src={product.img_url}
                     className="card-img-top"
-                    alt={product.name}
+                    alt={product.nombre}
                     style={{ height: '200px', objectFit: 'cover' }}
                   />
                 )}
                 <div className="card-body d-flex flex-column">
-                  <h5 className="card-title">{product.name}</h5>
-                  <p className="card-text flex-grow-1">{product.description}</p>
+                  <h5 className="card-title">{product.nombre}</h5>
+                  <p className="card-text flex-grow-1">{product.descripcion}</p>
                   <p className="card-text">
-                    <small className="text-muted">Categoría: {product.category}</small>
+                    <small className="text-muted">Categoría: {product.categoria?.name || 'Sin categoría'}</small>
                   </p>
                   {user ? (
                     <p className="card-text">
-                      <strong>Precio: ${product.price.toFixed(2)}</strong>
+                      <strong>Precio: Bs {product.precio ? parseFloat(product.precio.toFixed(2)) : '0.00'}</strong>
                     </p>
                   ) : null}
                 </div>

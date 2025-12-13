@@ -14,7 +14,7 @@ const Checkout = () => {
         body: JSON.stringify({
           orderItems: cart.items.map(item => ({
             product: item.product._id,
-            name: item.product.name,
+            name: item.product.nombre,
             qty: item.quantity,
             price: item.price,
           })),
@@ -62,17 +62,17 @@ const Checkout = () => {
             <tbody>
               {cart.items.map((item) => (
                 <tr key={item.product._id}>
-                  <td>{item.product.name}</td>
+                  <td>{item.product.nombre}</td>
                   <td className="text-center">{item.quantity}</td>
-                  <td className="text-end">${item.price.toFixed(2)}</td>
-                  <td className="text-end">${(item.price * item.quantity).toFixed(2)}</td>
+                  <td className="text-end">Bs {parseFloat(item.price.toFixed(2))}</td>
+                  <td className="text-end">Bs {parseFloat((item.price * item.quantity).toFixed(2))}</td>
                 </tr>
               ))}
             </tbody>
             <tfoot>
               <tr>
                 <td colSpan="3" className="text-end fw-bold">Total General</td>
-                <td className="text-end fw-bold">${cart.totalPrice.toFixed(2)}</td>
+                <td className="text-end fw-bold">Bs {parseFloat(cart.totalPrice.toFixed(2))}</td>
               </tr>
             </tfoot>
           </table>

@@ -98,10 +98,10 @@ const CartSidebar = () => {
                 <li key={item.product._id} className="list-group-item">
                   <div className="d-flex w-100 justify-content-between">
                     <div>
-                      <h6 className="mb-1">{item.product.name}</h6>
+                      <h6 className="mb-1">{item.product.nombre}</h6>
                       <small>Cantidad: {item.quantity}</small>
                     </div>
-                    <span className="text-muted">${(item.price * item.quantity).toFixed(2)}</span>
+                    <span className="text-muted">Bs {parseFloat((item.price * item.quantity).toFixed(2))}</span>
                   </div>
                   <div className="d-flex align-items-center mt-2">
                     <input
@@ -123,7 +123,7 @@ const CartSidebar = () => {
               ))}
             </ul>
             <div className="mt-4">
-              <h4>Total: ${cart.totalPrice.toFixed(2)}</h4>
+              <h4>Total: Bs {parseFloat(cart.totalPrice.toFixed(2))}</h4>
               <button onClick={handleCheckout} className="btn btn-success w-100">
                 Proceder al Pago
               </button>

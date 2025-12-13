@@ -52,19 +52,19 @@ const ProductDetail = () => {
       <div className="row">
         <div className="col-md-6">
           <img
-            src={product.image}
-            alt={product.name}
+            src={product.img_url}
+            alt={product.nombre}
             className="img-fluid rounded"
             style={{ maxHeight: '500px', objectFit: 'cover' }}
           />
         </div>
         <div className="col-md-6">
-          <h2>{product.name}</h2>
-          <p className="text-muted">Categoría: {product.category}</p>
-          <p>{product.description}</p>
+          <h2>{product.nombre}</h2>
+          <p className="text-muted">Categoría: {product.categoria?.name || 'Sin categoría'}</p>
+          <p>{product.descripcion}</p>
           {user ? (
             <>
-              <h3 className="my-3">Precio: ${product.price.toFixed(2)}</h3>
+              <h3 className="my-3">Precio: Bs {product.precio ? parseFloat(product.precio.toFixed(2)) : '0.00'}</h3>
               <p>Stock: {product.stock > 0 ? `${product.stock} disponibles` : 'Agotado'}</p>
               {user.role === 'cliente' && (
                 <button
