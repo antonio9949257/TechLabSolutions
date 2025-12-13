@@ -7,18 +7,19 @@ const {
   createProduct,
   updateProduct,
   deleteProduct,
+  exportProducts,
 } = require('../controllers/productController');
 const { protect, admin } = require('../middleware/authMiddleware');
 const upload = require('../middleware/uploadMiddleware');
 
 // Reglas de validación para la creación de productos
 const productValidationRules = [
-  check('name', 'El nombre es obligatorio').not().isEmpty(),
-  check('description', 'La descripción es obligatoria').not().isEmpty(),
-  check('price', 'El precio debe ser un valor numérico').isFloat({ gt: 0 }),
+  check('nombre', 'El nombre es obligatorio').not().isEmpty(),
+  check('descripcion', 'La descripción es obligatoria').not().isEmpty(),
+  check('precio', 'El precio debe ser un valor numérico').isFloat({ gt: 0 }),
   check('sku', 'El SKU es obligatorio y debe ser único').not().isEmpty(),
   check('stock', 'El stock debe ser un número entero').isInt({ gte: 0 }),
-  check('category', 'La categoría es obligatoria').not().isEmpty(),
+  check('categoria', 'La categoría es obligatoria').not().isEmpty(),
 ];
 
 /**
@@ -30,13 +31,34 @@ const productValidationRules = [
 
 /**
  * @swagger
+ * /api/products/export:
+ *   get:
+ *     summary: Exporta la lista de productos a un archivo XLSX
+ *     tags: [Products]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Archivo XLSX con los productos.
+ *         content:
+ *           application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
+ *             schema:
+ *               type: string
+ *               format: binary
+ *       401:
+ *         description: No autorizado
+ */
+router.route('/export').get(protect, admin, exportProducts);
+
+/**
+ * @swagger
  * /api/products:
  *   get:
  *     summary: Devuelve una lista de todos los productos
  *     tags: [Products]
  *     parameters:
  *       - in: query
- *         name: category
+ *         name: categoria
  *         schema:
  *           type: string
  *         description: Filtra productos por categoría
@@ -67,18 +89,20 @@ router.route('/').get(getProducts);
  *           schema:
  *             type: object
  *             properties:
- *               name:
+ *               nombre:
  *                 type: string
- *               description:
+ *               descripcion:
  *                 type: string
- *               price:
+ *               precio:
  *                 type: number
  *               sku:
  *                 type: string
  *               stock:
  *                 type: number
- *               category:
+ *               categoria:
  *                 type: string
+ *               especificaciones:
+ *                 type: object
  *               image:
  *                 type: string
  *                 format: binary
@@ -133,18 +157,20 @@ router.route('/').post(protect, admin, upload.single('image'), productValidation
  *           schema:
  *             type: object
  *             properties:
- *               name:
+ *               nombre:
  *                 type: string
- *               description:
+ *               descripcion:
  *                 type: string
- *               price:
+ *               precio:
  *                 type: number
  *               sku:
  *                 type: string
  *               stock:
  *                 type: number
- *               category:
+ *               categoria:
  *                 type: string
+ *               especificaciones:
+ *                 type: object
  *               image:
  *                 type: string
  *                 format: binary

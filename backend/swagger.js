@@ -36,14 +36,14 @@ const swaggerOptions = {
         Product: {
           type: 'object',
           properties: {
-            name: { type: 'string' },
-            description: { type: 'string' },
-            price: { type: 'number' },
+            nombre: { type: 'string' },
+            descripcion: { type: 'string' },
+            precio: { type: 'number' },
             sku: { type: 'string' },
             stock: { type: 'number' },
-            category: { type: 'string' },
-            components: { type: 'array', items: { type: 'string' } },
-            image: { type: 'string' },
+            categoria: { type: 'string' },
+            especificaciones: { type: 'object' },
+            img_url: { type: 'string' },
           },
         },
         Service: {

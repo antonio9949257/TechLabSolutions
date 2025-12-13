@@ -8,7 +8,7 @@ const getCart = async (req, res) => {
   try {
     const cart = await Cart.findOne({ user: req.user._id }).populate(
       'items.product',
-      'name price image'
+      'nombre precio img_url'
     );
 
     if (!cart) {
@@ -63,7 +63,7 @@ const addToCart = async (req, res) => {
       cart.items.push({
         product: productId,
         quantity,
-        price: product.price,
+        price: product.precio,
       });
     }
 
