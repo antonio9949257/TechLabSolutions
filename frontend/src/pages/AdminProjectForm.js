@@ -74,53 +74,52 @@ const AdminProjectForm = () => {
   };
 
   return (
-    <div className="container mt-4">
-      <h1>{isEditMode ? 'Editar Proyecto' : 'Crear Nuevo Proyecto'}</h1>
-      {error && <div className="alert alert-danger">{error}</div>}
+    <div className="container mx-auto px-4 py-8">
+      <h1 className="text-3xl font-bold mb-6">{isEditMode ? 'Editar Proyecto' : 'Crear Nuevo Proyecto'}</h1>
+      {error && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative my-4">{error}</div>}
       <form onSubmit={handleSubmit}>
-        <div className="mb-3">
-          <label htmlFor="title" className="form-label">Título</label>
+        <div className="mb-4">
+          <label htmlFor="title" className="block text-gray-700 text-sm font-bold mb-2">Título</label>
           <input
             type="text"
-            className="form-control"
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             id="title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             required
           />
         </div>
-        <div className="mb-3">
-          <label htmlFor="description" className="form-label">Descripción</label>
+        <div className="mb-4">
+          <label htmlFor="description" className="block text-gray-700 text-sm font-bold mb-2">Descripción</label>
           <textarea
-            className="form-control"
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline h-40"
             id="description"
-            rows="10"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             required
           ></textarea>
         </div>
         {isEditMode && currentImage && (
-          <div className="mb-3">
-            <label className="form-label">Imagen Actual</label>
+          <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-bold mb-2">Imagen Actual</label>
             <div>
-              <img src={currentImage} alt="Imagen actual del proyecto" style={{ width: '200px', height: 'auto' }} />
+              <img src={currentImage} alt="Imagen actual del proyecto" className="w-48 h-auto rounded-md object-cover" />
             </div>
           </div>
         )}
-        <div className="mb-3">
-          <label htmlFor="image" className="form-label">
+        <div className="mb-6">
+          <label htmlFor="image" className="block text-gray-700 text-sm font-bold mb-2">
             {isEditMode ? 'Reemplazar Imagen' : 'Subir Imagen (Opcional)'}
           </label>
           <input
             type="file"
-            className="form-control"
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             id="image"
             accept="image/*"
             onChange={handleFileChange}
           />
         </div>
-        <button type="submit" className="btn btn-primary" disabled={isSubmitting}>
+        <button type="submit" className="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-300" disabled={isSubmitting}>
           {isSubmitting ? 'Guardando...' : 'Guardar Proyecto'}
         </button>
       </form>

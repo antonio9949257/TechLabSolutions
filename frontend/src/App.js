@@ -25,17 +25,16 @@ import ProjectDetail from './pages/ProjectDetail'; // Import ProjectDetail
 import CartSidebar from './components/CartSidebar'; // Import CartSidebar
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
-import './App.css';
 
 function App() {
   return (
     <AuthProvider>
       <CartProvider>
         <Router>
-          <div className="d-flex flex-column min-vh-100">
+          <div className="flex flex-col min-h-screen">
             <Navbar />
             <CartSidebar />
-            <main className="container flex-grow-1">
+            <main className="flex-grow">
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<Login />} />

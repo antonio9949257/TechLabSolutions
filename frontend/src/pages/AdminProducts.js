@@ -167,261 +167,270 @@ const AdminProducts = () => {
   };
 
   if (loading) {
-    return <div className="container mt-5">Cargando productos...</div>;
+    return <div className="container mx-auto px-4 mt-8">Cargando productos...</div>;
   }
 
   if (error) {
-    return <div className="container mt-5 text-danger">Error: {error}</div>;
+    return <div className="container mx-auto px-4 mt-8 text-red-600">Error: {error}</div>;
   }
 
   return (
-    <div className="container mt-5">
-      <h2>Gestión de Productos</h2>
+    <div className="container mx-auto px-4 py-8">
+      <h2 className="text-3xl font-bold mb-6">Gestión de Productos</h2>
 
       {/* Button to open Create Product Modal */}
-      <button className="btn btn-primary mb-4" onClick={() => setShowCreateModal(true)}>
+      <button className="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-300 mb-6" onClick={() => setShowCreateModal(true)}>
         Crear Nuevo Producto
       </button>
 
       {/* Create Product Modal */}
       {showCreateModal && (
-        <div className="modal show d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
-          <div className="modal-dialog">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title">Crear Nuevo Producto</h5>
-                <button type="button" className="btn-close" onClick={() => setShowCreateModal(false)}></button>
-              </div>
-              <div className="modal-body">
-                <form onSubmit={handleCreateProduct}>
-                  <div className="mb-3">
-                    <label htmlFor="newProductName" className="form-label">Nombre</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="newProductName"
-                      value={newProductName}
-                      onChange={(e) => setNewProductName(e.target.value)}
-                      required
-                    />
-                  </div>
-                  <div className="mb-3">
-                    <label htmlFor="newProductDescription" className="form-label">Descripción</label>
-                    <textarea
-                      className="form-control"
-                      id="newProductDescription"
-                      value={newProductDescription}
-                      onChange={(e) => setNewProductDescription(e.target.value)}
-                      required
-                    ></textarea>
-                  </div>
-                  <div className="mb-3">
-                    <label htmlFor="newProductPrice" className="form-label">Precio</label>
-                    <input
-                      type="number"
-                      className="form-control"
-                      id="newProductPrice"
-                      value={newProductPrice}
-                      onChange={(e) => setNewProductPrice(e.target.value)}
-                      required
-                    />
-                  </div>
-                  <div className="mb-3">
-                    <label htmlFor="newProductSku" className="form-label">SKU</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="newProductSku"
-                      value={newProductSku}
-                      onChange={(e) => setNewProductSku(e.target.value)}
-                      required
-                    />
-                  </div>
-                  <div className="mb-3">
-                    <label htmlFor="newProductStock" className="form-label">Stock</label>
-                    <input
-                      type="number"
-                      className="form-control"
-                      id="newProductStock"
-                      value={newProductStock}
-                      onChange={(e) => setNewProductStock(e.target.value)}
-                      required
-                    />
-                  </div>
-                  <div className="mb-3">
-                    <label htmlFor="newProductCategory" className="form-label">Categoría</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="newProductCategory"
-                      value={newProductCategory}
-                      onChange={(e) => setNewProductCategory(e.target.value)}
-                      required
-                    />
-                  </div>
-                  <div className="mb-3">
-                    <label htmlFor="newProductImage" className="form-label">Imagen</label>
-                    <input
-                      type="file"
-                      className="form-control"
-                      id="newProductImage"
-                      onChange={(e) => setNewProductImage(e.target.files[0])}
-                    />
-                  </div>
-                  <button type="submit" className="btn btn-success">Crear Producto</button>
-                  <button type="button" className="btn btn-secondary ms-2" onClick={() => setShowCreateModal(false)}>Cancelar</button>
-                </form>
-              </div>
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-2xl mx-auto">
+            <div className="flex justify-between items-center pb-3 border-b border-gray-200">
+              <h5 className="text-xl font-bold">Crear Nuevo Producto</h5>
+              <button type="button" className="text-gray-400 hover:text-gray-600" onClick={() => setShowCreateModal(false)}>
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            <div className="py-4">
+              <form onSubmit={handleCreateProduct}>
+                <div className="mb-4">
+                  <label htmlFor="newProductName" className="block text-gray-700 text-sm font-bold mb-2">Nombre</label>
+                  <input
+                    type="text"
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    id="newProductName"
+                    value={newProductName}
+                    onChange={(e) => setNewProductName(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="mb-4">
+                  <label htmlFor="newProductDescription" className="block text-gray-700 text-sm font-bold mb-2">Descripción</label>
+                  <textarea
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    id="newProductDescription"
+                    value={newProductDescription}
+                    onChange={(e) => setNewProductDescription(e.target.value)}
+                    required
+                  ></textarea>
+                </div>
+                <div className="mb-4">
+                  <label htmlFor="newProductPrice" className="block text-gray-700 text-sm font-bold mb-2">Precio</label>
+                  <input
+                    type="number"
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    id="newProductPrice"
+                    value={newProductPrice}
+                    onChange={(e) => setNewProductPrice(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="mb-4">
+                  <label htmlFor="newProductSku" className="block text-gray-700 text-sm font-bold mb-2">SKU</label>
+                  <input
+                    type="text"
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    id="newProductSku"
+                    value={newProductSku}
+                    onChange={(e) => setNewProductSku(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="mb-4">
+                  <label htmlFor="newProductStock" className="block text-gray-700 text-sm font-bold mb-2">Stock</label>
+                  <input
+                    type="number"
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    id="newProductStock"
+                    value={newProductStock}
+                    onChange={(e) => setNewProductStock(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="mb-4">
+                  <label htmlFor="newProductCategory" className="block text-gray-700 text-sm font-bold mb-2">Categoría</label>
+                  <input
+                    type="text"
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    id="newProductCategory"
+                    value={newProductCategory}
+                    onChange={(e) => setNewProductCategory(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="mb-6">
+                  <label htmlFor="newProductImage" className="block text-gray-700 text-sm font-bold mb-2">Imagen</label>
+                  <input
+                    type="file"
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    id="newProductImage"
+                    onChange={(e) => setNewProductImage(e.target.files[0])}
+                  />
+                </div>
+                <div className="flex justify-end">
+                  <button type="submit" className="bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 transition duration-300">Crear Producto</button>
+                  <button type="button" className="bg-gray-300 text-gray-800 py-2 px-4 rounded-md hover:bg-gray-400 transition duration-300 ml-2" onClick={() => setShowCreateModal(false)}>Cancelar</button>
+                </div>
+              </form>
             </div>
           </div>
         </div>
       )}
 
       {/* Product List Table */}
-      <h3>Productos Existentes</h3>
+      <h3 className="text-2xl font-bold mb-4">Productos Existentes</h3>
       {products.length === 0 ? (
-        <p>No hay productos registrados.</p>
+        <p className="text-gray-600">No hay productos registrados.</p>
       ) : (
-        <table className="table table-striped">
-          <thead>
-            <tr>
-              <th>Imagen</th>
-              <th>Nombre</th>
-              <th>Categoría</th>
-              <th>Precio</th>
-              <th>Stock</th>
-              <th>SKU</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {products.map((p) => (
-              <tr key={p._id}>
-                <td>
-                  {p.image && (
-                    <img src={p.image} alt={p.name} style={{ width: '50px', height: '50px', objectFit: 'cover' }} />
-                  )}
-                </td>
-                <td>{p.name}</td>
-                <td>{p.category}</td>
-                <td>${p.price.toFixed(2)}</td>
-                <td>{p.stock}</td>
-                <td>{p.sku}</td>
-                <td>
-                  <button
-                    className="btn btn-warning btn-sm me-2"
-                    onClick={() => handleEditClick(p)}
-                  >
-                    Editar
-                  </button>
-                  <button
-                    className="btn btn-danger btn-sm"
-                    onClick={() => handleDeleteProduct(p._id)}
-                  >
-                    Eliminar
-                  </button>
-                </td>
+        <div className="overflow-x-auto">
+          <table className="w-full border-collapse bg-white shadow-md rounded-lg">
+            <thead className="bg-gray-200 text-gray-700">
+              <tr>
+                <th className="py-3 px-4 text-left font-semibold">Imagen</th>
+                <th className="py-3 px-4 text-left font-semibold">Nombre</th>
+                <th className="py-3 px-4 text-left font-semibold">Categoría</th>
+                <th className="py-3 px-4 text-left font-semibold">Precio</th>
+                <th className="py-3 px-4 text-left font-semibold">Stock</th>
+                <th className="py-3 px-4 text-left font-semibold">SKU</th>
+                <th className="py-3 px-4 text-left font-semibold">Acciones</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {products.map((p) => (
+                <tr key={p._id} className="border-b border-gray-200 hover:bg-gray-50">
+                  <td className="py-3 px-4">
+                    {p.image && (
+                      <img src={p.image} alt={p.name} className="w-12 h-12 object-cover rounded-md" />
+                    )}
+                  </td>
+                  <td className="py-3 px-4">{p.name}</td>
+                  <td className="py-3 px-4">{p.category}</td>
+                  <td className="py-3 px-4">${p.price.toFixed(2)}</td>
+                  <td className="py-3 px-4">{p.stock}</td>
+                  <td className="py-3 px-4">{p.sku}</td>
+                  <td className="py-3 px-4">
+                    <button
+                      className="bg-yellow-500 text-white py-1 px-3 rounded-md hover:bg-yellow-600 transition duration-300 text-sm mr-2"
+                      onClick={() => handleEditClick(p)}
+                    >
+                      Editar
+                    </button>
+                    <button
+                      className="bg-red-600 text-white py-1 px-3 rounded-md hover:bg-red-700 transition duration-300 text-sm"
+                      onClick={() => handleDeleteProduct(p._id)}
+                    >
+                      Eliminar
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
-
       {/* Edit Product Modal */}
       {showEditModal && editingProduct && (
-        <div className="modal show d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
-          <div className="modal-dialog">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title">Editar Producto</h5>
-                <button type="button" className="btn-close" onClick={() => setShowEditModal(false)}></button>
-              </div>
-              <div className="modal-body">
-                <form onSubmit={handleUpdateProduct}>
-                  <div className="mb-3">
-                    <label htmlFor="editProductName" className="form-label">Nombre</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="editProductName"
-                      value={editProductName}
-                      onChange={(e) => setEditProductName(e.target.value)}
-                      required
-                    />
-                  </div>
-                  <div className="mb-3">
-                    <label htmlFor="editProductDescription" className="form-label">Descripción</label>
-                    <textarea
-                      className="form-control"
-                      id="editProductDescription"
-                      value={editProductDescription}
-                      onChange={(e) => setEditProductDescription(e.target.value)}
-                      required
-                    ></textarea>
-                  </div>
-                  <div className="mb-3">
-                    <label htmlFor="editProductPrice" className="form-label">Precio</label>
-                    <input
-                      type="number"
-                      className="form-control"
-                      id="editProductPrice"
-                      value={editProductPrice}
-                      onChange={(e) => setEditProductPrice(e.target.value)}
-                      required
-                    />
-                  </div>
-                  <div className="mb-3">
-                    <label htmlFor="editProductSku" className="form-label">SKU</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="editProductSku"
-                      value={editProductSku}
-                      onChange={(e) => setEditProductSku(e.target.value)}
-                      required
-                    />
-                  </div>
-                  <div className="mb-3">
-                    <label htmlFor="editProductStock" className="form-label">Stock</label>
-                    <input
-                      type="number"
-                      className="form-control"
-                      id="editProductStock"
-                      value={editProductStock}
-                      onChange={(e) => setEditProductStock(e.target.value)}
-                      required
-                    />
-                  </div>
-                  <div className="mb-3">
-                    <label htmlFor="editProductCategory" className="form-label">Categoría</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="editProductCategory"
-                      value={editProductCategory}
-                      onChange={(e) => setEditProductCategory(e.target.value)}
-                      required
-                    />
-                  </div>
-                  <div className="mb-3">
-                    <label htmlFor="editProductImage" className="form-label">Imagen</label>
-                    <input
-                      type="file"
-                      className="form-control"
-                      id="editProductImage"
-                      onChange={(e) => setEditProductImage(e.target.files[0])}
-                    />
-                    {editingProduct.image && (
-                      <div className="mt-2">
-                        <p>Imagen actual:</p>
-                        <img src={editingProduct.image} alt="Current Product" style={{ width: '100px', height: '100px', objectFit: 'cover' }} />
-                      </div>
-                    )}
-                  </div>
-                  <button type="submit" className="btn btn-primary">Guardar Cambios</button>
-                  <button type="button" className="btn btn-secondary ms-2" onClick={() => setShowEditModal(false)}>Cancelar</button>
-                </form>
-              </div>
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-2xl mx-auto">
+            <div className="flex justify-between items-center pb-3 border-b border-gray-200">
+              <h5 className="text-xl font-bold">Editar Producto</h5>
+              <button type="button" className="text-gray-400 hover:text-gray-600" onClick={() => setShowEditModal(false)}>
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            <div className="py-4">
+              <form onSubmit={handleUpdateProduct}>
+                <div className="mb-4">
+                  <label htmlFor="editProductName" className="block text-gray-700 text-sm font-bold mb-2">Nombre</label>
+                  <input
+                    type="text"
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    id="editProductName"
+                    value={editProductName}
+                    onChange={(e) => setEditProductName(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="mb-4">
+                  <label htmlFor="editProductDescription" className="block text-gray-700 text-sm font-bold mb-2">Descripción</label>
+                  <textarea
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    id="editProductDescription"
+                    value={editProductDescription}
+                    onChange={(e) => setEditProductDescription(e.target.value)}
+                    required
+                  ></textarea>
+                </div>
+                <div className="mb-4">
+                  <label htmlFor="editProductPrice" className="block text-gray-700 text-sm font-bold mb-2">Precio</label>
+                  <input
+                    type="number"
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    id="editProductPrice"
+                    value={editProductPrice}
+                    onChange={(e) => setEditProductPrice(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="mb-4">
+                  <label htmlFor="editProductSku" className="block text-gray-700 text-sm font-bold mb-2">SKU</label>
+                  <input
+                    type="text"
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    id="editProductSku"
+                    value={editProductSku}
+                    onChange={(e) => setEditProductSku(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="mb-4">
+                  <label htmlFor="editProductStock" className="block text-gray-700 text-sm font-bold mb-2">Stock</label>
+                  <input
+                    type="number"
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    id="editProductStock"
+                    value={editProductStock}
+                    onChange={(e) => setEditProductStock(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="mb-4">
+                  <label htmlFor="editProductCategory" className="block text-gray-700 text-sm font-bold mb-2">Categoría</label>
+                  <input
+                    type="text"
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    id="editProductCategory"
+                    value={editProductCategory}
+                    onChange={(e) => setEditProductCategory(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="mb-6">
+                  <label htmlFor="editProductImage" className="block text-gray-700 text-sm font-bold mb-2">Imagen</label>
+                  <input
+                    type="file"
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    id="editProductImage"
+                    onChange={(e) => setEditProductImage(e.target.files[0])}
+                  />
+                  {editingProduct.image && (
+                    <div className="mt-4">
+                      <p className="text-gray-700 mb-2">Imagen actual:</p>
+                      <img src={editingProduct.image} alt="Current Product" className="w-24 h-24 object-cover rounded-md" />
+                    </div>
+                  )}
+                </div>
+                <div className="flex justify-end">
+                  <button type="submit" className="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-300">Guardar Cambios</button>
+                  <button type="button" className="bg-gray-300 text-gray-800 py-2 px-4 rounded-md hover:bg-gray-400 transition duration-300 ml-2" onClick={() => setShowEditModal(false)}>Cancelar</button>
+                </div>
+              </form>
             </div>
           </div>
         </div>

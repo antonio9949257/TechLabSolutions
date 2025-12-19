@@ -64,36 +64,35 @@ const Quote = () => {
   };
 
   if (loading) {
-    return <div className="container mt-5">Cargando...</div>;
+    return <div className="container mx-auto px-4 mt-8">Cargando...</div>;
   }
 
   return (
-    <div className="container mt-5">
-      <div className="row justify-content-center">
-        <div className="col-md-8">
+    <div className="container mx-auto px-4 py-8">
+      <div className="flex justify-center">
+        <div className="w-full md:w-2/3 lg:w-1/2">
           {service && (
-            <div className="text-center mb-4">
-              <h2>Solicitar Cotización para:</h2>
-              <h3>{service.name}</h3>
-              <img src={service.image} alt={service.name} className="img-fluid rounded my-3" style={{ maxHeight: '200px' }} />
+            <div className="text-center mb-6">
+              <h2 className="text-3xl font-bold mb-2">Solicitar Cotización para:</h2>
+              <h3 className="text-2xl font-semibold mb-4">{service.name}</h3>
+              <img src={service.image} alt={service.name} className="max-w-full h-auto rounded-lg my-4 max-h-48 object-cover mx-auto" />
             </div>
           )}
 
-          <div className="card">
-            <div className="card-body">
-              <h4 className="card-title text-center">Completa tus datos</h4>
-              {error && <div className="alert alert-danger">{error}</div>}
+          <div className="bg-white rounded-lg shadow-lg p-6">
+              <h4 className="text-xl font-bold text-center mb-6">Completa tus datos</h4>
+              {error && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative my-4">{error}</div>}
               {success && (
-                <div className="alert alert-success">
+                <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative my-4">
                   ¡Cotización enviada con éxito! Gracias por contactarnos. Serás redirigido en unos segundos.
                 </div>
               )}
               <form onSubmit={handleSubmit}>
-                <div className="mb-3">
-                  <label htmlFor="name" className="form-label">Nombre Completo</label>
+                <div className="mb-4">
+                  <label htmlFor="name" className="block text-gray-700 text-sm font-bold mb-2">Nombre Completo</label>
                   <input
                     type="text"
-                    className="form-control"
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     id="name"
                     name="name"
                     value={formData.name}
@@ -101,11 +100,11 @@ const Quote = () => {
                     required
                   />
                 </div>
-                <div className="mb-3">
-                  <label htmlFor="email" className="form-label">Correo Electrónico</label>
+                <div className="mb-4">
+                  <label htmlFor="email" className="block text-gray-700 text-sm font-bold mb-2">Correo Electrónico</label>
                   <input
                     type="email"
-                    className="form-control"
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     id="email"
                     name="email"
                     value={formData.email}
@@ -113,21 +112,21 @@ const Quote = () => {
                     required
                   />
                 </div>
-                <div className="mb-3">
-                  <label htmlFor="phone" className="form-label">Teléfono (Opcional)</label>
+                <div className="mb-4">
+                  <label htmlFor="phone" className="block text-gray-700 text-sm font-bold mb-2">Teléfono (Opcional)</label>
                   <input
                     type="tel"
-                    className="form-control"
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     id="phone"
                     name="phone"
                     value={formData.phone}
                     onChange={handleChange}
                   />
                 </div>
-                <div className="mb-3">
-                  <label htmlFor="message" className="form-label">Mensaje</label>
+                <div className="mb-6">
+                  <label htmlFor="message" className="block text-gray-700 text-sm font-bold mb-2">Mensaje</label>
                   <textarea
-                    className="form-control"
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline h-32"
                     id="message"
                     name="message"
                     rows="4"
@@ -136,13 +135,12 @@ const Quote = () => {
                     required
                   ></textarea>
                 </div>
-                <div className="d-grid">
-                  <button type="submit" className="btn btn-primary btn-lg">
+                <div className="w-full">
+                  <button type="submit" className="w-full bg-blue-600 text-white py-3 px-6 rounded-md hover:bg-blue-700 transition duration-300 text-lg">
                     Enviar Solicitud
                   </button>
                 </div>
               </form>
-            </div>
           </div>
         </div>
       </div>

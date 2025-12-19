@@ -154,213 +154,222 @@ const AdminServices = () => {
   };
 
   if (loading) {
-    return <div className="container mt-5">Cargando servicios...</div>;
+    return <div className="container mx-auto px-4 mt-8">Cargando servicios...</div>;
   }
 
   if (error) {
-    return <div className="container mt-5 text-danger">Error: {error}</div>;
+    return <div className="container mx-auto px-4 mt-8 text-red-600">Error: {error}</div>;
   }
 
   return (
-    <div className="container mt-5">
-      <h2>Gestión de Servicios</h2>
+    <div className="container mx-auto px-4 py-8">
+      <h2 className="text-3xl font-bold mb-6">Gestión de Servicios</h2>
 
       {/* Button to open Create Service Modal */}
-      <button className="btn btn-primary mb-4" onClick={() => setShowCreateModal(true)}>
+      <button className="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-300 mb-6" onClick={() => setShowCreateModal(true)}>
         Crear Nuevo Servicio
       </button>
 
       {/* Create Service Modal */}
       {showCreateModal && (
-        <div className="modal show d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
-          <div className="modal-dialog">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title">Crear Nuevo Servicio</h5>
-                <button type="button" className="btn-close" onClick={() => setShowCreateModal(false)}></button>
-              </div>
-              <div className="modal-body">
-                <form onSubmit={handleCreateService}>
-                  <div className="mb-3">
-                    <label htmlFor="newServiceName" className="form-label">Nombre</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="newServiceName"
-                      value={newServiceName}
-                      onChange={(e) => setNewServiceName(e.target.value)}
-                      required
-                    />
-                  </div>
-                  <div className="mb-3">
-                    <label htmlFor="newServiceDescription" className="form-label">Descripción</label>
-                    <textarea
-                      className="form-control"
-                      id="newServiceDescription"
-                      value={newServiceDescription}
-                      onChange={(e) => setNewServiceDescription(e.target.value)}
-                      required
-                    ></textarea>
-                  </div>
-                  <div className="mb-3">
-                    <label htmlFor="newServicePrice" className="form-label">Precio</label>
-                    <input
-                      type="number"
-                      className="form-control"
-                      id="newServicePrice"
-                      value={newServicePrice}
-                      onChange={(e) => setNewServicePrice(e.target.value)}
-                      required
-                    />
-                  </div>
-                  <div className="mb-3">
-                    <label htmlFor="newServiceCategory" className="form-label">Categoría</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="newServiceCategory"
-                      value={newServiceCategory}
-                      onChange={(e) => setNewServiceCategory(e.target.value)}
-                      required
-                    />
-                  </div>
-                  <div className="mb-3">
-                    <label htmlFor="newServiceImage" className="form-label">Imagen</label>
-                    <input
-                      type="file"
-                      className="form-control"
-                      id="newServiceImage"
-                      onChange={(e) => setNewServiceImage(e.target.files[0])}
-                    />
-                  </div>
-                  <button type="submit" className="btn btn-success">Crear Servicio</button>
-                  <button type="button" className="btn btn-secondary ms-2" onClick={() => setShowCreateModal(false)}>Cancelar</button>
-                </form>
-              </div>
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-2xl mx-auto">
+            <div className="flex justify-between items-center pb-3 border-b border-gray-200">
+              <h5 className="text-xl font-bold">Crear Nuevo Servicio</h5>
+              <button type="button" className="text-gray-400 hover:text-gray-600" onClick={() => setShowCreateModal(false)}>
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            <div className="py-4">
+              <form onSubmit={handleCreateService}>
+                <div className="mb-4">
+                  <label htmlFor="newServiceName" className="block text-gray-700 text-sm font-bold mb-2">Nombre</label>
+                  <input
+                    type="text"
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    id="newServiceName"
+                    value={newServiceName}
+                    onChange={(e) => setNewServiceName(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="mb-4">
+                  <label htmlFor="newServiceDescription" className="block text-gray-700 text-sm font-bold mb-2">Descripción</label>
+                  <textarea
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    id="newServiceDescription"
+                    value={newServiceDescription}
+                    onChange={(e) => setNewServiceDescription(e.target.value)}
+                    required
+                  ></textarea>
+                </div>
+                <div className="mb-4">
+                  <label htmlFor="newServicePrice" className="block text-gray-700 text-sm font-bold mb-2">Precio</label>
+                  <input
+                    type="number"
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    id="newServicePrice"
+                    value={newServicePrice}
+                    onChange={(e) => setNewServicePrice(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="mb-4">
+                  <label htmlFor="newServiceCategory" className="block text-gray-700 text-sm font-bold mb-2">Categoría</label>
+                  <input
+                    type="text"
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    id="newServiceCategory"
+                    value={newServiceCategory}
+                    onChange={(e) => setNewServiceCategory(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="mb-6">
+                  <label htmlFor="newServiceImage" className="block text-gray-700 text-sm font-bold mb-2">Imagen</label>
+                  <input
+                    type="file"
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    id="newServiceImage"
+                    onChange={(e) => setNewServiceImage(e.target.files[0])}
+                  />
+                </div>
+                <div className="flex justify-end">
+                  <button type="submit" className="bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 transition duration-300">Crear Servicio</button>
+                  <button type="button" className="bg-gray-300 text-gray-800 py-2 px-4 rounded-md hover:bg-gray-400 transition duration-300 ml-2" onClick={() => setShowCreateModal(false)}>Cancelar</button>
+                </div>
+              </form>
             </div>
           </div>
         </div>
       )}
 
       {/* Service List Table */}
-      <h3>Servicios Existentes</h3>
+      <h3 className="text-2xl font-bold mb-4">Servicios Existentes</h3>
       {services.length === 0 ? (
-        <p>No hay servicios registrados.</p>
+        <p className="text-gray-600">No hay servicios registrados.</p>
       ) : (
-        <table className="table table-striped">
-          <thead>
-            <tr>
-              <th>Imagen</th>
-              <th>Nombre</th>
-              <th>Categoría</th>
-              <th>Precio</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {services.map((s) => (
-              <tr key={s._id}>
-                <td>
-                  {s.image && (
-                    <img src={s.image} alt={s.name} style={{ width: '50px', height: '50px', objectFit: 'cover' }} />
-                  )}
-                </td>
-                <td>{s.name}</td>
-                <td>{s.category}</td>
-                <td>${s.price.toFixed(2)}</td>
-                <td>
-                  <button
-                    className="btn btn-warning btn-sm me-2"
-                    onClick={() => handleEditClick(s)}
-                  >
-                    Editar
-                  </button>
-                  <button
-                    className="btn btn-danger btn-sm"
-                    onClick={() => handleDeleteService(s._id)}
-                  >
-                    Eliminar
-                  </button>
-                </td>
+        <div className="overflow-x-auto">
+          <table className="w-full border-collapse bg-white shadow-md rounded-lg">
+            <thead className="bg-gray-200 text-gray-700">
+              <tr>
+                <th className="py-3 px-4 text-left font-semibold">Imagen</th>
+                <th className="py-3 px-4 text-left font-semibold">Nombre</th>
+                <th className="py-3 px-4 text-left font-semibold">Categoría</th>
+                <th className="py-3 px-4 text-left font-semibold">Precio</th>
+                <th className="py-3 px-4 text-left font-semibold">Acciones</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {services.map((s) => (
+                <tr key={s._id} className="border-b border-gray-200 hover:bg-gray-50">
+                  <td className="py-3 px-4">
+                    {s.image && (
+                      <img src={s.image} alt={s.name} className="w-12 h-12 object-cover rounded-md" />
+                    )}
+                  </td>
+                  <td className="py-3 px-4">{s.name}</td>
+                  <td className="py-3 px-4">{s.category}</td>
+                  <td className="py-3 px-4">${s.price.toFixed(2)}</td>
+                  <td className="py-3 px-4">
+                    <button
+                      className="bg-yellow-500 text-white py-1 px-3 rounded-md hover:bg-yellow-600 transition duration-300 text-sm mr-2"
+                      onClick={() => handleEditClick(s)}
+                    >
+                      Editar
+                    </button>
+                    <button
+                      className="bg-red-600 text-white py-1 px-3 rounded-md hover:bg-red-700 transition duration-300 text-sm"
+                      onClick={() => handleDeleteService(s._id)}
+                    >
+                      Eliminar
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
-
       {/* Edit Service Modal */}
       {showEditModal && editingService && (
-        <div className="modal show d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
-          <div className="modal-dialog">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title">Editar Servicio</h5>
-                <button type="button" className="btn-close" onClick={() => setShowEditModal(false)}></button>
-              </div>
-              <div className="modal-body">
-                <form onSubmit={handleUpdateService}>
-                  <div className="mb-3">
-                    <label htmlFor="editServiceName" className="form-label">Nombre</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="editServiceName"
-                      value={editServiceName}
-                      onChange={(e) => setEditServiceName(e.target.value)}
-                      required
-                    />
-                  </div>
-                  <div className="mb-3">
-                    <label htmlFor="editServiceDescription" className="form-label">Descripción</label>
-                    <textarea
-                      className="form-control"
-                      id="editServiceDescription"
-                      value={editServiceDescription}
-                      onChange={(e) => setEditServiceDescription(e.target.value)}
-                      required
-                    ></textarea>
-                  </div>
-                  <div className="mb-3">
-                    <label htmlFor="editServicePrice" className="form-label">Precio</label>
-                    <input
-                      type="number"
-                      className="form-control"
-                      id="editServicePrice"
-                      value={editServicePrice}
-                      onChange={(e) => setEditServicePrice(e.target.value)}
-                      required
-                    />
-                  </div>
-                  <div className="mb-3">
-                    <label htmlFor="editServiceCategory" className="form-label">Categoría</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="editServiceCategory"
-                      value={editServiceCategory}
-                      onChange={(e) => setEditServiceCategory(e.target.value)}
-                      required
-                    />
-                  </div>
-                  <div className="mb-3">
-                    <label htmlFor="editServiceImage" className="form-label">Imagen</label>
-                    <input
-                      type="file"
-                      className="form-control"
-                      id="editServiceImage"
-                      onChange={(e) => setEditServiceImage(e.target.files[0])}
-                    />
-                    {editingService.image && (
-                      <div className="mt-2">
-                        <p>Imagen actual:</p>
-                        <img src={editingService.image} alt="Current Service" style={{ width: '100px', height: '100px', objectFit: 'cover' }} />
-                      </div>
-                    )}
-                  </div>
-                  <button type="submit" className="btn btn-primary">Guardar Cambios</button>
-                  <button type="button" className="btn btn-secondary ms-2" onClick={() => setShowEditModal(false)}>Cancelar</button>
-                </form>
-              </div>
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-2xl mx-auto">
+            <div className="flex justify-between items-center pb-3 border-b border-gray-200">
+              <h5 className="text-xl font-bold">Editar Servicio</h5>
+              <button type="button" className="text-gray-400 hover:text-gray-600" onClick={() => setShowEditModal(false)}>
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            <div className="py-4">
+              <form onSubmit={handleUpdateService}>
+                <div className="mb-4">
+                  <label htmlFor="editServiceName" className="block text-gray-700 text-sm font-bold mb-2">Nombre</label>
+                  <input
+                    type="text"
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    id="editServiceName"
+                    value={editServiceName}
+                    onChange={(e) => setEditServiceName(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="mb-4">
+                  <label htmlFor="editServiceDescription" className="block text-gray-700 text-sm font-bold mb-2">Descripción</label>
+                  <textarea
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    id="editServiceDescription"
+                    value={editServiceDescription}
+                    onChange={(e) => setEditServiceDescription(e.target.value)}
+                    required
+                  ></textarea>
+                </div>
+                <div className="mb-4">
+                  <label htmlFor="editServicePrice" className="block text-gray-700 text-sm font-bold mb-2">Precio</label>
+                  <input
+                    type="number"
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    id="editServicePrice"
+                    value={editServicePrice}
+                    onChange={(e) => setEditServicePrice(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="mb-4">
+                  <label htmlFor="editServiceCategory" className="block text-gray-700 text-sm font-bold mb-2">Categoría</label>
+                  <input
+                    type="text"
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    id="editServiceCategory"
+                    value={editServiceCategory}
+                    onChange={(e) => setEditServiceCategory(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="mb-6">
+                  <label htmlFor="editServiceImage" className="block text-gray-700 text-sm font-bold mb-2">Imagen</label>
+                  <input
+                    type="file"
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    id="editServiceImage"
+                    onChange={(e) => setEditServiceImage(e.target.files[0])}
+                  />
+                  {editingService.image && (
+                    <div className="mt-4">
+                      <p className="text-gray-700 mb-2">Imagen actual:</p>
+                      <img src={editingService.image} alt="Current Service" className="w-24 h-24 object-cover rounded-md" />
+                    </div>
+                  )}
+                </div>
+                <div className="flex justify-end">
+                  <button type="submit" className="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-300">Guardar Cambios</button>
+                  <button type="button" className="bg-gray-300 text-gray-800 py-2 px-4 rounded-md hover:bg-gray-400 transition duration-300 ml-2" onClick={() => setShowEditModal(false)}>Cancelar</button>
+                </div>
+              </form>
             </div>
           </div>
         </div>

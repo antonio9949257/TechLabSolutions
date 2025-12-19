@@ -36,39 +36,38 @@ const ProductDetail = () => {
   }, [id]);
 
   if (loading) {
-    return <div className="container mt-5">Cargando producto...</div>;
+    return <div className="container mx-auto px-4 mt-8">Cargando producto...</div>;
   }
 
   if (error) {
-    return <div className="container mt-5 text-danger">Error: {error}</div>;
+    return <div className="container mx-auto px-4 mt-8 text-red-600">Error: {error}</div>;
   }
 
   if (!product) {
-    return <div className="container mt-5">Producto no encontrado.</div>;
+    return <div className="container mx-auto px-4 mt-8">Producto no encontrado.</div>;
   }
 
   return (
-    <div className="container mt-5">
-      <div className="row">
-        <div className="col-md-6">
+    <div className="container mx-auto px-4 py-8">
+      <div className="flex flex-wrap -mx-4">
+        <div className="w-full md:w-1/2 px-4 mb-8 md:mb-0">
           <img
             src={product.image}
             alt={product.name}
-            className="img-fluid rounded"
-            style={{ maxHeight: '500px', objectFit: 'cover' }}
+            className="max-w-full h-auto rounded-lg max-h-[500px] object-cover"
           />
         </div>
-        <div className="col-md-6">
-          <h2>{product.name}</h2>
-          <p className="text-muted">Categoría: {product.category}</p>
-          <p>{product.description}</p>
+        <div className="w-full md:w-1/2 px-4">
+          <h2 className="text-4xl font-bold mb-4">{product.name}</h2>
+          <p className="text-gray-600 text-lg mb-2">Categoría: {product.category}</p>
+          <p className="text-gray-700 mb-4">{product.description}</p>
           {user ? (
             <>
-              <h3 className="my-3">Precio: ${product.price.toFixed(2)}</h3>
-              <p>Stock: {product.stock > 0 ? `${product.stock} disponibles` : 'Agotado'}</p>
+              <h3 className="text-2xl font-semibold my-4">Precio: ${product.price.toFixed(2)}</h3>
+              <p className="text-gray-700 mb-4">Stock: {product.stock > 0 ? `${product.stock} disponibles` : 'Agotado'}</p>
               {user.role === 'cliente' && (
                 <button
-                  className="btn btn-primary btn-lg"
+                  className="py-3 px-6 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-300 text-lg"
                   onClick={() => addToCart(product._id, 1)}
                   disabled={product.stock === 0}
                 >
@@ -77,8 +76,8 @@ const ProductDetail = () => {
               )}
             </>
           ) : (
-            <div className="alert alert-info">
-              <Link to="/login">Inicia sesión</Link> para ver precios y comprar.
+            <div className="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded relative my-4">
+              <Link to="/login" className="text-blue-700 hover:underline">Inicia sesión</Link> para ver precios y comprar.
             </div>
           )}
         </div>

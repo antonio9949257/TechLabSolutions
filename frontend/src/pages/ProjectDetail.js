@@ -67,16 +67,16 @@ const ProjectDetail = () => {
 
   if (loading) {
     return (
-      <div className="d-flex justify-content-center align-items-center" style={{ height: '50vh' }}>
-        <div className="spinner-border" role="status">
-          <span className="visually-hidden">Cargando...</span>
+      <div className="flex items-center justify-center h-screen-1/2">
+        <div className="animate-spin rounded-full h-12 w-12 border-4 border-t-4 border-blue-500">
+          <span className="sr-only">Cargando...</span>
         </div>
       </div>
     );
   }
 
   if (error) {
-    return <div className="alert alert-danger">{error}</div>;
+    return <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mx-auto my-4 max-w-lg">{error}</div>;
   }
 
   if (!project) {
@@ -86,35 +86,35 @@ const ProjectDetail = () => {
   const hasLiked = user && project.likes.includes(user._id);
 
   return (
-    <div className="container mt-4">
-      <Link to="/projects" className="btn btn-light mb-3">Volver a Proyectos</Link>
-      <div className="card">
-        {project.image && <img src={project.image} className="card-img-top" alt={project.title} />}
-        <div className="card-body">
-          <h1 className="card-title">{project.title}</h1>
-          <p className="card-text text-muted">
+    <div className="container mx-auto px-4 py-8">
+      <Link to="/projects" className="inline-block bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded mb-6">Volver a Proyectos</Link>
+      <div className="bg-white rounded-lg shadow-lg">
+        {project.image && <img src={project.image} className="w-full h-96 object-cover rounded-t-lg" alt={project.title} />}
+        <div className="p-6">
+          <h1 className="text-4xl font-bold mb-2">{project.title}</h1>
+          <p className="text-gray-600 text-sm mb-4">
             Publicado por {project.user?.name || 'Admin'} el {new Date(project.createdAt).toLocaleDateString()}
           </p>
-          <p className="card-text" style={{ whiteSpace: 'pre-wrap' }}>{project.description}</p>
-          <hr />
-          <div className="d-flex align-items-center">
-            <button onClick={handleLike} className={`btn ${hasLiked ? 'btn-primary' : 'btn-outline-primary'}`} disabled={!user}>
-              <i className={`fas fa-heart me-2 ${hasLiked ? 'text-white' : ''}`}></i>
+          <p className="text-gray-700 mb-4" style={{ whiteSpace: 'pre-wrap' }}>{project.description}</p>
+          <hr className="border-t border-gray-300 my-6" />
+          <div className="flex items-center">
+            <button onClick={handleLike} className={`py-2 px-4 rounded transition duration-300 ${hasLiked ? 'bg-blue-600 text-white hover:bg-blue-700' : 'border border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white'}`} disabled={!user}>
+              <i className={`fas fa-heart mr-2 ${hasLiked ? 'text-white' : ''}`}></i>
               {hasLiked ? 'Te gusta' : 'Me gusta'}
             </button>
-            <span className="ms-3 text-muted">{project.likes.length} Me gusta</span>
+            <span className="ml-3 text-gray-600">{project.likes.length} Me gusta</span>
           </div>
         </div>
       </div>
 
       {/* Comments Section */}
-      <div className="mt-4">
-        <h3>Comentarios ({project.comments.length})</h3>
+      <div className="mt-8">
+        <h3 className="text-2xl font-bold mb-4">Comentarios ({project.comments.length})</h3>
         {user ? (
-          <form onSubmit={handleCommentSubmit} className="mb-4">
-            <div className="mb-3">
+          <form onSubmit={handleCommentSubmit} className="mb-6">
+            <div className="mb-4">
               <textarea
-                className="form-control"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                 rows="3"
                 placeholder="Escribe tu comentario..."
                 value={commentText}
@@ -122,22 +122,22 @@ const ProjectDetail = () => {
                 required
               ></textarea>
             </div>
-            <button type="submit" className="btn btn-success" disabled={isSubmitting}>
+            <button type="submit" className="bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 transition duration-300" disabled={isSubmitting}>
               {isSubmitting ? 'Enviando...' : 'Enviar Comentario'}
             </button>
           </form>
         ) : (
-          <p><Link to="/login">Inicia sesión</Link> para dejar un comentario.</p>
+          <p className="text-gray-700"><Link to="/login" className="text-blue-600 hover:underline">Inicia sesión</Link> para dejar un comentario.</p>
         )}
         
-        <div className="list-group">
+        <div className="space-y-4">
           {project.comments.slice().reverse().map((comment) => (
-            <div key={comment._id} className="list-group-item list-group-item-action flex-column align-items-start">
-              <div className="d-flex w-100 justify-content-between">
-                <h5 className="mb-1">{comment.name}</h5>
-                <small>{new Date(comment.createdAt).toLocaleString()}</small>
+            <div key={comment._id} className="bg-white p-4 rounded-lg shadow-sm flex flex-col items-start">
+              <div className="flex justify-between w-full mb-1">
+                <h5 className="text-lg font-semibold">{comment.name}</h5>
+                <small className="text-gray-500 text-sm">{new Date(comment.createdAt).toLocaleString()}</small>
               </div>
-              <p className="mb-1">{comment.text}</p>
+              <p className="text-gray-700">{comment.text}</p>
             </div>
           ))}
         </div>

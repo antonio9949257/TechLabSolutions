@@ -139,70 +139,73 @@ const AdminPanel = () => {
   };
 
   if (loading) {
-    return <div className="container mt-5">Cargando usuarios...</div>;
+    return <div className="container mx-auto px-4 mt-8">Cargando usuarios...</div>;
   }
 
   if (error) {
-    return <div className="container mt-5 text-danger">Error: {error}</div>;
+    return <div className="container mx-auto px-4 mt-8 text-red-600">Error: {error}</div>;
   }
 
   return (
-    <div className="container mt-5">
-      <h2>Panel de Administración</h2>
+    <div className="container mx-auto px-4 py-8">
+      <h2 className="text-3xl font-bold mb-6">Panel de Administración</h2>
 
       {/* Button to open Create User Modal */}
-      <button className="btn btn-primary mb-4" onClick={() => setShowCreateModal(true)}>
+      <button className="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-300 mb-6" onClick={() => setShowCreateModal(true)}>
         Crear Nuevo Usuario
       </button>
 
       {/* Create User Modal */}
       {showCreateModal && (
-        <div className="modal show d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
-          <div className="modal-dialog">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title">Crear Nuevo Usuario</h5>
-                <button type="button" className="btn-close" onClick={() => setShowCreateModal(false)}></button>
-              </div>
-              <div className="modal-body">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-lg mx-auto">
+            <div className="flex justify-between items-center pb-3 border-b border-gray-200">
+              <h5 className="text-xl font-bold">Crear Nuevo Usuario</h5>
+              <button type="button" className="text-gray-400 hover:text-gray-600" onClick={() => setShowCreateModal(false)}>
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            <div className="py-4">
                 <form onSubmit={handleCreateUser}>
-                  <div className="mb-3">
-                    <label htmlFor="newUserName" className="form-label">Nombre</label>
+                  <div className="mb-4">
+                    <label htmlFor="newUserName" className="block text-gray-700 text-sm font-bold mb-2">Nombre</label>
                     <input
                       type="text"
-                      className="form-control"
+                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                       id="newUserName"
                       value={newUserName}
                       onChange={(e) => setNewUserName(e.target.value)}
                       required
                     />
                   </div>
-                  <div className="mb-3">
-                    <label htmlFor="newUserEmail" className="form-label">Email</label>
+                  <div className="mb-4">
+                    <label htmlFor="newUserEmail" className="block text-gray-700 text-sm font-bold mb-2">Email</label>
                     <input
                       type="email"
-                      className="form-control"
+                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                       id="newUserEmail"
                       value={newUserEmail}
                       onChange={(e) => setNewUserEmail(e.target.value)}
                       required
                     />
                   </div>
-                  <div className="mb-3">
-                    <label htmlFor="newUserPassword" className="form-label">Contraseña</label>
+                  <div className="mb-4">
+                    <label htmlFor="newUserPassword" className="block text-gray-700 text-sm font-bold mb-2">Contraseña</label>
                     <input
                       type="password"
-                      className="form-control"
+                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                       id="newUserPassword"
                       value={newUserPassword}
                       onChange={(e) => setNewUserPassword(e.target.value)}
                       required
                     />
                   </div>
-                  <div className="mb-3">
-                    <label htmlFor="newUserRole" className="form-label">Rol</label>
+                  <div className="mb-6">
+                    <label htmlFor="newUserRole" className="block text-gray-700 text-sm font-bold mb-2">Rol</label>
                     <select
-                      className="form-select"
+                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                       id="newUserRole"
                       value={newUserRole}
                       onChange={(e) => setNewUserRole(e.target.value)}
@@ -211,106 +214,113 @@ const AdminPanel = () => {
                       <option value="admin">Admin</option>
                     </select>
                   </div>
-                  <button type="submit" className="btn btn-success">Crear Usuario</button>
-                  <button type="button" className="btn btn-secondary ms-2" onClick={() => setShowCreateModal(false)}>Cancelar</button>
+                  <div className="flex justify-end">
+                    <button type="submit" className="bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 transition duration-300">Crear Usuario</button>
+                    <button type="button" className="bg-gray-300 text-gray-800 py-2 px-4 rounded-md hover:bg-gray-400 transition duration-300 ml-2" onClick={() => setShowCreateModal(false)}>Cancelar</button>
+                  </div>
                 </form>
-              </div>
             </div>
           </div>
         </div>
       )}
 
       {/* User List Table */}
-      <h3>Gestión de Usuarios Existentes</h3>
+      <h3 className="text-2xl font-bold mb-4">Gestión de Usuarios Existentes</h3>
       {users.length === 0 ? (
-        <p>No hay usuarios registrados.</p>
+        <p className="text-gray-600">No hay usuarios registrados.</p>
       ) : (
-        <table className="table table-striped">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Nombre</th>
-              <th>Email</th>
-              <th>Rol</th>
-              <th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {users.map((u) => (
-              <tr key={u._id}>
-                <td>{u._id}</td>
-                <td>{u.name}</td>
-                <td>{u.email}</td>
-                <td>{u.role}</td>
-                <td>
-                  <button
-                    className="btn btn-warning btn-sm me-2"
-                    onClick={() => handleEditClick(u)}
-                  >
-                    Editar
-                  </button>
-                  <button
-                    className="btn btn-danger btn-sm"
-                    onClick={() => handleDeleteUser(u._id)}
-                  >
-                    Eliminar
-                  </button>
-                </td>
+        <div className="overflow-x-auto"> {/* Added for responsive table */}
+          <table className="w-full border-collapse bg-white shadow-md rounded-lg">
+            <thead className="bg-gray-200 text-gray-700">
+              <tr>
+                <th className="py-3 px-4 text-left font-semibold">ID</th>
+                <th className="py-3 px-4 text-left font-semibold">Nombre</th>
+                <th className="py-3 px-4 text-left font-semibold">Email</th>
+                <th className="py-3 px-4 text-left font-semibold">Rol</th>
+                <th className="py-3 px-4 text-left font-semibold">Acciones</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {users.map((u) => (
+                <tr key={u._id} className="border-b border-gray-200 hover:bg-gray-50">
+                  <td className="py-3 px-4">{u._id}</td>
+                  <td className="py-3 px-4">{u.name}</td>
+                  <td className="py-3 px-4">{u.email}</td>
+                  <td className="py-3 px-4">{u.role}</td>
+                  <td className="py-3 px-4">
+                    <button
+                      className="bg-yellow-500 text-white py-1 px-3 rounded-md hover:bg-yellow-600 transition duration-300 text-sm mr-2"
+                      onClick={() => handleEditClick(u)}
+                    >
+                      Editar
+                    </button>
+                    <button
+                      className="bg-red-600 text-white py-1 px-3 rounded-md hover:bg-red-700 transition duration-300 text-sm"
+                      onClick={() => handleDeleteUser(u._id)}
+                    >
+                      Eliminar
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
 
       {/* Edit User Modal */}
       {showEditModal && editingUser && (
-        <div className="modal show d-block" tabIndex="-1" style={{ backgroundColor: 'rgba(0,0,0,0.5)' }}>
-          <div className="modal-dialog">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title">Editar Usuario</h5>
-                <button type="button" className="btn-close" onClick={() => setShowEditModal(false)}></button>
-              </div>
-              <div className="modal-body">
-                <form onSubmit={handleUpdateUser}>
-                  <div className="mb-3">
-                    <label htmlFor="editUserName" className="form-label">Nombre</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="editUserName"
-                      value={editUserName}
-                      onChange={(e) => setEditUserName(e.target.value)}
-                      required
-                    />
-                  </div>
-                  <div className="mb-3">
-                    <label htmlFor="editUserEmail" className="form-label">Email</label>
-                    <input
-                      type="email"
-                      className="form-control"
-                      id="editUserEmail"
-                      value={editUserEmail}
-                      onChange={(e) => setEditUserEmail(e.target.value)}
-                      required
-                    />
-                  </div>
-                  <div className="mb-3">
-                    <label htmlFor="editUserRole" className="form-label">Rol</label>
-                    <select
-                      className="form-select"
-                      id="editUserRole"
-                      value={editUserRole}
-                      onChange={(e) => setEditUserRole(e.target.value)}
-                    >
-                      <option value="cliente">Cliente</option>
-                      <option value="admin">Admin</option>
-                    </select>
-                  </div>
-                  <button type="submit" className="btn btn-primary">Guardar Cambios</button>
-                  <button type="button" className="btn btn-secondary ms-2" onClick={() => setShowEditModal(false)}>Cancelar</button>
-                </form>
-              </div>
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-lg mx-auto">
+            <div className="flex justify-between items-center pb-3 border-b border-gray-200">
+              <h5 className="text-xl font-bold">Editar Usuario</h5>
+              <button type="button" className="text-gray-400 hover:text-gray-600" onClick={() => setShowEditModal(false)}>
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            <div className="py-4">
+              <form onSubmit={handleUpdateUser}>
+                <div className="mb-4">
+                  <label htmlFor="editUserName" className="block text-gray-700 text-sm font-bold mb-2">Nombre</label>
+                  <input
+                    type="text"
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    id="editUserName"
+                    value={editUserName}
+                    onChange={(e) => setEditUserName(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="mb-4">
+                  <label htmlFor="editUserEmail" className="block text-gray-700 text-sm font-bold mb-2">Email</label>
+                  <input
+                    type="email"
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    id="editUserEmail"
+                    value={editUserEmail}
+                    onChange={(e) => setEditUserEmail(e.target.value)}
+                    required
+                  />
+                </div>
+                <div className="mb-6">
+                  <label htmlFor="editUserRole" className="block text-gray-700 text-sm font-bold mb-2">Rol</label>
+                  <select
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    id="editUserRole"
+                    value={editUserRole}
+                    onChange={(e) => setEditUserRole(e.target.value)}
+                  >
+                    <option value="cliente">Cliente</option>
+                    <option value="admin">Admin</option>
+                  </select>
+                </div>
+                <div className="flex justify-end">
+                  <button type="submit" className="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-300">Guardar Cambios</button>
+                  <button type="button" className="bg-gray-300 text-gray-800 py-2 px-4 rounded-md hover:bg-gray-400 transition duration-300 ml-2" onClick={() => setShowEditModal(false)}>Cancelar</button>
+                </div>
+              </form>
             </div>
           </div>
         </div>

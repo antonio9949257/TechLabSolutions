@@ -38,66 +38,61 @@ const Products = () => {
   };
 
   if (loading) {
-    return <div className="container mt-5">Cargando productos...</div>;
+    <div className="container mx-auto px-4 mt-8">Cargando productos...</div>;
   }
 
   if (error) {
-    return <div className="container mt-5 text-danger">Error: {error}</div>;
+    return <div className="container mx-auto px-4 mt-8 text-red-600">Error: {error}</div>;
   }
 
   return (
-    <div className="container mt-5">
-      <h2>Nuestros Productos</h2>
+    <div className="container mx-auto px-4 py-8">
+      <h2 className="text-3xl font-bold mb-6">Nuestros Productos</h2>
       {products.length === 0 ? (
-        <p>No hay productos disponibles en este momento.</p>
+        <p className="text-gray-600">No hay productos disponibles en este momento.</p>
       ) : (
-        <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {products.map((product) => (
-            <div className="col" key={product._id}>
-              <div className="card h-100 d-flex flex-column">
-                {product.image && (
-                  <img
-                    src={product.image}
-                    className="card-img-top"
-                    alt={product.name}
-                    style={{ height: '200px', objectFit: 'cover' }}
-                  />
-                )}
-                <div className="card-body d-flex flex-column">
-                  <h5 className="card-title">{product.name}</h5>
-                  <p className="card-text flex-grow-1">{product.description}</p>
-                  <p className="card-text">
-                    <small className="text-muted">Categoría: {product.category}</small>
+            <div key={product._id} className="bg-white rounded-lg shadow-md h-full flex flex-col">
+              {product.image && (
+                <img
+                  src={product.image}
+                  className="w-full h-48 object-cover rounded-t-lg"
+                  alt={product.name}
+                />
+              )}
+              <div className="p-4 flex flex-col flex-grow">
+                <h5 className="text-xl font-semibold mb-2">{product.name}</h5>
+                <p className="text-gray-700 mb-2 flex-grow">{product.description}</p>
+                <p className="text-gray-500 text-sm">Categoría: {product.category}</p>
+                {user ? (
+                  <p className="text-gray-800 font-bold mt-2">
+                    Precio: ${product.price.toFixed(2)}
                   </p>
-                  {user ? (
-                    <p className="card-text">
-                      <strong>Precio: ${product.price.toFixed(2)}</strong>
-                    </p>
-                  ) : null}
-                </div>
-                <div className="card-footer">
-                  {user ? (
-                    user.role === 'cliente' && (
-                      <div className="d-flex gap-2">
-                        <Link to={`/products/${product._id}`} className="btn btn-outline-secondary flex-grow-1">
-                          Ver Detalles
-                        </Link>
-                        <button
-                          className="btn btn-primary flex-grow-1"
-                          onClick={() => handleAddToCart(product._id)}
-                        >
-                          Añadir al Carrito
-                        </button>
-                      </div>
-                    )
-                  ) : (
-                    <div className="text-center">
-                      <Link to="/login" className="btn btn-outline-primary w-100">
-                        Inicia sesión para ver precios
+                ) : null}
+              </div>
+              <div className="p-4 border-t border-gray-200">
+                {user ? (
+                  user.role === 'cliente' && (
+                    <div className="flex space-x-2">
+                      <Link to={`/products/${product._id}`} className="flex-1 py-2 px-4 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-100 transition duration-300 text-center">
+                        Ver Detalles
                       </Link>
+                      <button
+                        className="flex-1 py-2 px-4 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-300"
+                        onClick={() => handleAddToCart(product._id)}
+                      >
+                        Añadir al Carrito
+                      </button>
                     </div>
-                  )}
-                </div>
+                  )
+                ) : (
+                  <div className="text-center">
+                    <Link to="/login" className="w-full py-2 px-4 border border-blue-600 text-blue-600 rounded-md hover:bg-blue-600 hover:text-white transition duration-300 text-center">
+                      Inicia sesión para ver precios
+                    </Link>
+                  </div>
+                )}
               </div>
             </div>
           ))}
