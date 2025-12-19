@@ -79,20 +79,20 @@ const Quote = () => {
             </div>
           )}
 
-          <div className="bg-white rounded-lg shadow-lg p-6">
+          <div className="bg-card-bg rounded-lg shadow-lg p-6">
               <h4 className="text-xl font-bold text-center mb-6">Completa tus datos</h4>
-              {error && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative my-4">{error}</div>}
+              {error && <div className="bg-red-200 border border-red-500 text-red-600 px-4 py-3 rounded relative my-4">{error}</div>}
               {success && (
-                <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative my-4">
+                <div className="bg-green-200 border border-green-500 text-green-600 px-4 py-3 rounded relative my-4">
                   ¡Cotización enviada con éxito! Gracias por contactarnos. Serás redirigido en unos segundos.
                 </div>
               )}
               <form onSubmit={handleSubmit}>
                 <div className="mb-4">
-                  <label htmlFor="name" className="block text-gray-700 text-sm font-bold mb-2">Nombre Completo</label>
+                  <label htmlFor="name" className="block text-secondary text-sm font-bold mb-2">Nombre Completo</label>
                   <input
                     type="text"
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-secondary leading-tight focus:outline-none focus:shadow-outline bg-background border-secondary focus:ring-primary"
                     id="name"
                     name="name"
                     value={formData.name}
@@ -101,10 +101,10 @@ const Quote = () => {
                   />
                 </div>
                 <div className="mb-4">
-                  <label htmlFor="email" className="block text-gray-700 text-sm font-bold mb-2">Correo Electrónico</label>
+                  <label htmlFor="email" className="block text-secondary text-sm font-bold mb-2">Correo Electrónico</label>
                   <input
                     type="email"
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-secondary leading-tight focus:outline-none focus:shadow-outline bg-background border-secondary focus:ring-primary"
                     id="email"
                     name="email"
                     value={formData.email}
@@ -113,10 +113,10 @@ const Quote = () => {
                   />
                 </div>
                 <div className="mb-4">
-                  <label htmlFor="phone" className="block text-gray-700 text-sm font-bold mb-2">Teléfono (Opcional)</label>
+                  <label htmlFor="phone" className="block text-secondary text-sm font-bold mb-2">Teléfono (Opcional)</label>
                   <input
                     type="tel"
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-secondary leading-tight focus:outline-none focus:shadow-outline bg-background border-secondary focus:ring-primary"
                     id="phone"
                     name="phone"
                     value={formData.phone}
@@ -124,9 +124,9 @@ const Quote = () => {
                   />
                 </div>
                 <div className="mb-6">
-                  <label htmlFor="message" className="block text-gray-700 text-sm font-bold mb-2">Mensaje</label>
+                  <label htmlFor="message" className="block text-secondary text-sm font-bold mb-2">Mensaje</label>
                   <textarea
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline h-32"
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-secondary leading-tight focus:outline-none focus:shadow-outline h-32 bg-background border-secondary focus:ring-primary"
                     id="message"
                     name="message"
                     rows="4"
@@ -136,7 +136,7 @@ const Quote = () => {
                   ></textarea>
                 </div>
                 <div className="w-full">
-                  <button type="submit" className="w-full bg-blue-600 text-white py-3 px-6 rounded-md hover:bg-blue-700 transition duration-300 text-lg">
+                  <button type="submit" className="w-full bg-primary text-white py-3 px-6 rounded-md hover:opacity-90 transition duration-300 text-lg">
                     Enviar Solicitud
                   </button>
                 </div>

@@ -40,11 +40,11 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-white shadow-md">
+    <nav className="bg-navbar-bg text-navbar-text shadow-md">
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex items-center justify-between py-4">
           {/* Logo */}
-          <Link to="/" className="text-2xl font-bold text-gray-800">
+          <Link to="/" className="text-2xl font-bold text-text-primary">
             TechLab
           </Link>
 
@@ -71,15 +71,15 @@ const Navbar = () => {
                 type="search"
                 placeholder="Buscar productos o servicios"
                 className="
-                  w-full lg:w-64 px-3 py-2 border rounded-l
-                  focus:outline-none focus:ring-2 focus:ring-blue-500
+                  w-full lg:w-64 px-3 py-2 border rounded-l bg-background text-text-primary
+                  focus:outline-none focus:ring-2 focus:ring-primary
                 "
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
               <button
                 type="submit"
-                className="bg-blue-600 text-white px-4 py-2 rounded-r hover:bg-blue-700"
+                className="bg-primary text-white px-4 py-2 rounded-r hover:opacity-90"
               >
                 <Search />
               </button>
@@ -87,27 +87,27 @@ const Navbar = () => {
 
             {/* Links */}
             <ul className="flex flex-col lg:flex-row lg:items-center gap-2 lg:gap-4 ml-auto">
-              <NavLink className="text-gray-700 hover:text-blue-600" to="/" end>
+              <NavLink className="hover:text-primary" to="/" end>
                 <House className="inline mr-1" />
                 Home
               </NavLink>
 
-              <NavLink className="text-gray-700 hover:text-blue-600" to="/products">
+              <NavLink className="hover:text-primary" to="/products">
                 Productos
               </NavLink>
 
-              <NavLink className="text-gray-700 hover:text-blue-600" to="/services">
+              <NavLink className="hover:text-primary" to="/services">
                 Servicios
               </NavLink>
 
-              <NavLink className="text-gray-700 hover:text-blue-600" to="/projects">
+              <NavLink className="hover:text-primary" to="/projects">
                 Proyectos
               </NavLink>
 
               {token ? (
                 <>
                   <NavLink
-                    className="text-gray-700 hover:text-blue-600"
+                    className="hover:text-primary"
                     to="/dashboard"
                   >
                     Dashboard
@@ -116,7 +116,7 @@ const Navbar = () => {
                   {user?.role === 'cliente' && (
                     <button
                       onClick={toggleCart}
-                      className="text-gray-700 hover:text-blue-600"
+                      className="hover:text-primary"
                     >
                       <Cart className="inline mr-1" />
                       ({cartItemCount})
@@ -138,15 +138,15 @@ const Navbar = () => {
                           className="w-8 h-8 rounded-full object-cover"
                         />
                       ) : (
-                        <PersonCircle className="w-7 h-7 text-gray-700" />
+                        <PersonCircle className="w-7 h-7" />
                       )}
                     </button>
 
                     {isProfileDropdownOpen && (
-                      <div className="absolute right-0 mt-2 w-56 bg-white shadow-lg rounded z-50">
+                      <div className="absolute right-0 mt-2 w-56 bg-card-bg shadow-lg rounded z-50 text-text-primary">
                         <Link
                           to="/profile"
-                          className="block px-4 py-2 hover:bg-gray-100"
+                          className="block px-4 py-2 hover:bg-background"
                           onClick={() => setIsProfileDropdownOpen(false)}
                         >
                           Perfil
@@ -157,25 +157,25 @@ const Navbar = () => {
                             <hr />
                             <Link
                               to="/admin-panel"
-                              className="block px-4 py-2 hover:bg-gray-100"
+                              className="block px-4 py-2 hover:bg-background"
                             >
                               Admin Usuarios
                             </Link>
                             <Link
                               to="/admin-products"
-                              className="block px-4 py-2 hover:bg-gray-100"
+                              className="block px-4 py-2 hover:bg-background"
                             >
                               Admin Productos
                             </Link>
                             <Link
                               to="/admin-services"
-                              className="block px-4 py-2 hover:bg-gray-100"
+                              className="block px-4 py-2 hover:bg-background"
                             >
                               Admin Servicios
                             </Link>
                             <Link
                               to="/admin-projects"
-                              className="block px-4 py-2 hover:bg-gray-100"
+                              className="block px-4 py-2 hover:bg-background"
                             >
                               Admin Proyectos
                             </Link>
@@ -189,7 +189,7 @@ const Navbar = () => {
                           onClick={() =>
                             setIsThemeDropdownOpen(!isThemeDropdownOpen)
                           }
-                          className="w-full text-left px-4 py-2 hover:bg-gray-100"
+                          className="w-full text-left px-4 py-2 hover:bg-background"
                         >
                           <Gear className="inline mr-1" />
                           Tema
@@ -199,21 +199,21 @@ const Navbar = () => {
                           <div className="pl-4">
                             <button
                               onClick={() => changeTheme('light')}
-                              className="block w-full text-left px-4 py-2 hover:bg-gray-100"
+                              className="block w-full text-left px-4 py-2 hover:bg-background"
                             >
                               <Sun className="inline mr-1" /> Claro{' '}
                               {theme === 'light' && '✓'}
                             </button>
                             <button
                               onClick={() => changeTheme('dark')}
-                              className="block w-full text-left px-4 py-2 hover:bg-gray-100"
+                              className="block w-full text-left px-4 py-2 hover:bg-background"
                             >
                               <Moon className="inline mr-1" /> Oscuro{' '}
                               {theme === 'dark' && '✓'}
                             </button>
                             <button
                               onClick={() => changeTheme('system')}
-                              className="block w-full text-left px-4 py-2 hover:bg-gray-100"
+                              className="block w-full text-left px-4 py-2 hover:bg-background"
                             >
                               <Display className="inline mr-1" /> Sistema{' '}
                               {theme === 'system' && '✓'}
@@ -225,7 +225,7 @@ const Navbar = () => {
 
                         <button
                           onClick={logout}
-                          className="w-full text-left px-4 py-2 hover:bg-gray-100"
+                          className="w-full text-left px-4 py-2 hover:bg-background"
                         >
                           <BoxArrowRight className="inline mr-1" />
                           Logout
@@ -237,7 +237,7 @@ const Navbar = () => {
               ) : (
                 <Link
                   to="/login"
-                  className="text-gray-700 hover:text-blue-600"
+                  className="hover:text-primary"
                 >
                   Login
                 </Link>

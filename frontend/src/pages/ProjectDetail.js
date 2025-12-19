@@ -68,7 +68,7 @@ const ProjectDetail = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen-1/2">
-        <div className="animate-spin rounded-full h-12 w-12 border-4 border-t-4 border-blue-500">
+        <div className="animate-spin rounded-full h-12 w-12 border-4 border-t-4 border-primary">
           <span className="sr-only">Cargando...</span>
         </div>
       </div>
@@ -76,7 +76,7 @@ const ProjectDetail = () => {
   }
 
   if (error) {
-    return <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mx-auto my-4 max-w-lg">{error}</div>;
+    return <div className="bg-red-200 border border-red-500 text-red-600 px-4 py-3 rounded relative mx-auto my-4 max-w-lg">{error}</div>;
   }
 
   if (!project) {
@@ -87,22 +87,22 @@ const ProjectDetail = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <Link to="/projects" className="inline-block bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded mb-6">Volver a Proyectos</Link>
-      <div className="bg-white rounded-lg shadow-lg">
+      <Link to="/projects" className="inline-block bg-secondary hover:opacity-90 text-text-primary font-bold py-2 px-4 rounded mb-6">Volver a Proyectos</Link>
+      <div className="bg-card-bg rounded-lg shadow-lg">
         {project.image && <img src={project.image} className="w-full h-96 object-cover rounded-t-lg" alt={project.title} />}
         <div className="p-6">
           <h1 className="text-4xl font-bold mb-2">{project.title}</h1>
-          <p className="text-gray-600 text-sm mb-4">
+          <p className="text-secondary text-sm mb-4">
             Publicado por {project.user?.name || 'Admin'} el {new Date(project.createdAt).toLocaleDateString()}
           </p>
-          <p className="text-gray-700 mb-4" style={{ whiteSpace: 'pre-wrap' }}>{project.description}</p>
-          <hr className="border-t border-gray-300 my-6" />
+          <p className="text-secondary mb-4" style={{ whiteSpace: 'pre-wrap' }}>{project.description}</p>
+          <hr className="border-t border-secondary my-6" />
           <div className="flex items-center">
-            <button onClick={handleLike} className={`py-2 px-4 rounded transition duration-300 ${hasLiked ? 'bg-blue-600 text-white hover:bg-blue-700' : 'border border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white'}`} disabled={!user}>
+            <button onClick={handleLike} className={`py-2 px-4 rounded transition duration-300 ${hasLiked ? 'bg-primary text-white hover:opacity-90' : 'border border-primary text-primary hover:bg-primary hover:text-white'}`} disabled={!user}>
               <i className={`fas fa-heart mr-2 ${hasLiked ? 'text-white' : ''}`}></i>
               {hasLiked ? 'Te gusta' : 'Me gusta'}
             </button>
-            <span className="ml-3 text-gray-600">{project.likes.length} Me gusta</span>
+            <span className="ml-3 text-secondary">{project.likes.length} Me gusta</span>
           </div>
         </div>
       </div>
@@ -114,7 +114,7 @@ const ProjectDetail = () => {
           <form onSubmit={handleCommentSubmit} className="mb-6">
             <div className="mb-4">
               <textarea
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-3 py-2 border border-secondary rounded-md focus:outline-none focus:ring-primary focus:border-primary"
                 rows="3"
                 placeholder="Escribe tu comentario..."
                 value={commentText}
@@ -122,22 +122,22 @@ const ProjectDetail = () => {
                 required
               ></textarea>
             </div>
-            <button type="submit" className="bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 transition duration-300" disabled={isSubmitting}>
+            <button type="submit" className="bg-green-500 text-white py-2 px-4 rounded-md hover:bg-green-600 transition duration-300" disabled={isSubmitting}>
               {isSubmitting ? 'Enviando...' : 'Enviar Comentario'}
             </button>
           </form>
         ) : (
-          <p className="text-gray-700"><Link to="/login" className="text-blue-600 hover:underline">Inicia sesión</Link> para dejar un comentario.</p>
+          <p className="text-secondary"><Link to="/login" className="text-primary hover:underline">Inicia sesión</Link> para dejar un comentario.</p>
         )}
         
         <div className="space-y-4">
           {project.comments.slice().reverse().map((comment) => (
-            <div key={comment._id} className="bg-white p-4 rounded-lg shadow-sm flex flex-col items-start">
+            <div key={comment._id} className="bg-card-bg p-4 rounded-lg shadow-sm flex flex-col items-start">
               <div className="flex justify-between w-full mb-1">
                 <h5 className="text-lg font-semibold">{comment.name}</h5>
-                <small className="text-gray-500 text-sm">{new Date(comment.createdAt).toLocaleString()}</small>
+                <small className="text-secondary text-sm">{new Date(comment.createdAt).toLocaleString()}</small>
               </div>
-              <p className="text-gray-700">{comment.text}</p>
+              <p className="text-secondary">{comment.text}</p>
             </div>
           ))}
         </div>

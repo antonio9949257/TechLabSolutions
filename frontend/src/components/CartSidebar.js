@@ -45,7 +45,7 @@ const CartSidebar = () => {
       <div
         ref={offcanvasRef}
         className={`
-          fixed top-0 right-0 w-80 h-full bg-white shadow-lg z-50
+          fixed top-0 right-0 w-80 h-full bg-card-bg shadow-lg z-50
           transform transition-transform duration-300 ease-in-out
           ${isCartOpen ? 'translate-x-0' : 'translate-x-full'}
         `}
@@ -55,7 +55,7 @@ const CartSidebar = () => {
           <h5 className="text-xl font-semibold">Tu Carrito</h5>
           <button
             onClick={closeCart}
-            className="text-gray-400 hover:text-gray-600"
+            className="text-secondary hover:text-primary"
           >
             ✕
           </button>
@@ -65,7 +65,7 @@ const CartSidebar = () => {
         <div className="flex flex-col h-full p-4 overflow-y-auto">
           {loading ? (
             <div className="flex items-center justify-center flex-grow">
-              <div className="h-8 w-8 animate-spin rounded-full border-2 border-blue-500 border-t-transparent" />
+              <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent" />
             </div>
           ) : cart && cart.items.length > 0 ? (
             <>
@@ -77,11 +77,11 @@ const CartSidebar = () => {
                         <h6 className="font-medium">
                           {item.product.nombre}
                         </h6>
-                        <p className="text-sm text-gray-500">
+                        <p className="text-sm text-secondary">
                           Cantidad: {item.quantity}
                         </p>
                       </div>
-                      <span className="text-gray-600">
+                      <span className="text-secondary">
                         Bs {(item.price * item.quantity).toFixed(2)}
                       </span>
                     </div>
@@ -99,7 +99,7 @@ const CartSidebar = () => {
                         }
                         className="
                           w-16 px-2 py-1 text-sm border rounded
-                          focus:outline-none focus:ring-2 focus:ring-blue-500
+                          focus:outline-none focus:ring-2 focus:ring-primary
                         "
                       />
 
@@ -108,7 +108,7 @@ const CartSidebar = () => {
                           removeFromCart(item.product._id)
                         }
                         className="
-                          px-2 py-1 text-red-600 border border-red-500 rounded
+                          px-2 py-1 text-red-500 border border-red-500 rounded
                           hover:bg-red-500 hover:text-white transition
                         "
                       >
@@ -128,8 +128,8 @@ const CartSidebar = () => {
                 <button
                   onClick={handleCheckout}
                   className="
-                    w-full bg-green-600 text-white py-2 rounded
-                    hover:bg-green-700 transition
+                    w-full bg-green-500 text-white py-2 rounded
+                    hover:bg-green-600 transition
                   "
                 >
                   Proceder al Pago
@@ -138,14 +138,14 @@ const CartSidebar = () => {
             </>
           ) : (
             <div className="flex flex-col items-center justify-center flex-grow text-center">
-              <p className="text-gray-600 mb-4">
+              <p className="text-secondary mb-4">
                 Tu carrito está vacío
               </p>
               <button
                 onClick={handleViewProducts}
                 className="
-                  bg-blue-600 text-white px-4 py-2 rounded
-                  hover:bg-blue-700 transition
+                  bg-primary text-white px-4 py-2 rounded
+                  hover:opacity-90 transition
                 "
               >
                 Ver Productos

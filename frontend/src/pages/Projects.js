@@ -29,7 +29,7 @@ const Projects = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen-1/2">
-        <div className="animate-spin rounded-full h-12 w-12 border-4 border-t-4 border-blue-500">
+        <div className="animate-spin rounded-full h-12 w-12 border-4 border-t-4 border-primary">
           <span className="sr-only">Cargando...</span>
         </div>
       </div>
@@ -37,7 +37,7 @@ const Projects = () => {
   }
 
   if (error) {
-    return <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mx-auto my-4 max-w-lg">{error}</div>;
+    return <div className="bg-red-200 border border-red-500 text-red-600 px-4 py-3 rounded relative mx-auto my-4 max-w-lg">{error}</div>;
   }
 
   return (
@@ -46,23 +46,23 @@ const Projects = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {projects.length > 0 ? (
           projects.map((project) => (
-            <div key={project._id} className="bg-white rounded-lg shadow-md h-full flex flex-col">
+            <div key={project._id} className="bg-card-bg rounded-lg shadow-md h-full flex flex-col">
               {project.image && (
                 <img src={project.image} className="w-full h-48 object-cover rounded-t-lg" alt={project.title} />
               )}
               <div className="p-4 flex flex-col flex-grow">
                 <h5 className="text-xl font-semibold mb-2">{project.title}</h5>
-                <p className="text-gray-600 text-sm mb-2">
+                <p className="text-secondary text-sm mb-2">
                   Publicado por {project.user?.name || 'Admin'}
                 </p>
-                <p className="text-gray-700 mb-4 flex-grow">
+                <p className="text-secondary mb-4 flex-grow">
                   {project.description.substring(0, 100)}...
                 </p>
-                <Link to={`/projects/${project._id}`} className="mt-auto py-2 px-4 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-300 text-center">
+                <Link to={`/projects/${project._id}`} className="mt-auto py-2 px-4 bg-primary text-white rounded-md hover:opacity-90 transition duration-300 text-center">
                   Leer Más y Comentar
                 </Link>
               </div>
-              <div className="p-4 border-t border-gray-200 text-gray-500 text-sm">
+              <div className="p-4 border-t border-secondary text-secondary text-sm">
                 <small>{new Date(project.createdAt).toLocaleDateString()}</small>
                 <span className="float-right">
                   <i className="fas fa-heart mr-1"></i>{project.likes.length}
@@ -72,7 +72,7 @@ const Projects = () => {
             </div>
           ))
         ) : (
-          <p className="text-gray-600">No hay proyectos publicados en este momento.</p>
+          <p className="text-secondary">No hay proyectos publicados en este momento.</p>
         )}
       </div>
     </div>
