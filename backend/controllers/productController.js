@@ -2,15 +2,16 @@ const { validationResult } = require('express-validator');
 const Product = require('../models/Product');
 const { minioClient } = require('../config/minio');
 const crypto = require('crypto');
+const xlsx = require('xlsx');
 
 // @desc    Obtener todos los productos, con opción de filtrar por categoría
 // @route   GET /api/products
 // @access  Public
 const getProducts = async (req, res) => {
-  const { category } = req.query;
-  const filter = category ? { category } : {};
+  const { categoria } = req.query;
+  const filter = categoria ? { categoria } : {};
 
-  const products = await Product.find(filter);
+  const products = await Product.find(filter).populate('categoria');
   res.json(products);
 };
 
@@ -19,7 +20,7 @@ const getProducts = async (req, res) => {
 // @access  Public
 const getProductById = async (req, res) => {
   try {
-    const product = await Product.findById(req.params.id);
+    const product = await Product.findById(req.params.id).populate('categoria');
 
     if (product) {
       res.json(product);
@@ -41,8 +42,8 @@ const createProduct = async (req, res) => {
     return res.status(400).json({ errors: errors.array() });
   }
 
-  const { name, description, price, sku, stock, category, components } = req.body;
-  let imageUrl = '';
+  const { nombre, descripcion, precio, sku, stock, categoria, especificaciones } = req.body;
+  let img_url = '';
 
   try {
     if (req.file) {
@@ -52,21 +53,22 @@ const createProduct = async (req, res) => {
       
       await minioClient.putObject(bucketName, fileName, fileBuffer);
       
-      imageUrl = `${process.env.MINIO_USE_SSL === 'true' ? 'https' : 'http'}://${process.env.MINIO_ENDPOINT}:${process.env.MINIO_PORT}/${bucketName}/${fileName}`;
+      img_url = `${process.env.MINIO_USE_SSL === 'true' ? 'https' : 'http'}://${process.env.MINIO_ENDPOINT}:${process.env.MINIO_PORT}/${bucketName}/${fileName}`;
     }
 
     const product = new Product({
-      name,
-      description,
-      price,
+      nombre,
+      descripcion,
+      precio,
       sku,
       stock,
-      category,
-      components,
-      image: imageUrl,
+      categoria,
+      especificaciones,
+      img_url: img_url,
     });
 
     const createdProduct = await product.save();
+    await createdProduct.populate('categoria');
     res.status(201).json(createdProduct);
   } catch (error) {
     console.error('Error al crear producto:', error);
@@ -83,7 +85,7 @@ const updateProduct = async (req, res) => {
     return res.status(400).json({ errors: errors.array() });
   }
   
-  const { name, description, price, sku, stock, category, components } = req.body;
+  const { nombre, descripcion, precio, sku, stock, categoria, especificaciones } = req.body;
 
   try {
     const product = await Product.findById(req.params.id);
@@ -99,18 +101,19 @@ const updateProduct = async (req, res) => {
       
       await minioClient.putObject(bucketName, fileName, fileBuffer);
       
-      product.image = `${process.env.MINIO_USE_SSL === 'true' ? 'https' : 'http'}://${process.env.MINIO_ENDPOINT}:${process.env.MINIO_PORT}/${bucketName}/${fileName}`;
+      product.img_url = `${process.env.MINIO_USE_SSL === 'true' ? 'https' : 'http'}://${process.env.MINIO_ENDPOINT}:${process.env.MINIO_PORT}/${bucketName}/${fileName}`;
     }
 
-    product.name = name || product.name;
-    product.description = description || product.description;
-    product.price = price ?? product.price;
+    product.nombre = nombre || product.nombre;
+    product.descripcion = descripcion || product.descripcion;
+    product.precio = precio ?? product.precio;
     product.sku = sku || product.sku;
     product.stock = stock ?? product.stock;
-    product.category = category || product.category;
-    product.components = components || product.components;
+    product.categoria = categoria || product.categoria;
+    product.especificaciones = especificaciones || product.especificaciones;
 
     const updatedProduct = await product.save();
+    await updatedProduct.populate('categoria');
     res.json(updatedProduct);
   } catch (error) {
     console.error('Error al actualizar producto:', error);
@@ -126,7 +129,7 @@ const deleteProduct = async (req, res) => {
 
   if (product) {
     // Opcional: Eliminar la imagen de MinIO también
-    // if (product.image) { ... }
+    // if (product.img_url) { ... }
     await product.deleteOne();
     res.json({ message: 'Producto eliminado' });
   } else {
@@ -134,10 +137,53 @@ const deleteProduct = async (req, res) => {
   }
 };
 
+// @desc    Exportar productos a XLSX
+// @route   GET /api/products/export
+// @access  Private/Admin
+const exportProducts = async (req, res) => {
+  try {
+    const products = await Product.find({}).populate('categoria');
+
+    const productsForSheet = products.map(p => ({
+      'Nombre': p.nombre,
+      'SKU': p.sku,
+      'Categoría': p.categoria?.name || 'Sin categoría',
+      'Precio (Bs)': p.precio,
+      'Stock': p.stock,
+      'Descripción': p.descripcion,
+      'URL de Imagen': p.img_url,
+      'Especificaciones': JSON.stringify(p.especificaciones),
+    }));
+
+    const worksheet = xlsx.utils.json_to_sheet(productsForSheet);
+    const workbook = xlsx.utils.book_new();
+    xlsx.utils.book_append_sheet(workbook, worksheet, 'Productos');
+
+    // Escribir el libro de trabajo en un buffer
+    const buffer = xlsx.write(workbook, { type: 'buffer', bookType: 'xlsx' });
+
+    res.setHeader(
+      'Content-Type',
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    );
+    res.setHeader(
+      'Content-Disposition',
+      'attachment; filename="productos.xlsx"'
+    );
+
+    res.send(buffer);
+  } catch (error) {
+    console.error('Error al exportar productos:', error);
+    res.status(500).json({ message: 'Error interno del servidor' });
+  }
+};
+
+
 module.exports = {
   getProducts,
   getProductById,
   createProduct,
   updateProduct,
   deleteProduct,
+  exportProducts,
 };

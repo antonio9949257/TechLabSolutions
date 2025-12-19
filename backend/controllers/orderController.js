@@ -9,7 +9,7 @@ const Cart = require('../models/Cart'); // Import Cart model
 // @access  Private
 const createOrder = async (req, res) => {
   try {
-    const cart = await Cart.findOne({ user: req.user._id }).populate('items.product', 'name price stock');
+    const cart = await Cart.findOne({ user: req.user._id }).populate('items.product', 'nombre price stock');
 
     if (!cart || cart.items.length === 0) {
       return res.status(400).json({ message: 'No hay artículos en el carrito' });
@@ -17,7 +17,7 @@ const createOrder = async (req, res) => {
 
     const orderItems = cart.items.map(item => ({
       product: item.product._id,
-      name: item.product.name,
+      name: item.product.nombre,
       qty: item.quantity,
       price: item.product.price, // Use price from DB for security
     }));
@@ -27,7 +27,7 @@ const createOrder = async (req, res) => {
     // Check stock for all items before creating the order
     for (const item of cart.items) {
       if (item.product.stock < item.quantity) {
-        return res.status(400).json({ message: `No hay stock suficiente para ${item.product.name}` });
+        return res.status(400).json({ message: `No hay stock suficiente para ${item.product.nombre}` });
       }
     }
 

@@ -52,6 +52,7 @@ const ProductDetail = () => {
       <div className="flex flex-wrap -mx-4">
         <div className="w-full md:w-1/2 px-4 mb-8 md:mb-0">
           <img
+<<<<<<< HEAD
             src={product.image}
             alt={product.name}
             className="max-w-full h-auto rounded-lg max-h-[500px] object-cover"
@@ -65,6 +66,22 @@ const ProductDetail = () => {
             <>
               <h3 className="text-2xl font-semibold my-4">Precio: ${product.price.toFixed(2)}</h3>
               <p className="text-gray-700 mb-4">Stock: {product.stock > 0 ? `${product.stock} disponibles` : 'Agotado'}</p>
+=======
+            src={product.img_url}
+            alt={product.nombre}
+            className="img-fluid rounded"
+            style={{ maxHeight: '500px', objectFit: 'cover' }}
+          />
+        </div>
+        <div className="col-md-6">
+          <h2>{product.nombre}</h2>
+          <p className="text-muted">Categoría: {product.categoria?.name || 'Sin categoría'}</p>
+          <p>{product.descripcion}</p>
+          {user ? (
+            <>
+              <h3 className="my-3">Precio: Bs {product.precio ? parseFloat(product.precio.toFixed(2)) : '0.00'}</h3>
+              <p>Stock: {product.stock > 0 ? `${product.stock} disponibles` : 'Agotado'}</p>
+>>>>>>> 069726e5513e66c788697b28348dba9e97fe421a
               {user.role === 'cliente' && (
                 <button
                   className="py-3 px-6 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-300 text-lg"

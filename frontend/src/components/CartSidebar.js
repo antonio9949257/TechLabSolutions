@@ -4,7 +4,15 @@ import { useNavigate } from 'react-router-dom';
 import { Trash } from 'react-bootstrap-icons';
 
 const CartSidebar = () => {
-  const { cart, loading, removeFromCart, updateCartItem, isCartOpen, closeCart } = useCart();
+  const {
+    cart,
+    loading,
+    removeFromCart,
+    updateCartItem,
+    isCartOpen,
+    closeCart,
+  } = useCart();
+
   const offcanvasRef = useRef(null);
   const navigate = useNavigate();
 
@@ -29,62 +37,80 @@ const CartSidebar = () => {
     <>
       {isCartOpen && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-40"
+          className="fixed inset-0 bg-black/50 z-40"
           onClick={closeCart}
-        ></div>
+        />
       )}
+
       <div
-        className={`fixed top-0 right-0 w-80 h-full bg-white shadow-lg transform transition-transform duration-300 ease-in-out z-50
-          ${isCartOpen ? 'translate-x-0' : 'translate-x-full'}`}
-        tabIndex="-1"
-        aria-labelledby="cartSidebarLabel"
         ref={offcanvasRef}
+        className={`
+          fixed top-0 right-0 w-80 h-full bg-white shadow-lg z-50
+          transform transition-transform duration-300 ease-in-out
+          ${isCartOpen ? 'translate-x-0' : 'translate-x-full'}
+        `}
       >
-        <div className="flex justify-between items-center p-4 border-b border-gray-200">
-          <h5 className="text-xl font-semibold" id="cartSidebarLabel">
-            Tu Carrito
-          </h5>
+        {/* Header */}
+        <div className="flex items-center justify-between p-4 border-b">
+          <h5 className="text-xl font-semibold">Tu Carrito</h5>
           <button
-            type="button"
-            className="text-gray-400 hover:text-gray-600"
-            aria-label="Close"
             onClick={closeCart}
+            className="text-gray-400 hover:text-gray-600"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
+            ✕
           </button>
         </div>
-        <div className="p-4 overflow-y-auto flex-grow flex flex-col">
+
+        {/* Body */}
+        <div className="flex flex-col h-full p-4 overflow-y-auto">
           {loading ? (
-            <div className="flex justify-center items-center h-full">
-              <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-blue-500">
-                <span className="sr-only">Cargando...</span>
-              </div>
+            <div className="flex items-center justify-center flex-grow">
+              <div className="h-8 w-8 animate-spin rounded-full border-2 border-blue-500 border-t-transparent" />
             </div>
           ) : cart && cart.items.length > 0 ? (
             <>
-              <ul className="divide-y divide-gray-200 flex-grow">
+              <ul className="flex-grow divide-y">
                 {cart.items.map((item) => (
                   <li key={item.product._id} className="py-4">
-                    <div className="flex justify-between items-start">
+                    <div className="flex justify-between">
                       <div>
-                        <h6 className="text-lg font-medium">{item.product.name}</h6>
-                        <small className="text-gray-500">Cantidad: {item.quantity}</small>
+                        <h6 className="font-medium">
+                          {item.product.nombre}
+                        </h6>
+                        <p className="text-sm text-gray-500">
+                          Cantidad: {item.quantity}
+                        </p>
                       </div>
-                      <span className="text-gray-600">${(item.price * item.quantity).toFixed(2)}</span>
+                      <span className="text-gray-600">
+                        Bs {(item.price * item.quantity).toFixed(2)}
+                      </span>
                     </div>
-                    <div className="flex items-center mt-2">
+
+                    <div className="flex items-center gap-2 mt-2">
                       <input
                         type="number"
-                        className="w-16 px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm"
-                        value={item.quantity}
-                        onChange={(e) => handleQuantityChange(item.product._id, e.target.value)}
                         min="1"
+                        value={item.quantity}
+                        onChange={(e) =>
+                          handleQuantityChange(
+                            item.product._id,
+                            e.target.value
+                          )
+                        }
+                        className="
+                          w-16 px-2 py-1 text-sm border rounded
+                          focus:outline-none focus:ring-2 focus:ring-blue-500
+                        "
                       />
+
                       <button
-                        className="ml-2 px-2 py-1 border border-red-500 text-red-500 rounded-md hover:bg-red-500 hover:text-white transition duration-300 text-sm"
-                        onClick={() => removeFromCart(item.product._id)}
+                        onClick={() =>
+                          removeFromCart(item.product._id)
+                        }
+                        className="
+                          px-2 py-1 text-red-600 border border-red-500 rounded
+                          hover:bg-red-500 hover:text-white transition
+                        "
                       >
                         <Trash />
                       </button>
@@ -92,17 +118,36 @@ const CartSidebar = () => {
                   </li>
                 ))}
               </ul>
-              <div className="mt-4 p-4 border-t border-gray-200">
-                <h4 className="text-xl font-bold mb-4">Total: ${cart.totalPrice.toFixed(2)}</h4>
-                <button onClick={handleCheckout} className="w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 transition duration-300">
+
+              {/* Footer */}
+              <div className="pt-4 border-t">
+                <h4 className="text-lg font-bold mb-3">
+                  Total: Bs {cart.totalPrice.toFixed(2)}
+                </h4>
+
+                <button
+                  onClick={handleCheckout}
+                  className="
+                    w-full bg-green-600 text-white py-2 rounded
+                    hover:bg-green-700 transition
+                  "
+                >
                   Proceder al Pago
                 </button>
               </div>
             </>
           ) : (
-            <div className="text-center p-4">
-              <p className="text-gray-600 mb-4">Tu carrito está vacío.</p>
-              <button onClick={handleViewProducts} className="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-300">
+            <div className="flex flex-col items-center justify-center flex-grow text-center">
+              <p className="text-gray-600 mb-4">
+                Tu carrito está vacío
+              </p>
+              <button
+                onClick={handleViewProducts}
+                className="
+                  bg-blue-600 text-white px-4 py-2 rounded
+                  hover:bg-blue-700 transition
+                "
+              >
                 Ver Productos
               </button>
             </div>

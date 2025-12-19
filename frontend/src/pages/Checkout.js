@@ -14,7 +14,7 @@ const Checkout = () => {
         body: JSON.stringify({
           orderItems: cart.items.map(item => ({
             product: item.product._id,
-            name: item.product.name,
+            name: item.product.nombre,
             qty: item.quantity,
             price: item.price,
           })),
@@ -24,8 +24,8 @@ const Checkout = () => {
 
       if (response.ok) {
         alert('¡Pedido realizado con éxito!');
-        fetchCart(); // To clear the cart in the UI
-        navigate('/dashboard'); // Redirect to dashboard or an order confirmation page
+        fetchCart();
+        navigate('/dashboard');
       } else {
         const errorData = await response.json();
         alert(`Error al crear el pedido: ${errorData.message}`);
@@ -38,49 +38,82 @@ const Checkout = () => {
 
   if (!cart || cart.items.length === 0) {
     return (
-      <div className="container mx-auto px-4 py-8">
-        <h2 className="text-3xl font-bold mb-6">Checkout</h2>
-        <p className="text-gray-600">Tu carrito está vacío. No puedes proceder al pago.</p>
+      <div className="max-w-5xl mx-auto px-4 py-8">
+        <h2 className="text-3xl font-bold mb-4">Checkout</h2>
+        <p className="text-gray-600">
+          Tu carrito está vacío. No puedes proceder al pago.
+        </p>
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="max-w-5xl mx-auto px-4 py-8">
       <h2 className="text-3xl font-bold mb-6">Resumen del Pedido</h2>
-      <div className="bg-white rounded-lg shadow-md p-6">
-          <table className="w-full border-collapse">
-            <thead className="bg-gray-200 text-gray-700">
-              <tr>
-                <th className="py-3 px-4 text-left font-semibold">Nombre del Producto</th>
-                <th className="py-3 px-4 text-center font-semibold">Cantidad</th>
-                <th className="py-3 px-4 text-right font-semibold">Precio Unitario</th>
-                <th className="py-3 px-4 text-right font-semibold">Total</th>
+
+      <div className="bg-white shadow rounded-lg p-6 overflow-x-auto">
+        <table className="w-full border-collapse">
+          <thead className="bg-gray-100">
+            <tr>
+              <th className="py-3 px-4 text-left">Producto</th>
+              <th className="py-3 px-4 text-center">Cantidad</th>
+              <th className="py-3 px-4 text-right">Precio Unitario</th>
+              <th className="py-3 px-4 text-right">Total</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            {cart.items.map(item => (
+              <tr
+                key={item.product._id}
+                className="border-b last:border-b-0"
+              >
+                <td className="py-3 px-4">
+                  {item.product.nombre}
+                </td>
+                <td className="py-3 px-4 text-center">
+                  {item.quantity}
+                </td>
+                <td className="py-3 px-4 text-right">
+                  Bs {parseFloat(item.price.toFixed(2))}
+                </td>
+                <td className="py-3 px-4 text-right font-medium">
+                  Bs {parseFloat(
+                    (item.price * item.quantity).toFixed(2)
+                  )}
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {cart.items.map((item) => (
-                <tr key={item.product._id} className="border-b border-gray-200">
-                  <td className="py-3 px-4">{item.product.name}</td>
-                  <td className="py-3 px-4 text-center">{item.quantity}</td>
-                  <td className="py-3 px-4 text-right">${item.price.toFixed(2)}</td>
-                  <td className="py-3 px-4 text-right">${(item.price * item.quantity).toFixed(2)}</td>
-                </tr>
-              ))}
-            </tbody>
-            <tfoot>
-              <tr className="border-t-2 border-gray-300">
-                <td colSpan="3" className="py-3 px-4 text-right font-bold">Total General</td>
-                <td className="py-3 px-4 text-right font-bold">${cart.totalPrice.toFixed(2)}</td>
-              </tr>
-            </tfoot>
-          </table>
-          <button className="w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 transition duration-300 mt-6" onClick={handleCreateOrder}>
-            Confirmar y Pagar (Simulado)
-          </button>
+            ))}
+          </tbody>
+
+          <tfoot>
+            <tr className="border-t-2">
+              <td
+                colSpan="3"
+                className="py-4 px-4 text-right font-bold"
+              >
+                Total General
+              </td>
+              <td className="py-4 px-4 text-right font-bold">
+                Bs {parseFloat(cart.totalPrice.toFixed(2))}
+              </td>
+            </tr>
+          </tfoot>
+        </table>
+
+        <button
+          onClick={handleCreateOrder}
+          className="
+            mt-6 w-full bg-green-600 text-white py-3 rounded
+            hover:bg-green-700 transition
+          "
+        >
+          Confirmar y Pagar (Simulado)
+        </button>
       </div>
     </div>
   );
 };
 
 export default Checkout;
+

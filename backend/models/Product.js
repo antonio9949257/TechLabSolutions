@@ -2,15 +2,15 @@ const mongoose = require('mongoose');
 
 const productSchema = mongoose.Schema(
   {
-    name: {
+    nombre: {
       type: String,
       required: [true, 'Por favor, añade un nombre de producto'],
     },
-    description: {
+    descripcion: {
       type: String,
       required: [true, 'Por favor, añade una descripción'],
     },
-    price: {
+    precio: {
       type: Number,
       required: [true, 'Por favor, añade un precio'],
     },
@@ -24,17 +24,18 @@ const productSchema = mongoose.Schema(
       required: true,
       default: 0,
     },
-    category: {
-      type: String,
+    categoria: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Category',
       required: [true, 'Por favor, añade una categoría'],
     },
-    components: {
-      type: [String],
-      default: [],
+    especificaciones: {
+      type: Object,
+      default: {},
     },
-    image: {
+    img_url: {
       type: String,
-      required: false, // No es obligatorio tener una imagen
+      required: false,
     },
   },
   {
