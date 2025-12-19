@@ -31,60 +31,43 @@ const ProductDetail = () => {
         setLoading(false);
       }
     };
-
     fetchProduct();
   }, [id]);
 
-  if (loading) {
-    return <div className="container mx-auto px-4 mt-8">Cargando producto...</div>;
-  }
-
-  if (error) {
-    return <div className="container mx-auto px-4 mt-8 text-red-600">Error: {error}</div>;
-  }
-
-  if (!product) {
-    return <div className="container mx-auto px-4 mt-8">Producto no encontrado.</div>;
-  }
+  if (loading) return <div className="container mx-auto px-4 mt-8">Cargando producto...</div>;
+  if (error) return <div className="container mx-auto px-4 mt-8 text-red-600">Error: {error}</div>;
+  if (!product) return <div className="container mx-auto px-4 mt-8">Producto no encontrado.</div>;
 
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="flex flex-wrap -mx-4">
         <div className="w-full md:w-1/2 px-4 mb-8 md:mb-0">
           <img
-<<<<<<< HEAD
-            src={product.image}
-            alt={product.name}
-            className="max-w-full h-auto rounded-lg max-h-[500px] object-cover"
+            src={product.img_url}
+            alt={product.nombre}
+            className="w-full h-auto max-h-[500px] object-cover rounded-lg"
           />
         </div>
         <div className="w-full md:w-1/2 px-4">
-          <h2 className="text-4xl font-bold mb-4">{product.name}</h2>
-          <p className="text-gray-600 text-lg mb-2">Categoría: {product.category}</p>
-          <p className="text-gray-700 mb-4">{product.description}</p>
+          <h2 className="text-4xl font-bold mb-4">{product.nombre}</h2>
+          <p className="text-gray-600 text-lg mb-2">
+            Categoría: {product.categoria?.name || 'Sin categoría'}
+          </p>
+          <p className="text-gray-700 mb-4">{product.descripcion}</p>
+
           {user ? (
             <>
-              <h3 className="text-2xl font-semibold my-4">Precio: ${product.price.toFixed(2)}</h3>
-              <p className="text-gray-700 mb-4">Stock: {product.stock > 0 ? `${product.stock} disponibles` : 'Agotado'}</p>
-=======
-            src={product.img_url}
-            alt={product.nombre}
-            className="img-fluid rounded"
-            style={{ maxHeight: '500px', objectFit: 'cover' }}
-          />
-        </div>
-        <div className="col-md-6">
-          <h2>{product.nombre}</h2>
-          <p className="text-muted">Categoría: {product.categoria?.name || 'Sin categoría'}</p>
-          <p>{product.descripcion}</p>
-          {user ? (
-            <>
-              <h3 className="my-3">Precio: Bs {product.precio ? parseFloat(product.precio.toFixed(2)) : '0.00'}</h3>
-              <p>Stock: {product.stock > 0 ? `${product.stock} disponibles` : 'Agotado'}</p>
->>>>>>> 069726e5513e66c788697b28348dba9e97fe421a
+              <h3 className="text-2xl font-semibold my-4">
+                Precio: Bs {product.precio ? parseFloat(product.precio.toFixed(2)) : '0.00'}
+              </h3>
+              <p className="text-gray-700 mb-4">
+                Stock: {product.stock > 0 ? `${product.stock} disponibles` : 'Agotado'}
+              </p>
               {user.role === 'cliente' && (
                 <button
-                  className="py-3 px-6 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-300 text-lg"
+                  className={`py-3 px-6 text-lg rounded-md text-white transition duration-300 ${
+                    product.stock > 0 ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-400 cursor-not-allowed'
+                  }`}
                   onClick={() => addToCart(product._id, 1)}
                   disabled={product.stock === 0}
                 >
@@ -94,7 +77,10 @@ const ProductDetail = () => {
             </>
           ) : (
             <div className="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded relative my-4">
-              <Link to="/login" className="text-blue-700 hover:underline">Inicia sesión</Link> para ver precios y comprar.
+              <Link to="/login" className="text-blue-700 hover:underline">
+                Inicia sesión
+              </Link>{' '}
+              para ver precios y comprar.
             </div>
           )}
         </div>
