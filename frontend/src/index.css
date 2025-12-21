@@ -17,7 +17,7 @@
 [data-theme='dark'] {
   --background-color: #1a202c; /* Dark Gray */
   --text-color: #ecf0f1; /* Light Silver */
-  --primary-color: #3498db; /* Bright Blue */
+  --primary-color: #64b5f6; /* Lighter Blue for Dark Theme */
   --secondary-color: #7f8c8d; /* Grayish */
   --card-bg: #2c3e50; /* Midnight Blue */
   --navbar-bg: #2c3e50; /* Midnight Blue */

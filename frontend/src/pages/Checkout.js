@@ -40,7 +40,7 @@ const Checkout = () => {
     return (
       <div className="max-w-5xl mx-auto px-4 py-8">
         <h2 className="text-3xl font-bold mb-4">Checkout</h2>
-        <p className="text-gray-600">
+        <p className="text-secondary">
           Tu carrito está vacío. No puedes proceder al pago.
         </p>
       </div>
@@ -51,9 +51,9 @@ const Checkout = () => {
     <div className="max-w-5xl mx-auto px-4 py-8">
       <h2 className="text-3xl font-bold mb-6">Resumen del Pedido</h2>
 
-      <div className="bg-white shadow rounded-lg p-6 overflow-x-auto">
+      <div className="bg-card-bg shadow rounded-lg p-6 overflow-x-auto">
         <table className="w-full border-collapse">
-          <thead className="bg-gray-100">
+          <thead className="bg-background">
             <tr>
               <th className="py-3 px-4 text-left">Producto</th>
               <th className="py-3 px-4 text-center">Cantidad</th>
@@ -104,8 +104,8 @@ const Checkout = () => {
         <button
           onClick={handleCreateOrder}
           className="
-            mt-6 w-full bg-green-600 text-white py-3 rounded
-            hover:bg-green-700 transition
+            mt-6 w-full bg-primary text-white py-3 rounded
+            hover:opacity-90 transition
           "
         >
           Confirmar y Pagar (Simulado)

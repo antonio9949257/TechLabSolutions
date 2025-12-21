@@ -3,6 +3,14 @@ const User = require('../models/User');
 const { minioClient } = require('../config/minio');
 const path = require('path');
 
+// Helper function to calculate stars
+const calculateStars = (project) => {
+  const score = (project.likes.length * 5) + project.views;
+  // Using log1p (ln(1+x)) to have a smoother curve for star calculation
+  const stars = Math.min(5, Math.floor(Math.log1p(score)));
+  return stars;
+};
+
 // @desc    Create a new project
 // @route   POST /api/projects
 // @access  Private/Admin
@@ -161,10 +169,37 @@ const likeProject = async (req, res) => {
       project.likes.push(req.user._id);
     }
 
+    // Recalculate stars
+    project.stars = calculateStars(project);
+
     await project.save();
     res.json(project);
   } catch (error) {
     console.error('Error liking project:', error);
+    res.status(500).json({ message: 'Error interno del servidor' });
+  }
+};
+
+// @desc    Increment project view count
+// @route   POST /api/projects/:id/view
+// @access  Public
+const incrementView = async (req, res) => {
+  try {
+    const project = await Project.findById(req.params.id);
+
+    if (!project) {
+      return res.status(404).json({ message: 'Proyecto no encontrado' });
+    }
+
+    project.views += 1;
+    
+    // Recalculate stars
+    project.stars = calculateStars(project);
+
+    await project.save();
+    res.json({ message: 'Vista incrementada', views: project.views, stars: project.stars });
+  } catch (error) {
+    console.error('Error incrementing view count:', error);
     res.status(500).json({ message: 'Error interno del servidor' });
   }
 };
@@ -213,4 +248,5 @@ module.exports = {
   deleteProject,
   likeProject,
   addComment,
+  incrementView,
 };

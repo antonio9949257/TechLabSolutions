@@ -33,7 +33,7 @@ const Products = () => {
   }, []);
 
   const handleAddToCart = (productId) => {
-    addToCart(productId, 1);
+    addToCart(productId, 1, 'Product');
   };
 
   if (loading) return <div className="container mx-auto px-4 mt-8">Cargando productos...</div>;

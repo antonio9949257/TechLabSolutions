@@ -31,6 +31,18 @@ const ProjectDetail = () => {
     fetchProject();
   }, [fetchProject]);
 
+  useEffect(() => {
+    // Increment view count
+    const incrementView = async () => {
+      try {
+        await publicFetch(`/projects/${id}/view`, { method: 'POST' });
+      } catch (err) {
+        console.error('Error incrementing view count:', err);
+      }
+    };
+    incrementView();
+  }, [id]);
+
   const handleLike = async () => {
     if (!user) return; // Or redirect to login
     try {

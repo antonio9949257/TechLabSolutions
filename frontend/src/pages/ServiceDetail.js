@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { publicFetch } from '../utils/api';
 import { useAuth } from '../context/AuthContext';
+import { useCart } from '../context/CartContext'; // Import useCart
 
 const ServiceDetail = () => {
   const { id } = useParams();
@@ -9,6 +10,7 @@ const ServiceDetail = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { user } = useAuth();
+  const { addToCart } = useCart(); // Get addToCart function
 
   useEffect(() => {
     const fetchService = async () => {
@@ -61,12 +63,19 @@ const ServiceDetail = () => {
           <p className="text-gray-700 mb-4">{service.description}</p>
           {user ? (
             <>
-              <h3 className="text-2xl font-semibold my-4">Precio: ${service.price.toFixed(2)}</h3>
-              {/* Assuming services don't have stock but have availability */}
+              <h3 className="text-2xl font-semibold my-4">Precio Base: Bs {service.price.toFixed(2)}</h3>
               <p className="text-gray-700 mb-4">Disponibilidad: {service.availability ? 'Disponible' : 'No disponible'}</p>
-              <Link to={`/quote/${service._id}`} className="py-3 px-6 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition duration-300 text-lg mt-4">
-                Solicitar Cotización
-              </Link>
+              {user.role === 'cliente' && (
+                <button
+                  className={`py-3 px-6 text-lg rounded-md text-white transition duration-300 ${
+                    service.availability ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-400 cursor-not-allowed'
+                  }`}
+                  onClick={() => addToCart(service._id, 1, 'Service')}
+                  disabled={!service.availability}
+                >
+                  {service.availability ? 'Añadir al Carrito' : 'No Disponible'}
+                </button>
+              )}
             </>
           ) : (
             <div className="bg-blue-100 border border-blue-400 text-blue-700 px-4 py-3 rounded relative my-4">

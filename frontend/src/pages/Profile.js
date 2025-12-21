@@ -1,189 +1,112 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { authenticatedFetch } from '../utils/api';
 import { useAuth } from '../context/AuthContext';
+import { PersonCircle, Gear } from 'react-bootstrap-icons';
+import ProfileSettings from './ProfileSettings'; // Import the settings component
 
 const Profile = () => {
-  const { user, token, login } = useAuth(); // Get user, token, and login function to update context
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [nickname, setNickname] = useState(''); // New state for nickname
-  const [password, setPassword] = useState(''); // For password change
-  const [confirmPassword, setConfirmPassword] = useState(''); // For password change confirmation
-  const [profilePictureFile, setProfilePictureFile] = useState(null); // New state for profile picture file
-  const [profilePictureUrl, setProfilePictureUrl] = useState(''); // New state for displaying current profile picture
-  const [message, setMessage] = useState(null);
-  const [error, setError] = useState(null);
+  const { user, token } = useAuth();
+  const [profileData, setProfileData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
-  useEffect(() => {
-    const fetchUserProfile = async () => {
-      if (user && token) {
-        try {
-          const response = await authenticatedFetch('/profile');
-          if (response.ok) {
-            const data = await response.json();
-            setName(data.name);
-            setEmail(data.email);
-            setNickname(data.nickname || ''); // Initialize nickname
-            setProfilePictureUrl(data.profilePicture || ''); // Initialize profile picture URL
-          } else {
-            const errorData = await response.json();
-            setError(errorData.message || 'Error al cargar el perfil');
-          }
-        } catch (err) {
-          console.error('Error fetching user profile:', err);
-          setError('Error de conexión al servidor');
-        } finally {
-          setLoading(false);
+  const fetchUserProfile = useCallback(async () => {
+    if (user && token) {
+      setLoading(true);
+      try {
+        const response = await authenticatedFetch('/profile');
+        if (response.ok) {
+          const data = await response.json();
+          setProfileData(data);
+        } else {
+          const errorData = await response.json();
+          setError(errorData.message || 'Error al cargar el perfil');
         }
-      } else {
+      } catch (err) {
+        console.error('Error fetching user profile:', err);
+        setError('Error de conexión al servidor');
+      } finally {
         setLoading(false);
-        setError('No autenticado.');
       }
-    };
-
-    fetchUserProfile();
+    } else {
+      setLoading(false);
+      setError('No autenticado.');
+    }
   }, [user, token]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setMessage(null);
-    setError(null);
+  useEffect(() => {
+    fetchUserProfile();
+  }, [fetchUserProfile]);
 
-    if (password !== confirmPassword) {
-      setError('Las contraseñas no coinciden');
-      return;
-    }
-
-    try {
-      const formData = new FormData();
-      formData.append('name', name);
-      formData.append('email', email);
-      formData.append('nickname', nickname); // Add nickname to formData
-      if (password) {
-        formData.append('password', password);
-      }
-      if (profilePictureFile) {
-        formData.append('profilePicture', profilePictureFile); // Add profile picture file to formData
-      }
-
-      const response = await authenticatedFetch('/profile', {
-        method: 'PUT',
-        body: formData, // Send FormData
-        // Do NOT set Content-Type header for FormData, browser sets it automatically
-      });
-
-      if (response.ok) {
-        const updatedUser = await response.json();
-        setMessage('Perfil actualizado exitosamente');
-        setName(updatedUser.name);
-        setEmail(updatedUser.email);
-        setNickname(updatedUser.nickname || ''); // Update nickname state
-        setProfilePictureUrl(updatedUser.profilePicture || ''); // Update profile picture URL state
-        setPassword('');
-        setConfirmPassword('');
-        setProfilePictureFile(null); // Clear file input
-
-        // Update the user object in AuthContext
-        login({ ...user, ...updatedUser });
-      } else {
-        const errorData = await response.json();
-        setError(errorData.message || 'Error al actualizar el perfil');
-      }
-    } catch (err) {
-      console.error('Error updating profile:', err);
-      setError('Error de conexión al servidor');
-    }
+  const handleProfileUpdate = () => {
+    fetchUserProfile(); // Refetch data when settings are updated
   };
 
-  if (loading) {
-    return <div className="container mx-auto px-4 mt-8">Cargando perfil...</div>;
+  if (loading && !profileData) { // Avoid full page loader when refetching
+    return <div className="container mx-auto px-4 py-8 text-center">Cargando perfil...</div>;
   }
 
-  if (error && error !== 'No autenticado.') {
-    return <div className="container mx-auto px-4 mt-8 text-red-600">Error: {error}</div>;
+  if (error) {
+    return <div className="container mx-auto px-4 py-8 text-center text-red-600">Error: {error}</div>;
   }
 
-  if (!user) {
-    return <div className="container mx-auto px-4 mt-8 text-yellow-600">Por favor, inicia sesión para ver tu perfil.</div>;
+  if (!profileData) {
+    return <div className="container mx-auto px-4 py-8 text-center text-yellow-600">No se pudo cargar la información del perfil.</div>;
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h2 className="text-3xl font-bold mb-6">Configuración de Perfil</h2>
-      {message && <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative my-4">{message}</div>}
-      {error && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative my-4">{error}</div>}
-      <form onSubmit={handleSubmit}>
-        <div className="mb-4">
-          <label htmlFor="name" className="block text-gray-700 text-sm font-bold mb-2">Nombre</label>
-          <input
-            type="text"
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id="name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="nickname" className="block text-gray-700 text-sm font-bold mb-2">Nickname</label>
-          <input
-            type="text"
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id="nickname"
-            value={nickname}
-            onChange={(e) => setNickname(e.target.value)}
-          />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="email" className="block text-gray-700 text-sm font-bold mb-2">Email</label>
-          <input
-            type="email"
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="profilePicture" className="block text-gray-700 text-sm font-bold mb-2">Foto de Perfil</label>
-          <input
-            type="file"
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id="profilePicture"
-            onChange={(e) => setProfilePictureFile(e.target.files[0])}
-          />
-          {profilePictureUrl && (
-            <div className="mt-4">
-              <p className="text-gray-700 mb-2">Imagen actual:</p>
-              <img src={profilePictureUrl} alt="Profile" className="w-24 h-24 object-cover rounded-full" />
+    <>
+      <div className="container mx-auto px-4 py-12">
+        <div className="max-w-2xl mx-auto bg-card-bg rounded-2xl shadow-xl p-8">
+          <div className="flex flex-col items-center">
+            {profileData.profilePicture ? (
+              <img
+                src={profileData.profilePicture}
+                alt="Foto de Perfil"
+                className="w-32 h-32 rounded-full object-cover shadow-lg mb-4"
+              />
+            ) : (
+              <PersonCircle className="w-32 h-32 text-secondary mb-4" />
+            )}
+            <h1 className="text-4xl font-bold text-text-primary">{profileData.name}</h1>
+            {profileData.nickname && (
+              <p className="text-xl text-secondary mt-1">@{profileData.nickname}</p>
+            )}
+            <div className="w-full mt-8">
+              <div className="flex justify-between py-3 border-b border-gray-200">
+                <span className="font-semibold text-gray-600">Email:</span>
+                <span className="text-gray-800">{profileData.email}</span>
+              </div>
+              <div className="flex justify-between py-3 border-b border-gray-200">
+                <span className="font-semibold text-gray-600">Rol:</span>
+                <span className="text-gray-800 capitalize">{profileData.role}</span>
+              </div>
+              <div className="flex justify-between py-3">
+                <span className="font-semibold text-gray-600">Miembro desde:</span>
+                <span className="text-gray-800">{new Date(profileData.createdAt).toLocaleDateString()}</span>
+              </div>
             </div>
-          )}
+            <button
+              onClick={() => setIsSettingsOpen(true)}
+              className="mt-8 inline-flex items-center gap-2 bg-primary text-white py-2 px-6 rounded-lg shadow-md hover:bg-primary-dark transition duration-300"
+            >
+              <Gear className="w-5 h-5" />
+              Configuración de Perfil
+            </button>
+          </div>
         </div>
-        <div className="mb-4">
-          <label htmlFor="password" className="block text-gray-700 text-sm font-bold mb-2">Nueva Contraseña (dejar en blanco para no cambiar)</label>
-          <input
-            type="password"
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+      </div>
+
+      {isSettingsOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <ProfileSettings 
+            onClose={() => setIsSettingsOpen(false)} 
+            onProfileUpdate={handleProfileUpdate}
           />
         </div>
-        <div className="mb-6">
-          <label htmlFor="confirmPassword" className="block text-gray-700 text-sm font-bold mb-2">Confirmar Nueva Contraseña</label>
-          <input
-            type="password"
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            id="confirmPassword"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-          />
-        </div>
-        <button type="submit" className="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-300">Actualizar Perfil</button>
-      </form>
-    </div>
+      )}
+    </>
   );
 };
 

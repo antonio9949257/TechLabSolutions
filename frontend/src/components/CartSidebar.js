@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { useCart } from '../context/CartContext';
 import { useNavigate } from 'react-router-dom';
 import { Trash } from 'react-bootstrap-icons';
@@ -15,11 +15,9 @@ const CartSidebar = () => {
 
   const navigate = useNavigate();
 
-  const handleQuantityChange = (itemId, quantity) => {
-    const newQuantity = parseInt(quantity, 10);
-    if (newQuantity > 0) {
-      updateCartItem(itemId, newQuantity);
-    }
+  const handleQuantityChange = (itemId, newQuantity) => {
+    const quantity = Math.max(1, Number(newQuantity));
+    updateCartItem(itemId, quantity);
   };
 
   const handleCheckout = () => {
@@ -32,54 +30,6 @@ const CartSidebar = () => {
     navigate('/products');
   };
 
-  const cartContents = useMemo(() => {
-    if (!cart || !cart.items) return { hasProducts: false, hasServices: false };
-
-    let productsFound = false;
-    let servicesFound = false;
-
-    for (const item of cart.items) {
-      // If item.itemType is explicitly 'Product'
-      if (item.itemType === 'Product') {
-        productsFound = true;
-      }
-      // If item.itemType is explicitly 'Service'
-      else if (item.itemType === 'Service') {
-        servicesFound = true;
-      }
-      // If item.itemType is missing (undefined or null), assume it's an old Product
-      else if (item.itemType === undefined || item.itemType === null) {
-        productsFound = true;
-      }
-    }
-    return { hasProducts: productsFound, hasServices: servicesFound };
-  }, [cart]);
-
-  const renderFooter = () => {
-    const { hasProducts, hasServices } = cartContents;
-
-    console.log('Cart Contents:', cartContents); // Debug log
-    console.log('hasProducts:', hasProducts, 'hasServices:', hasServices); // Debug log
-        console.log('Cart items length for button rendering:', cart.items.length); // New debug log
-
-        return (
-          <div className="pt-4 border-t">
-            <h4 className="text-lg font-bold mb-3">
-              Total: Bs {cart.totalPrice.toFixed(2)}
-            </h4>
-
-            {cart.items.length > 0 && (
-              <button
-                onClick={handleCheckout}
-                className="w-full bg-green-500 text-white py-2 rounded hover:bg-green-600 transition"
-              >
-                Proceder al Pago
-              </button>
-            )}
-          </div>
-        );
-      };
-
   return (
     <>
       <div
@@ -87,6 +37,7 @@ const CartSidebar = () => {
           fixed top-0 right-0 w-80 h-full bg-card-bg shadow-lg z-50
           transform transition-transform duration-300 ease-in-out
           ${isCartOpen ? 'translate-x-0' : 'translate-x-full'}
+          flex flex-col // Added flexbox for column layout
         `}
       >
         {/* Header */}
@@ -100,15 +51,15 @@ const CartSidebar = () => {
           </button>
         </div>
 
-        {/* Body */}
-        <div className="flex flex-col h-full p-4 overflow-y-auto">
+        {/* Body - now the scrollable part */}
+        <div className="flex-1 overflow-y-auto p-4"> {/* flex-1 to take available space, overflow-y-auto for scrolling */}
           {loading ? (
             <div className="flex items-center justify-center flex-grow">
               <div className="h-8 w-8 animate-spin rounded-full border-2 border-primary border-t-transparent" />
             </div>
           ) : cart && cart.items.length > 0 ? (
             <>
-              <ul className="flex-grow divide-y">
+              <ul className="divide-y"> {/* Removed flex-grow from ul */}
                 {cart.items.map((cartItem) => (
                   <li key={cartItem.item._id} className="py-4">
                     <div className="flex justify-between">
@@ -126,18 +77,28 @@ const CartSidebar = () => {
                     </div>
 
                     <div className="flex items-center gap-2 mt-2">
-                      <input
-                        type="number"
-                        min="1"
-                        value={cartItem.quantity}
-                        onChange={(e) =>
-                          handleQuantityChange(
-                            cartItem.item._id,
-                            e.target.value
-                          )
+                      <button
+                        onClick={() =>
+                          handleQuantityChange(cartItem.item._id, cartItem.quantity - 1)
                         }
-                        className="w-16 px-2 py-1 text-sm border rounded focus:outline-none focus:ring-2 focus:ring-primary"
-                      />
+                        disabled={cartItem.quantity <= 1}
+                        className="w-8 h-8 flex items-center justify-center border rounded disabled:opacity-50 transition-all duration-150 ease-in-out"
+                      >
+                        −
+                      </button>
+
+                      <span className="min-w-[24px] text-center">
+                        {cartItem.quantity}
+                      </span>
+
+                      <button
+                        onClick={() =>
+                          handleQuantityChange(cartItem.item._id, cartItem.quantity + 1)
+                        }
+                        className="w-8 h-8 flex items-center justify-center border rounded transition-all duration-150 ease-in-out"
+                      >
+                        +
+                      </button>
 
                       <button
                         onClick={() => removeFromCart(cartItem.item._id)}
@@ -149,7 +110,6 @@ const CartSidebar = () => {
                   </li>
                 ))}
               </ul>
-              {renderFooter()}
             </>
           ) : (
             <div className="flex flex-col items-center justify-center flex-grow text-center">
@@ -165,6 +125,22 @@ const CartSidebar = () => {
             </div>
           )}
         </div>
+
+        {/* Footer - now sticky at the bottom */}
+        {cart && cart.items.length > 0 && ( // Only render footer if cart has items
+          <div className="sticky bottom-0 z-50 bg-card-bg p-4 border-t"> {/* Added sticky, z-index, background, padding, and top border */}
+            <h4 className="text-lg font-bold mb-3">
+              Total: Bs {cart.totalPrice.toFixed(2)}
+            </h4>
+
+            <button
+              onClick={handleCheckout}
+              className="w-full bg-primary text-white py-2 rounded hover:opacity-90 transition"
+            >
+              Proceder al Pago
+            </button>
+          </div>
+        )}
       </div>
     </>
   );

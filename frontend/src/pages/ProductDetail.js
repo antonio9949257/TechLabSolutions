@@ -68,7 +68,7 @@ const ProductDetail = () => {
                   className={`py-3 px-6 text-lg rounded-md text-white transition duration-300 ${
                     product.stock > 0 ? 'bg-blue-600 hover:bg-blue-700' : 'bg-gray-400 cursor-not-allowed'
                   }`}
-                  onClick={() => addToCart(product._id, 1)}
+                  onClick={() => addToCart(product._id, 1, 'Product')}
                   disabled={product.stock === 0}
                 >
                   {product.stock > 0 ? 'Añadir al Carrito' : 'Agotado'}

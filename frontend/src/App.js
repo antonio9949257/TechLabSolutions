@@ -1,9 +1,9 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Navbar from './components/Navbar';
+import SearchNavbar from './components/SearchNavbar'; // Import SearchNavbar
 import Footer from './components/Footer';
 import Home from './pages/Home';
-import Dashboard from './pages/Dashboard';
 import Products from './pages/Products';
 import Services from './pages/Services';
 import Login from './pages/Login';
@@ -24,6 +24,7 @@ import Quote from './pages/Quote'; // Import Quote
 import Projects from './pages/Projects'; // Import Projects
 import ProjectDetail from './pages/ProjectDetail'; // Import ProjectDetail
 import CartSidebar from './components/CartSidebar'; // Import CartSidebar
+import FloatingCartButton from './components/FloatingCartButton'; // Import FloatingCartButton
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 
@@ -34,7 +35,9 @@ function App() {
         <Router>
           <div className="flex flex-col min-h-screen">
             <Navbar />
+            <SearchNavbar /> {/* Render the new SearchNavbar */}
             <CartSidebar />
+            <FloatingCartButton />
             <main className="flex-grow">
               <Routes>
                 <Route path="/" element={<Home />} />
@@ -51,7 +54,6 @@ function App() {
 
                 {/* Protected Routes */}
                 <Route element={<ProtectedRoute allowedRoles={['admin', 'cliente']} />}>
-                  <Route path="/dashboard" element={<Dashboard />} />
                   <Route path="/profile" element={<Profile />} />
                   <Route path="/checkout" element={<Checkout />} />
                 </Route>

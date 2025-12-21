@@ -9,25 +9,25 @@ const Cart = require('../models/Cart'); // Import Cart model
 // @access  Private
 const createOrder = async (req, res) => {
   try {
-    const cart = await Cart.findOne({ user: req.user._id }).populate('items.product', 'nombre price stock');
+    const cart = await Cart.findOne({ user: req.user._id }).populate('items.item', 'nombre price stock');
 
     if (!cart || cart.items.length === 0) {
       return res.status(400).json({ message: 'No hay artículos en el carrito' });
     }
 
     const orderItems = cart.items.map(item => ({
-      product: item.product._id,
-      name: item.product.nombre,
+      product: item.item._id,
+      name: item.item.nombre || item.item.name,
       qty: item.quantity,
-      price: item.product.price, // Use price from DB for security
+      price: item.price, // Usar el precio guardado en el carrito
     }));
 
     const totalPrice = orderItems.reduce((acc, item) => acc + item.price * item.qty, 0);
 
     // Check stock for all items before creating the order
     for (const item of cart.items) {
-      if (item.product.stock < item.quantity) {
-        return res.status(400).json({ message: `No hay stock suficiente para ${item.product.nombre}` });
+      if (item.itemType === 'Product' && item.item.stock < item.quantity) {
+        return res.status(400).json({ message: `No hay stock suficiente para ${item.item.nombre || item.item.name}` });
       }
     }
 

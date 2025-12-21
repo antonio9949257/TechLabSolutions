@@ -1,6 +1,26 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { publicFetch } from '../utils/api';
+import { Heart, ChatSquareText, PersonCircle, Star, StarFill } from 'react-bootstrap-icons';
+
+// Helper component for star ratings
+const StarRating = ({ rating }) => {
+  const totalStars = 5;
+  const filledStars = Math.round(rating);
+
+  return (
+    <div className="flex items-center">
+      {[...Array(totalStars)].map((_, index) =>
+        index < filledStars ? (
+          <StarFill key={index} className="w-4 h-4 text-yellow-400" />
+        ) : (
+          <Star key={index} className="w-4 h-4 text-gray-300" />
+        )
+      )}
+    </div>
+  );
+};
+
 
 const Projects = () => {
   const [projects, setProjects] = useState([]);
@@ -26,6 +46,15 @@ const Projects = () => {
     fetchProjects();
   }, []);
 
+  const featuredProjects = useMemo(() => {
+    return [...projects].sort((a, b) => b.stars - a.stars).slice(0, 3);
+  }, [projects]);
+
+  const otherProjects = useMemo(() => {
+    return projects.filter(p => !featuredProjects.some(fp => fp._id === p._id));
+  }, [projects, featuredProjects]);
+
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen-1/2">
@@ -42,37 +71,116 @@ const Projects = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-4xl font-bold mb-6">Proyectos de TechLab</h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {projects.length > 0 ? (
-          projects.map((project) => (
-            <div key={project._id} className="bg-card-bg rounded-lg shadow-md h-full flex flex-col">
-              {project.image && (
-                <img src={project.image} className="w-full h-48 object-cover rounded-t-lg" alt={project.title} />
-              )}
-              <div className="p-4 flex flex-col flex-grow">
-                <h5 className="text-xl font-semibold mb-2">{project.title}</h5>
-                <p className="text-secondary text-sm mb-2">
-                  Publicado por {project.user?.name || 'Admin'}
-                </p>
-                <p className="text-secondary mb-4 flex-grow">
-                  {project.description.substring(0, 100)}...
-                </p>
-                <Link to={`/projects/${project._id}`} className="mt-auto py-2 px-4 bg-primary text-white rounded-md hover:opacity-90 transition duration-300 text-center">
-                  Leer Más y Comentar
-                </Link>
+      {/* Featured Projects Section */}
+      {featuredProjects.length > 0 && (
+        <div className="mb-16">
+          <h2 className="text-3xl font-bold mb-8 text-center border-b-2 border-primary pb-3">Proyectos Destacados</h2>
+          <div className="flex flex-col gap-12">
+            {featuredProjects.map((project) => (
+              <div key={project._id} className="bg-card-bg rounded-xl shadow-lg flex flex-col md:flex-row overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
+                {project.image && (
+                  <img src={project.image} className="w-full md:w-2/5 lg:w-1/3 h-64 md:h-auto object-cover" alt={project.title} />
+                )}
+                <div className="p-6 flex flex-col flex-grow">
+                  <div>
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex items-center gap-3">
+                        {project.user?.profilePicture ? (
+                          <img
+                            src={project.user.profilePicture}
+                            alt={project.user.name}
+                            className="w-12 h-12 rounded-full object-cover"
+                          />
+                        ) : (
+                          <PersonCircle className="w-12 h-12 text-secondary" />
+                        )}
+                        <div>
+                          <p className="font-semibold text-text-primary">{project.user?.name || 'Admin'}</p>
+                          <p className="text-secondary text-sm">{new Date(project.createdAt).toLocaleDateString()}</p>
+                        </div>
+                      </div>
+                      <StarRating rating={project.stars} />
+                    </div>
+                    <h5 className="text-3xl font-bold mb-3 text-text-primary">{project.title}</h5>
+                    <p className="text-text-secondary mb-6">
+                      {project.description.substring(0, 200)}...
+                    </p>
+                  </div>
+                  <div className="mt-auto flex items-center justify-between">
+                    <Link to={`/projects/${project._id}`} className="py-2 px-6 bg-primary text-white font-semibold rounded-lg shadow-md hover:bg-primary-dark transition duration-300 text-center">
+                      Leer Más
+                    </Link>
+                    <div className="flex items-center gap-6 text-secondary">
+                      <span className="flex items-center gap-2">
+                        <Heart className="w-5 h-5" />
+                        <span className="font-medium">{project.likes.length}</span>
+                      </span>
+                      <span className="flex items-center gap-2">
+                        <ChatSquareText className="w-5 h-5" />
+                        <span className="font-medium">{project.comments.length}</span>
+                      </span>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div className="p-4 border-t border-secondary text-secondary text-sm">
-                <small>{new Date(project.createdAt).toLocaleDateString()}</small>
-                <span className="float-right">
-                  <i className="fas fa-heart mr-1"></i>{project.likes.length}
-                  <i className="fas fa-comment ml-2 mr-1"></i>{project.comments.length}
-                </span>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <h1 className="text-4xl font-bold mb-8 text-center">Todos los Proyectos</h1>
+      <div className="flex flex-col gap-12">
+        {otherProjects.length > 0 ? (
+          otherProjects.map((project) => (
+            <div key={project._id} className="bg-card-bg rounded-xl shadow-lg flex flex-col md:flex-row overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
+              {project.image && (
+                <img src={project.image} className="w-full md:w-2/5 lg:w-1/3 h-64 md:h-auto object-cover" alt={project.title} />
+              )}
+              <div className="p-6 flex flex-col flex-grow">
+                <div>
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center gap-3">
+                      {project.user?.profilePicture ? (
+                        <img
+                          src={project.user.profilePicture}
+                          alt={project.user.name}
+                          className="w-12 h-12 rounded-full object-cover"
+                        />
+                      ) : (
+                        <PersonCircle className="w-12 h-12 text-secondary" />
+                      )}
+                      <div>
+                        <p className="font-semibold text-text-primary">{project.user?.name || 'Admin'}</p>
+                        <p className="text-secondary text-sm">{new Date(project.createdAt).toLocaleDateString()}</p>
+                      </div>
+                    </div>
+                    <StarRating rating={project.stars} />
+                  </div>
+                  <h5 className="text-3xl font-bold mb-3 text-text-primary">{project.title}</h5>
+                  <p className="text-text-secondary mb-6">
+                    {project.description.substring(0, 200)}...
+                  </p>
+                </div>
+                <div className="mt-auto flex items-center justify-between">
+                  <Link to={`/projects/${project._id}`} className="py-2 px-6 bg-primary text-white font-semibold rounded-lg shadow-md hover:bg-primary-dark transition duration-300 text-center">
+                    Leer Más
+                  </Link>
+                  <div className="flex items-center gap-6 text-secondary">
+                    <span className="flex items-center gap-2">
+                      <Heart className="w-5 h-5" />
+                      <span className="font-medium">{project.likes.length}</span>
+                    </span>
+                    <span className="flex items-center gap-2">
+                      <ChatSquareText className="w-5 h-5" />
+                      <span className="font-medium">{project.comments.length}</span>
+                    </span>
+                  </div>
+                </div>
               </div>
             </div>
           ))
         ) : (
-          <p className="text-secondary">No hay proyectos publicados en este momento.</p>
+          <p className="text-secondary text-center">No hay más proyectos publicados en este momento.</p>
         )}
       </div>
     </div>

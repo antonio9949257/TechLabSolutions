@@ -41,6 +41,16 @@ const projectSchema = new mongoose.Schema(
       type: String, // URL to the image
       required: false,
     },
+    views: {
+      type: Number,
+      default: 0,
+    },
+    stars: {
+      type: Number,
+      default: 0,
+      min: 0,
+      max: 5,
+    },
     likes: [
       {
         type: mongoose.Schema.Types.ObjectId,

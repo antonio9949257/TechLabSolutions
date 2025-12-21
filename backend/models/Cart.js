@@ -10,10 +10,15 @@ const cartSchema = mongoose.Schema(
     },
     items: [
       {
-        product: {
+        item: {
           type: mongoose.Schema.Types.ObjectId,
           required: true,
-          ref: 'Product',
+          refPath: 'items.itemType', // Dynamic reference
+        },
+        itemType: {
+          type: String,
+          required: true,
+          enum: ['Product', 'Service'],
         },
         quantity: {
           type: Number,

@@ -8,6 +8,7 @@ const {
   deleteProject,
   likeProject,
   addComment,
+  incrementView,
 } = require('../controllers/projectController');
 const { protect, admin } = require('../middleware/authMiddleware');
 const upload = require('../middleware/uploadMiddleware');
@@ -15,6 +16,7 @@ const upload = require('../middleware/uploadMiddleware');
 // Public routes
 router.route('/').get(getAllProjects);
 router.route('/:id').get(getProjectById);
+router.route('/:id/view').post(incrementView);
 
 // Admin routes
 router.route('/').post(protect, admin, upload.single('image'), createProject);

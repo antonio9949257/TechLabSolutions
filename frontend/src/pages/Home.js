@@ -17,8 +17,8 @@ const Home = () => {
           <p className="text-lg mb-5 mx-auto max-w-3xl">
             Soluciones accesibles en automatización, electrónica e informática industrial
           </p>
-          <div>
-            <Link to="/products" className="bg-card-bg text-primary hover:bg-background py-3 px-6 text-lg rounded-md mr-3 transition duration-300">
+          <div className="flex flex-col sm:flex-row justify-center gap-3">
+            <Link to="/products" className="bg-card-bg text-primary hover:bg-background py-3 px-6 text-lg rounded-md transition duration-300">
               Nuestros Productos
             </Link>
             <Link to="/services" className="border border-white text-white hover:bg-white hover:text-primary py-3 px-6 text-lg rounded-md transition duration-300">
@@ -158,8 +158,8 @@ const Home = () => {
           <p className="text-lg mb-5 mx-auto max-w-3xl">
             Únete a nuestra comunidad y accede a recursos, productos y servicios diseñados para impulsar tu aprendizaje.
           </p>
-          <div>
-            <Link to="/register" className="bg-card-bg text-primary hover:bg-background py-3 px-6 text-lg rounded-md mr-3 transition duration-300">
+          <div className="flex flex-col sm:flex-row justify-center gap-3">
+            <Link to="/register" className="bg-card-bg text-primary hover:bg-background py-3 px-6 text-lg rounded-md transition duration-300">
               Contáctanos
             </Link>
             <Link to="/services" className="border border-white text-white hover:bg-white hover:text-primary py-3 px-6 text-lg rounded-md transition duration-300">

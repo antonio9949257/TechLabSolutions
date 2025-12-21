@@ -14,6 +14,6 @@ router.use(protect, isCliente);
 
 router.route('/').get(getCart).post(addToCart);
 
-router.route('/items/:productId').delete(removeFromCart).put(updateCartItem);
+router.route('/items/:itemId').delete(removeFromCart).put(updateCartItem);
 
 module.exports = router;

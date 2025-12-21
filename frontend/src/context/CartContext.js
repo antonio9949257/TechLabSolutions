@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext, useEffect } from 'react';
+import React, { createContext, useState, useContext, useEffect, useCallback } from 'react';
 import { authenticatedFetch } from '../utils/api';
 import { useAuth } from './AuthContext';
 
@@ -9,14 +9,14 @@ export const useCart = () => useContext(CartContext);
 export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState({ items: [], totalPrice: 0 });
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const [loading, setLoading] = useState(true); // Add loading state
+  const [loading, setLoading] = useState(true);
   const { token } = useAuth();
 
   const openCart = () => setIsCartOpen(true);
   const toggleCart = () => setIsCartOpen(!isCartOpen);
   const closeCart = () => setIsCartOpen(false);
 
-  const fetchCart = async () => {
+  const fetchCart = useCallback(async () => {
     if (!token) {
       setCart({ items: [], totalPrice: 0 });
       setLoading(false);
@@ -28,69 +28,36 @@ export const CartProvider = ({ children }) => {
         const data = await response.json();
         setCart(data);
       } else {
-        // If cart is not found (e.g., 404), it means it's empty for the user
         setCart({ items: [], totalPrice: 0 });
       }
     } catch (error) {
       console.error('Error fetching cart:', error);
-      setCart({ items: [], totalPrice: 0 }); // Also reset on network error
-    } finally {
-      setLoading(false); // Stop loading in any case
-    }
-  };
-
-  useEffect(() => {
-    const attemptFetch = async (retries = 3, delay = 1000) => {
-      setLoading(true);
-      if (!token) {
-        setCart({ items: [], totalPrice: 0 });
-        setLoading(false);
-        return;
-      }
-
-      for (let i = 0; i < retries; i++) {
-        try {
-          const response = await authenticatedFetch('/cart');
-          if (response.ok) {
-            const data = await response.json();
-            setCart(data);
-            setLoading(false);
-            return; // Success
-          }
-          if (response.status === 404) {
-            setCart({ items: [], totalPrice: 0 });
-            setLoading(false);
-            return; // Empty cart, not an error
-          }
-          // Handle other non-ok responses as transient errors
-          console.error(`Failed to fetch cart, status: ${response.status} on attempt ${i + 1}`);
-        } catch (error) {
-          console.error(`Network error fetching cart (attempt ${i + 1}):`, error);
-        }
-
-        if (i < retries - 1) {
-          await new Promise(res => setTimeout(res, delay));
-        }
-      }
-
-      // All retries failed
       setCart({ items: [], totalPrice: 0 });
+    } finally {
       setLoading(false);
-      console.error("Failed to fetch cart after multiple retries.");
-    };
-
-    attemptFetch();
+    }
   }, [token]);
 
-  const addToCart = async (productId, quantity) => {
+  useEffect(() => {
+    if (token) {
+      fetchCart();
+    } else {
+      setCart({ items: [], totalPrice: 0 });
+      setLoading(false);
+    }
+  }, [token, fetchCart]);
+
+  const addToCart = async (itemId, quantity, itemType) => {
     try {
       const response = await authenticatedFetch('/cart', {
         method: 'POST',
-        body: JSON.stringify({ productId, quantity }),
+        body: JSON.stringify({ itemId, quantity, itemType }),
       });
       if (response.ok) {
-        await fetchCart(); // Refetch cart to get updated state
-        if (!isCartOpen) {
+        await fetchCart();
+        // Only open cart automatically if not on a mobile screen
+        // or if the cart is already open (to keep it open if user wants)
+        if (!isCartOpen && window.innerWidth >= 1024) { // Assuming 1024px as desktop breakpoint
           openCart();
         }
       }
@@ -99,9 +66,9 @@ export const CartProvider = ({ children }) => {
     }
   };
 
-  const removeFromCart = async (productId) => {
+  const removeFromCart = async (itemId) => {
     try {
-      const response = await authenticatedFetch(`/cart/items/${productId}`, {
+      const response = await authenticatedFetch(`/cart/items/${itemId}`, {
         method: 'DELETE',
       });
       if (response.ok) {
@@ -112,9 +79,9 @@ export const CartProvider = ({ children }) => {
     }
   };
 
-  const updateCartItem = async (productId, quantity) => {
+  const updateCartItem = async (itemId, quantity) => {
     try {
-      const response = await authenticatedFetch(`/cart/items/${productId}`, {
+      const response = await authenticatedFetch(`/cart/items/${itemId}`, {
         method: 'PUT',
         body: JSON.stringify({ quantity }),
       });
@@ -128,7 +95,7 @@ export const CartProvider = ({ children }) => {
 
   const value = {
     cart,
-    loading, // Expose loading state
+    loading,
     addToCart,
     removeFromCart,
     updateCartItem,
