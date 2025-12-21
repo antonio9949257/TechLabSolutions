@@ -12,11 +12,11 @@ const Checkout = () => {
       const response = await authenticatedFetch('/orders', {
         method: 'POST',
         body: JSON.stringify({
-          orderItems: cart.items.map(item => ({
-            product: item.product._id,
-            name: item.product.nombre,
-            qty: item.quantity,
-            price: item.price,
+          orderItems: cart.items.map(cartItem => ({
+            product: cartItem.item?._id,
+            name: cartItem.item?.nombre || cartItem.item?.name || 'Producto Desconocido',
+            qty: cartItem.quantity,
+            price: cartItem.price,
           })),
           totalPrice: cart.totalPrice,
         }),
@@ -63,23 +63,23 @@ const Checkout = () => {
           </thead>
 
           <tbody>
-            {cart.items.map(item => (
+            {cart.items.map(cartItem => (
               <tr
-                key={item.product._id}
+                key={cartItem.item?._id || `cart-item-${cartItem.itemType}-${cartItem.quantity}`}
                 className="border-b last:border-b-0"
               >
                 <td className="py-3 px-4">
-                  {item.product.nombre}
+                  {cartItem.item?.nombre || cartItem.item?.name || 'Producto Desconocido'}
                 </td>
                 <td className="py-3 px-4 text-center">
-                  {item.quantity}
+                  {cartItem.quantity}
                 </td>
                 <td className="py-3 px-4 text-right">
-                  Bs {parseFloat(item.price.toFixed(2))}
+                  Bs {parseFloat(cartItem.price.toFixed(2))}
                 </td>
                 <td className="py-3 px-4 text-right font-medium">
                   Bs {parseFloat(
-                    (item.price * item.quantity).toFixed(2)
+                    (cartItem.price * cartItem.quantity).toFixed(2)
                   )}
                 </td>
               </tr>
