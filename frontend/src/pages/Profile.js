@@ -15,7 +15,7 @@ const Profile = () => {
     if (user && token) {
       setLoading(true);
       try {
-        const response = await authenticatedFetch('/profile');
+        const response = await authenticatedFetch('/profile/me');
         if (response.ok) {
           const data = await response.json();
           setProfileData(data);

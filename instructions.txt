@@ -1,0 +1,9 @@
+I've updated `backend/server.js` to simplify the session cookie options for debugging.
+
+Please perform the following steps:
+1.  **Restart your backend server.**
+2.  Attempt to log in with Google again.
+3.  **Crucially, check your browser's Developer Tools (Application -> Cookies).**
+    *   **First, look for 'http://localhost:5000' and tell me if a cookie named 'sid' is present there.**
+    *   **Then, look for 'http://localhost:3000' and tell me if a cookie named 'sid' is present there.**
+4.  Also, please provide any new output from your backend console during this attempt.

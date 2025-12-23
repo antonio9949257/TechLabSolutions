@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const passport = require('passport'); // Import passport
 
 router.use(express.json({ limit: '50mb' }));
 router.use(express.urlencoded({ limit: '50mb', extended: false }));
@@ -11,6 +12,7 @@ const {
   createUser,
   updateUser,
   deleteUser,
+  deleteMe,
 } = require('../controllers/authController');
 const { protect } = require('../middleware/authMiddleware');
 const { adminProtect } = require('../middleware/adminMiddleware'); 
@@ -86,6 +88,43 @@ router.post('/login', loginUser);
 
 /**
  * @swagger
+ * /api/users/auth/google:
+ *   get:
+ *     summary: Inicia el flujo de autenticación con Google
+ *     tags: [Authentication]
+ *     responses:
+ *       302:
+ *         description: Redirecciona al proveedor Google
+ */
+router.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+
+/**
+ * @swagger
+ * /api/users/auth/google/callback:
+ *   get:
+ *     summary: Callback para el flujo de autenticación con Google
+ *     tags: [Authentication]
+ *     responses:
+ *       200:
+ *         description: Autenticación Google exitosa, devuelve token
+ *       401:
+ *         description: Fallo en la autenticación Google
+ */
+router.get(
+  '/auth/google/callback',
+  passport.authenticate('google', { failureRedirect: `${process.env.FRONTEND_URL}/login` }),
+  (req, res) => {
+    // Successful authentication, redirect to frontend with token and user ID
+    const token = req.user.token;
+    const userId = req.user._id; // Only pass the user ID, not the full object
+
+    // Redirect to frontend callback URL with token and user ID
+    res.redirect(`${process.env.FRONTEND_URL}/auth/callback?token=${token}&userId=${userId}`);
+  }
+);
+
+/**
+ * @swagger
  * /api/users/me:
  *   get:
  *     summary: Obtiene la información del usuario autenticado
@@ -99,6 +138,7 @@ router.post('/login', loginUser);
  *         description: No autorizado
  */
 router.get('/me', protect, getMe);
+router.delete('/me', protect, deleteMe);
 
 /**
  * @swagger

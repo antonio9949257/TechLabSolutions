@@ -8,6 +8,7 @@ import Products from './pages/Products';
 import Services from './pages/Services';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import AuthCallback from './pages/AuthCallback'; // Import AuthCallback
 import ProtectedRoute from './components/ProtectedRoute'; // Import ProtectedRoute
 import AdminPanel from './pages/AdminPanel'; // Import AdminPanel
 import AdminProducts from './pages/AdminProducts'; // Import AdminProducts
@@ -43,6 +44,7 @@ function App() {
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
+                <Route path="/auth/callback" element={<AuthCallback />} /> {/* New OIDC callback route */}
                 <Route path="/products" element={<Products />} />
                 <Route path="/products/:id" element={<ProductDetail />} />
                 <Route path="/services" element={<Services />} />

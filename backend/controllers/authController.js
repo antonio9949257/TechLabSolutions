@@ -180,6 +180,19 @@ const deleteUser = async (req, res) => {
   res.status(200).json({ message: 'Usuario eliminado exitosamente', id: req.params.id });
 };
 
+// @desc    Eliminar la cuenta del usuario autenticado
+// @route   DELETE /api/users/me
+// @access  Private
+const deleteMe = async (req, res) => {
+  try {
+    await User.findByIdAndDelete(req.user._id);
+    res.status(200).json({ message: 'Tu cuenta ha sido eliminada exitosamente.' });
+  } catch (error) {
+    console.error('Error al eliminar la cuenta:', error);
+    res.status(500).json({ message: 'Error interno del servidor' });
+  }
+};
+
 // Función para generar el JWT
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -195,4 +208,5 @@ module.exports = {
   createUser,
   updateUser,
   deleteUser,
+  deleteMe,
 };

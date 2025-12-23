@@ -32,10 +32,15 @@ const Login = () => {
     }
   };
 
+  const handleOIDCLogin = () => {
+    // Redirect to the backend's OIDC initiation endpoint
+    window.location.href = 'http://localhost:5000/api/users/auth/google';
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="w-full max-w-md">
-          <div className="bg-white p-8 rounded-lg shadow-lg">
+          <div className="bg-card-bg p-8 rounded-lg shadow-lg">
             <h3 className="text-3xl font-bold text-center mb-6 text-gray-800">Iniciar Sesión</h3>
             <form onSubmit={handleSubmit}>
               <div className="mb-4">
@@ -64,6 +69,15 @@ const Login = () => {
                 <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full">Login</button>
               </div>
             </form>
+            <div className="mt-4">
+              <button
+                onClick={handleOIDCLogin}
+                className="bg-black hover:bg-gray-800 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full flex items-center justify-center"
+              >
+                <img src="https://img.icons8.com/color/16/000000/google-logo.png" alt="Google logo" className="mr-2" />
+                Login con Google
+              </button>
+            </div>
             <p className="mt-4 text-center text-gray-600">
               ¿No tienes una cuenta? <Link to="/register" className="text-blue-500 hover:text-blue-800">Regístrate aquí</Link>
             </p>

@@ -52,7 +52,7 @@ const profileValidationRules = [
  *         description: Perfil actualizado
  */
 router
-  .route('/')
+  .route('/me')
   .get(protect, getMyProfile)
   .put(protect, upload.single('profilePicture'), updateMyProfile);
 

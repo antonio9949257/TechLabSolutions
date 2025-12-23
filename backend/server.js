@@ -1,6 +1,8 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const cors = require('cors');
+const passport = require('passport'); // Add passport
+const session = require('express-session'); // Add express-session
 const connectDB = require('./config/db');
 const { swaggerUi, swaggerDocs } = require('./swagger');
 const { ensureBucketExists } = require('./config/minio');
@@ -9,10 +11,32 @@ dotenv.config();
 connectDB();
 ensureBucketExists(process.env.MINIO_BUCKET_NAME);
 
-
 const app = express();
-app.use(cors({ origin: ['http://localhost:3000', 'http://192.168.50.57:3000'] }));
+app.set('trust proxy', 1); //  ESTA LÍNEA ES CRÍTICA
+
+app.use(cors({ 
+  origin: ['http://localhost:3000', 'http://192.168.50.57:3000'],
+  credentials: true // Add this line
+}));
 app.use(express.json()); // Middleware to parse JSON bodies
+
+// Session middleware for Passport
+app.use(session({
+  name: 'sid', // Add this line
+  secret: process.env.SESSION_SECRET || 'supersecretkey', // Use a strong secret from env
+  resave: false,
+  saveUninitialized: false,
+  cookie: { 
+    secure: false // Set to false for local development, true for production with HTTPS
+  } 
+}));
+
+// Initialize Passport
+app.use(passport.initialize());
+app.use(passport.session());
+
+// Import OIDC configuration
+require('./config/googleStrategy');
 
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
