@@ -28,15 +28,20 @@ const AuthCallback = () => {
             console.log('AuthCallback: Fetched user data', userData);
             login({ ...userData, token }); // Login with full user data and token
             console.log('AuthCallback: Login function called');
-            navigate('/'); // Redirect to home page after successful login
+            // Redirect based on user role
+            if (userData.role === 'admin') {
+              navigate('/admin');
+            } else {
+              navigate('/');
+            }
           } else {
             const errorData = await response.json();
             console.error('AuthCallback: Error fetching user profile:', errorData.message);
-            navigate('/login'); // Redirect to login on error
+            navigate('/'); // Redirect to home on error
           }
         } catch (error) {
           console.error('AuthCallback: Network error fetching user profile:', error);
-          navigate('/login'); // Redirect to login on network error
+          navigate('/'); // Redirect to home on network error
         }
       };
 
@@ -44,7 +49,7 @@ const AuthCallback = () => {
 
     } else {
       console.error('AuthCallback: Token or userId missing from callback');
-      navigate('/login'); // Redirect to login if data is missing
+      navigate('/'); // Redirect to home if data is missing
     }
   }, [location, login, navigate]);
 

@@ -56,7 +56,7 @@ const createProject = async (req, res) => {
 // @access  Public
 const getAllProjects = async (req, res) => {
   try {
-    const projects = await Project.find({}).sort({ createdAt: -1 }).populate('user', 'name');
+    const projects = await Project.find({}).sort({ createdAt: -1 }).populate('user', 'name profilePicture');
     res.json(projects);
   } catch (error) {
     console.error('Error getting projects:', error);
@@ -70,7 +70,7 @@ const getAllProjects = async (req, res) => {
 const getProjectById = async (req, res) => {
   try {
     const project = await Project.findById(req.params.id)
-      .populate('user', 'name')
+      .populate('user', 'name profilePicture')
       .populate('comments.user', 'name');
 
     if (project) {

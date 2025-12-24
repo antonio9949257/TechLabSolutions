@@ -11,8 +11,21 @@ const Home = () => {
       {/* Hero Section */}
       <section className="hero-section bg-primary text-white text-center py-12">
         <div className="container mx-auto px-4">
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-4">
-            {user ? `Bienvenido, ${user.name}` : 'Innovación Tecnológica al Alcance de Todos'}
+          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold mb-4 flex flex-col items-center justify-center">
+            {user ? (
+              <>
+                {user.profilePicture && (
+                  <img
+                    src={user.profilePicture}
+                    alt="Perfil"
+                    className="w-24 h-24 rounded-full object-cover mb-4 border-4 border-white"
+                  />
+                )}
+                Bienvenido, {user.nickname || user.name}
+              </>
+            ) : (
+              'Innovación Tecnológica al Alcance de Todos'
+            )}
           </h1>
           <p className="text-lg mb-5 mx-auto max-w-3xl">
             Soluciones accesibles en automatización, electrónica e informática industrial

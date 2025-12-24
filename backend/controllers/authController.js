@@ -52,12 +52,15 @@ const registerUser = async (req, res) => {
 // @desc    Autenticar un usuario
 // @route   POST /api/users/login
 // @access  Public
-const loginUser = async (req, res) => {
+const loginUser = async (req, res, io) => { // Accept io
   const { email, password } = req.body;
 
   const user = await User.findOne({ email });
 
   if (user && (await bcrypt.compare(password, user.password))) {
+    // Emit user online status via Socket.IO
+    io.emit('updateUserStatus', { userId: user._id, status: 'online' });
+
     res.json({
       _id: user.id,
       name: user.name,
@@ -139,7 +142,7 @@ const createUser = async (req, res) => {
 // @route   PUT /api/users/:id
 // @access  Private/Admin
 const updateUser = async (req, res) => {
-  const { name, email, role } = req.body; // Password update would be separate or handled carefully
+  const { name, email, role, status } = req.body; // Add status to destructuring
 
   const user = await User.findById(req.params.id);
 
@@ -151,9 +154,14 @@ const updateUser = async (req, res) => {
     return res.status(400).json({ message: 'Rol inválido' });
   }
 
+  if (status && !['active', 'inactive'].includes(status)) { // Validate status
+    return res.status(400).json({ message: 'Estado inválido' });
+  }
+
   user.name = name || user.name;
   user.email = email || user.email;
   user.role = role || user.role;
+  user.status = status || user.status; // Update status
 
   const updatedUser = await user.save();
 
@@ -162,6 +170,7 @@ const updateUser = async (req, res) => {
     name: updatedUser.name,
     email: updatedUser.email,
     role: updatedUser.role,
+    status: updatedUser.status, // Include status in response
   });
 };
 
@@ -180,12 +189,33 @@ const deleteUser = async (req, res) => {
   res.status(200).json({ message: 'Usuario eliminado exitosamente', id: req.params.id });
 };
 
+// @desc    Obtener un usuario por ID
+// @route   GET /api/users/:id
+// @access  Private/Admin
+const getUserById = async (req, res) => {
+  // This check is also done by adminProtect middleware, but good to have here too
+  if (req.user.role !== 'admin') {
+    return res.status(403).json({ message: 'No autorizado. Solo administradores.' });
+  }
+
+  const user = await User.findById(req.params.id).select('-password'); // Get user by ID, exclude password
+
+  if (!user) {
+    return res.status(404).json({ message: 'Usuario no encontrado' });
+  }
+
+  res.status(200).json(user);
+};
+
 // @desc    Eliminar la cuenta del usuario autenticado
 // @route   DELETE /api/users/me
 // @access  Private
-const deleteMe = async (req, res) => {
+const deleteMe = async (req, res, io) => { // Accept io
   try {
-    await User.findByIdAndDelete(req.user._id);
+    const userId = req.user._id;
+    await User.findByIdAndDelete(userId);
+    // Emit user offline status via Socket.IO
+    io.emit('updateUserStatus', { userId, status: 'offline' });
     res.status(200).json({ message: 'Tu cuenta ha sido eliminada exitosamente.' });
   } catch (error) {
     console.error('Error al eliminar la cuenta:', error);
@@ -209,4 +239,5 @@ module.exports = {
   updateUser,
   deleteUser,
   deleteMe,
+  getUserById, // Add new function to exports
 };

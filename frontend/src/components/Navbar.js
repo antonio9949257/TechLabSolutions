@@ -9,16 +9,33 @@ import {
   Moon,
   Display,
   Gear,
+  Speedometer2,
+  PeopleFill, // Import PeopleFill icon
 } from 'react-bootstrap-icons';
 import { useTheme } from '../context/ThemeContext';
+import LoginModal from './LoginModal'; // Import LoginModal
+import RegisterModal from './RegisterModal'; // Import RegisterModal
 
-const Navbar = () => {
-  const { token, user, logout } = useAuth();
+const Navbar = ({ toggleUserList }) => { // Accept toggleUserList prop
+  const { token, user, logout, showLoginModal, closeLoginModal, openLoginModal, showRegisterModal, closeRegisterModal, openRegisterModal } = useAuth();
   const { theme, changeTheme } = useTheme();
 
   const [isNavOpen, setIsNavOpen] = useState(false);
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
   const [isThemeDropdownOpen, setIsThemeDropdownOpen] = useState(false);
+
+  const handleLoginSuccess = () => {
+    // Optionally, perform actions after successful login, e.g., close modals
+    closeLoginModal();
+    closeRegisterModal();
+  };
+
+  const handleRegisterSuccess = () => {
+    // Optionally, perform actions after successful registration
+    closeRegisterModal();
+    // Maybe automatically open login modal after successful registration
+    openLoginModal();
+  };
 
   return (
     <nav className="bg-navbar-bg text-navbar-text shadow-md">
@@ -48,6 +65,12 @@ const Navbar = () => {
             <NavLink to="/projects" className="hover:text-primary">
               Proyectos
             </NavLink>
+            {user?.role === 'admin' && (
+              <NavLink to="/admin" className="hover:text-primary">
+                <Speedometer2 className="inline mr-1" />
+                Dashboard
+              </NavLink>
+            )}
           </ul>
 
           {/* Profile/Login Section (Always visible on desktop) */}
@@ -90,7 +113,7 @@ const Navbar = () => {
                         <>
                           <hr />
                           <Link
-                            to="/admin-panel"
+                            to="/admin-users"
                             className="block px-4 py-2 hover:bg-background"
                             onClick={() => {
                               setIsProfileDropdownOpen(false);
@@ -128,6 +151,16 @@ const Navbar = () => {
                             }}
                           >
                             Admin Proyectos
+                          </Link>
+                          <Link
+                            to="/admin/orders"
+                            className="block px-4 py-2 hover:bg-background"
+                            onClick={() => {
+                              setIsProfileDropdownOpen(false);
+                              setIsNavOpen(false);
+                            }}
+                          >
+                            Gestionar Pedidos
                           </Link>
                         </>
                       )}
@@ -198,13 +231,12 @@ const Navbar = () => {
                 </div>
               </>
             ) : (
-              <Link
-                to="/login"
+              <button
+                onClick={openLoginModal}
                 className="hover:text-primary"
-                onClick={() => setIsNavOpen(false)}
               >
                 Login
-              </Link>
+              </button>
             )}
           </div>
         </div>
@@ -219,9 +251,46 @@ const Navbar = () => {
             <NavLink to="/projects" className="hover:text-primary block py-2" onClick={() => setIsNavOpen(false)}>
               Proyectos
             </NavLink>
+            {user?.role === 'admin' && (
+              <NavLink to="/admin" className="hover:text-primary block py-2" onClick={() => setIsNavOpen(false)}>
+                <Speedometer2 className="inline mr-1" />
+                Dashboard
+              </NavLink>
+            )}
+            {!token && (
+              <>
+                <button
+                  onClick={() => { setIsNavOpen(false); openLoginModal(); }}
+                  className="hover:text-primary block py-2 text-left"
+                >
+                  Login
+                </button>
+                <button
+                  onClick={() => { setIsNavOpen(false); openRegisterModal(); }}
+                  className="hover:text-primary block py-2 text-left"
+                >
+                  Register
+                </button>
+              </>
+            )}
           </ul>
         )}
       </div>
+
+      {showLoginModal && (
+        <LoginModal
+          onClose={closeLoginModal}
+          onSuccess={handleLoginSuccess}
+          openRegisterModal={openRegisterModal}
+        />
+      )}
+      {showRegisterModal && (
+        <RegisterModal
+          onClose={closeRegisterModal}
+          onSuccess={handleRegisterSuccess}
+          openLoginModal={openLoginModal}
+        />
+      )}
     </nav>
   );
 };

@@ -2,6 +2,9 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { publicFetch } from '../utils/api';
 import { Heart, ChatSquareText, PersonCircle, Star, StarFill } from 'react-bootstrap-icons';
+import { useAuth } from '../context/AuthContext'; // Import useAuth
+
+const API_URL = "http://localhost:5000"; // Assuming backend runs on this URL
 
 // Helper component for star ratings
 const StarRating = ({ rating }) => {
@@ -26,6 +29,7 @@ const Projects = () => {
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const { user } = useAuth(); // Get user from context
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -66,11 +70,22 @@ const Projects = () => {
   }
 
   if (error) {
-    return <div className="bg-red-200 border border-red-500 text-red-600 px-4 py-3 rounded relative mx-auto my-4 max-w-lg">{error}</div>;
+    return <div className="bg-red-200 border border-500 text-red-600 px-4 py-3 rounded relative mx-auto my-4 max-w-lg">{error}</div>;
   }
 
   return (
     <div className="container mx-auto px-4 py-8">
+      {user && user.role === 'admin' && (
+        <div className="mb-8 text-right">
+          <Link
+            to="/admin-project-form"
+            className="bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 transition duration-300"
+          >
+            Crear Nuevo Proyecto
+          </Link>
+        </div>
+      )}
+
       {/* Featured Projects Section */}
       {featuredProjects.length > 0 && (
         <div className="mb-16">
@@ -87,9 +102,12 @@ const Projects = () => {
                       <div className="flex items-center gap-3">
                         {project.user?.profilePicture ? (
                           <img
-                            src={project.user.profilePicture}
+                            src={project.user.profilePicture.startsWith("http")
+                              ? project.user.profilePicture
+                              : `${API_URL}/${project.user.profilePicture}`}
                             alt={project.user.name}
                             className="w-12 h-12 rounded-full object-cover"
+                            onError={(e) => e.target.style.display = 'none'}
                           />
                         ) : (
                           <PersonCircle className="w-12 h-12 text-secondary" />
@@ -140,15 +158,18 @@ const Projects = () => {
                 <div>
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-3">
-                      {project.user?.profilePicture ? (
-                        <img
-                          src={project.user.profilePicture}
-                          alt={project.user.name}
-                          className="w-12 h-12 rounded-full object-cover"
-                        />
-                      ) : (
-                        <PersonCircle className="w-12 h-12 text-secondary" />
-                      )}
+                        {project.user?.profilePicture ? (
+                          <img
+                            src={project.user.profilePicture.startsWith("http")
+                              ? project.user.profilePicture
+                              : `${API_URL}/${project.user.profilePicture}`}
+                            alt={project.user.name}
+                            className="w-12 h-12 rounded-full object-cover"
+                            onError={(e) => e.target.style.display = 'none'}
+                          />
+                        ) : (
+                          <PersonCircle className="w-12 h-12 text-secondary" />
+                        )}
                       <div>
                         <p className="font-semibold text-text-primary">{project.user?.name || 'Admin'}</p>
                         <p className="text-secondary text-sm">{new Date(project.createdAt).toLocaleDateString()}</p>

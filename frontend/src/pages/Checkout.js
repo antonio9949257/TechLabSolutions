@@ -25,7 +25,7 @@ const Checkout = () => {
       if (response.ok) {
         alert('¡Pedido realizado con éxito!');
         fetchCart();
-        navigate('/dashboard');
+        navigate('/profile');
       } else {
         const errorData = await response.json();
         alert(`Error al crear el pedido: ${errorData.message}`);

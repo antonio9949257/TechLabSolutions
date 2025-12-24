@@ -1,21 +1,28 @@
 import React, { useEffect, useState, useCallback } from 'react';
+import { useParams } from 'react-router-dom'; // Import useParams
 import { authenticatedFetch } from '../utils/api';
 import { useAuth } from '../context/AuthContext';
-import { PersonCircle, Gear } from 'react-bootstrap-icons';
+import { PersonCircle, Gear, BoxSeam, ToggleOn, ToggleOff } from 'react-bootstrap-icons'; // Import ToggleOn and ToggleOff icons
 import ProfileSettings from './ProfileSettings'; // Import the settings component
+import OrderHistory from '../components/OrderHistory'; // Import the OrderHistory component
 
 const Profile = () => {
   const { user, token } = useAuth();
+  const { id } = useParams(); // Get id from URL parameters
   const [profileData, setProfileData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [showOrderHistory, setShowOrderHistory] = useState(false); // New state for order history
 
   const fetchUserProfile = useCallback(async () => {
-    if (user && token) {
+    if (token) { // Only proceed if authenticated
       setLoading(true);
       try {
-        const response = await authenticatedFetch('/profile/me');
+        const profileId = id || user._id; // Use id from URL if present, otherwise current user's ID
+        const endpoint = id ? `/users/${profileId}` : `/profile/me`; // Adjust endpoint based on id presence
+
+        const response = await authenticatedFetch(endpoint);
         if (response.ok) {
           const data = await response.json();
           setProfileData(data);
@@ -33,7 +40,7 @@ const Profile = () => {
       setLoading(false);
       setError('No autenticado.');
     }
-  }, [user, token]);
+  }, [user, token, id]); // Add id to dependencies
 
   useEffect(() => {
     fetchUserProfile();
@@ -42,6 +49,34 @@ const Profile = () => {
   const handleProfileUpdate = () => {
     fetchUserProfile(); // Refetch data when settings are updated
   };
+
+  const handleStatusChange = async (newStatus) => {
+    if (!user || user.role !== 'admin' || !profileData || !id) {
+      setError('No autorizado para cambiar el estado del usuario.');
+      return;
+    }
+
+    try {
+      const response = await authenticatedFetch(`/users/${id}`, {
+        method: 'PUT',
+        body: JSON.stringify({ status: newStatus }),
+      });
+
+      if (response.ok) {
+        setProfileData((prevData) => ({ ...prevData, status: newStatus }));
+      } else {
+        const errorData = await response.json();
+        setError(errorData.message || 'Error al actualizar el estado del usuario.');
+      }
+    } catch (err) {
+      console.error('Error updating user status:', err);
+      setError('Error de conexión al servidor al actualizar el estado.');
+    }
+  };
+
+  // Hide settings and order history buttons if viewing another user's profile
+  const isViewingOwnProfile = !id || (user && user._id === id);
+  const canChangeStatus = user && user.role === 'admin' && !isViewingOwnProfile;
 
   if (loading && !profileData) { // Avoid full page loader when refetching
     return <div className="container mx-auto px-4 py-8 text-center">Cargando perfil...</div>;
@@ -82,18 +117,56 @@ const Profile = () => {
                 <span className="font-semibold text-gray-600">Rol:</span>
                 <span className="text-gray-800 capitalize">{profileData.role}</span>
               </div>
+              <div className="flex justify-between py-3 border-b border-gray-200"> {/* Added border-b */}
+                <span className="font-semibold text-gray-600">Estado:</span>
+                <span className={`text-gray-800 capitalize ${profileData.status === 'active' ? 'text-green-500' : 'text-red-500'}`}>
+                  {profileData.status}
+                </span>
+              </div>
               <div className="flex justify-between py-3">
                 <span className="font-semibold text-gray-600">Miembro desde:</span>
                 <span className="text-gray-800">{new Date(profileData.createdAt).toLocaleDateString()}</span>
               </div>
             </div>
-            <button
-              onClick={() => setIsSettingsOpen(true)}
-              className="mt-8 inline-flex items-center gap-2 bg-primary text-white py-2 px-6 rounded-lg shadow-md hover:bg-primary-dark transition duration-300"
-            >
-              <Gear className="w-5 h-5" />
-              Configuración de Perfil
-            </button>
+            {canChangeStatus && (
+              <div className="mt-8">
+                {profileData.status === 'active' ? (
+                  <button
+                    onClick={() => handleStatusChange('inactive')}
+                    className="inline-flex items-center gap-2 bg-red-500 text-white py-2 px-6 rounded-lg shadow-md hover:bg-red-600 transition duration-300"
+                  >
+                    <ToggleOff className="w-5 h-5" />
+                    Desactivar Usuario
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => handleStatusChange('active')}
+                    className="inline-flex items-center gap-2 bg-green-500 text-white py-2 px-6 rounded-lg shadow-md hover:bg-green-600 transition duration-300"
+                  >
+                    <ToggleOn className="w-5 h-5" />
+                    Activar Usuario
+                  </button>
+                )}
+              </div>
+            )}
+            {isViewingOwnProfile && ( // Only show these buttons if viewing own profile
+              <div className="flex flex-col sm:flex-row gap-4 mt-8"> {/* Flex container for buttons */}
+                <button
+                  onClick={() => setIsSettingsOpen(true)}
+                  className="inline-flex items-center gap-2 bg-primary text-white py-2 px-6 rounded-lg shadow-md hover:bg-primary-dark transition duration-300"
+                >
+                  <Gear className="w-5 h-5" />
+                  Configuración de Perfil
+                </button>
+                <button
+                  onClick={() => setShowOrderHistory(true)}
+                  className="inline-flex items-center gap-2 bg-secondary text-white py-2 px-6 rounded-lg shadow-md hover:bg-secondary-dark transition duration-300"
+                >
+                  <BoxSeam className="w-5 h-5" />
+                  Ver Historial de Pedidos
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -106,8 +179,13 @@ const Profile = () => {
           />
         </div>
       )}
+
+      {showOrderHistory && (
+        <OrderHistory onClose={() => setShowOrderHistory(false)} />
+      )}
     </>
   );
 };
 
 export default Profile;
+

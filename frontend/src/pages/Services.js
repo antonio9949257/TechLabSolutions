@@ -7,7 +7,7 @@ const Services = () => {
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const { user } = useAuth();
+  const { user, openLoginModal } = useAuth();
 
   useEffect(() => {
     const fetchServices = async () => {
@@ -61,23 +61,28 @@ const Services = () => {
                 <p className="text-secondary"><strong>Categoría:</strong> {service.category}</p>
                 {user ? (
                   <p className="text-secondary font-bold mt-2"><strong>Precio:</strong> Bs {service.price.toFixed(2)}</p>
-                ) : (
-                  <div className="text-center mt-auto">
-                    <Link to="/login" className="w-full py-2 px-4 border border-primary text-primary rounded-md hover:bg-primary hover:text-white transition duration-300 text-center">
-                      Inicia sesión para ver precios
+                ) : null}
+              </div>
+              <div className="p-4 border-t border-secondary mt-auto"> {/* mt-auto to push to bottom */}
+                {user ? (
+                  <div className="flex space-x-2">
+                    <Link to={`/services/${service._id}`} className="flex-1 py-2 px-4 border border-secondary rounded-md text-secondary hover:bg-background transition duration-300 text-center">
+                      Ver Detalles
+                    </Link>
+                    <Link to={`/quote/${service._id}`} className="flex-1 py-2 px-4 bg-primary text-white rounded-md hover:opacity-90 transition duration-300 text-center">
+                      Cotización
                     </Link>
                   </div>
+                ) : (
+                  <div className="text-center">
+                    <button
+                      onClick={openLoginModal}
+                      className="w-full py-2 px-4 border border-primary text-primary rounded-md hover:bg-primary hover:text-white transition duration-300 text-center"
+                    >
+                      Inicia sesión para ver precios, detalles y cotizar
+                    </button>
+                  </div>
                 )}
-              </div>
-              <div className="p-4 border-t border-secondary">
-                <div className="flex space-x-2">
-                  <Link to={`/services/${service._id}`} className="flex-1 py-2 px-4 border border-secondary rounded-md text-secondary hover:bg-background transition duration-300 text-center">
-                    Ver Detalles
-                  </Link>
-                  <Link to={`/quote/${service._id}`} className="flex-1 py-2 px-4 bg-primary text-white rounded-md hover:opacity-90 transition duration-300 text-center">
-                    Cotización
-                  </Link>
-                </div>
               </div>
             </div>
           ))}

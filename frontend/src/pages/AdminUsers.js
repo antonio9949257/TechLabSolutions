@@ -1,8 +1,9 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { authenticatedFetch } from '../utils/api';
 import { useAuth } from '../context/AuthContext';
+import { Link } from 'react-router-dom'; // Import Link
 
-const AdminPanel = () => {
+const AdminUsers = () => {
   const { user } = useAuth();
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -148,12 +149,12 @@ const AdminPanel = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h2 className="text-3xl font-bold mb-6">Panel de Administración</h2>
-
-      {/* Button to open Create User Modal */}
-      <button className="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-300 mb-6" onClick={() => setShowCreateModal(true)}>
-        Crear Nuevo Usuario
-      </button>
+      <div className="flex flex-wrap gap-4 mb-6">
+        {/* Button to open Create User Modal */}
+        <button className="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-300" onClick={() => setShowCreateModal(true)}>
+          Crear Nuevo Usuario
+        </button>
+      </div>
 
       {/* Create User Modal */}
       {showCreateModal && (
@@ -329,4 +330,4 @@ const AdminPanel = () => {
   );
 };
 
-export default AdminPanel;
+export default AdminUsers;

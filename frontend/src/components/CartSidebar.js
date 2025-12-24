@@ -34,7 +34,7 @@ const CartSidebar = () => {
     <>
       <div
         className={`
-          fixed top-0 right-0 w-80 h-full bg-card-bg shadow-lg z-50
+          fixed top-0 right-0 w-80 h-full bg-gray-900 backdrop-blur-sm bg-opacity-70 shadow-lg z-50
           transform transition-transform duration-300 ease-in-out
           ${isCartOpen ? 'translate-x-0' : 'translate-x-full'}
           flex flex-col // Added flexbox for column layout

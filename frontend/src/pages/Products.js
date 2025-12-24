@@ -9,7 +9,7 @@ const Products = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { addToCart } = useCart();
-  const { user } = useAuth();
+  const { user, openLoginModal } = useAuth();
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -91,12 +91,12 @@ const Products = () => {
                     </div>
                   ) : null
                 ) : (
-                  <Link
-                    to="/login"
+                  <button
+                    onClick={openLoginModal}
                     className="w-full py-2 px-4 border border-primary text-primary rounded-md hover:bg-primary hover:text-white transition duration-300 text-center"
                   >
                     Inicia sesión para ver precios
-                  </Link>
+                  </button>
                 )}
               </div>
             </div>

@@ -1,4 +1,6 @@
 const express = require('express');
+const http = require('http'); // Import http module
+const { Server } = require('socket.io'); // Import Server from socket.io
 const dotenv = require('dotenv');
 const cors = require('cors');
 const passport = require('passport'); // Add passport
@@ -12,6 +14,15 @@ connectDB();
 ensureBucketExists(process.env.MINIO_BUCKET_NAME);
 
 const app = express();
+const server = http.createServer(app); // Create http server from express app
+const io = new Server(server, { // Initialize socket.io with the http server
+  cors: {
+    origin: ['http://localhost:3000', 'http://192.168.50.57:3000'], // Allow frontend origin
+    methods: ['GET', 'POST'],
+    credentials: true
+  }
+});
+
 app.set('trust proxy', 1); //  ESTA LÍNEA ES CRÍTICA
 
 app.use(cors({ 
@@ -43,7 +54,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 app.get('/', (req, res) => res.send('API de TechLab Solutions funcionando'));
 app.get('/api', (req, res) => res.send('API base path is working'));
-app.use('/api/users', require('./routes/authRoutes'));
+app.use('/api/users', require('./routes/authRoutes')(io));
 app.use('/api/products', require('./routes/productRoutes'));
 app.use('/api/services', require('./routes/serviceRoutes'));
 app.use('/api/orders', require('./routes/orderRoutes'));
@@ -54,6 +65,7 @@ app.use('/api/search', require('./routes/searchRoutes'));
 app.use('/api/quotes', require('./routes/quoteRoutes'));
 app.use('/api/projects', require('./routes/projectRoutes'));
 app.use('/api/categories', require('./routes/categoryRoutes'));
+app.use('/api/dashboard', require('./routes/dashboardRoutes'));
 
 // Error handling middleware
 app.use((err, req, res, next) => {
@@ -61,6 +73,35 @@ app.use((err, req, res, next) => {
   res.status(500).send({ message: err.message || 'Something broke!' });
 });
 
+// Socket.IO connection handling
+const onlineUsers = new Map(); // Map to store online users: userId -> socketId
+
+io.on('connection', (socket) => {
+  console.log('A user connected:', socket.id);
+
+  socket.on('userOnline', (userId) => {
+    onlineUsers.set(userId, socket.id);
+    io.emit('updateUserStatus', { userId, status: 'online' });
+    console.log(`User ${userId} is online. Total online: ${onlineUsers.size}`);
+  });
+
+  socket.on('disconnect', () => {
+    console.log('User disconnected:', socket.id);
+    let disconnectedUserId = null;
+    for (let [userId, socketId] of onlineUsers.entries()) {
+      if (socketId === socket.id) {
+        disconnectedUserId = userId;
+        onlineUsers.delete(userId);
+        break;
+      }
+    }
+    if (disconnectedUserId) {
+      io.emit('updateUserStatus', { userId: disconnectedUserId, status: 'offline' });
+      console.log(`User ${disconnectedUserId} is offline. Total online: ${onlineUsers.size}`);
+    }
+  });
+});
+
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, '0.0.0.0', () => console.log(`Servidor corriendo en el puerto ${PORT} en 0.0.0.0`));
+server.listen(PORT, '0.0.0.0', () => console.log(`Servidor corriendo en el puerto ${PORT} en 0.0.0.0 con WebSockets`));

@@ -6,6 +6,7 @@ const {
   getOrderById,
   updateOrderStatus,
   getUserOrders,
+  getAllOrders, // Added getAllOrders
 } = require('../controllers/orderController');
 const { protect, admin } = require('../middleware/authMiddleware');
 
@@ -59,6 +60,20 @@ const orderValidationRules = [
  *         description: Orden creada exitosamente
  */
 router.route('/').post(protect, createOrder);
+
+/**
+ * @swagger
+ * /api/orders/all:
+ *   get:
+ *     summary: Obtiene todas las órdenes (solo Admin)
+ *     tags: [Orders]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Una lista de todas las órdenes
+ */
+router.route('/all').get(protect, admin, getAllOrders);
 
 /**
  * @swagger

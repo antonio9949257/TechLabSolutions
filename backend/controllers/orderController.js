@@ -101,10 +101,19 @@ const getUserOrders = async (req, res) => {
   res.json(orders);
 };
 
+// @desc    Obtener todas las órdenes (solo Admin)
+// @route   GET /api/orders/all
+// @access  Private/Admin
+const getAllOrders = async (req, res) => {
+  const orders = await Order.find({}).populate('user', 'id name email');
+  res.json(orders);
+};
+
 
 module.exports = {
   createOrder,
   getOrderById,
   updateOrderStatus,
   getUserOrders,
+  getAllOrders,
 };
