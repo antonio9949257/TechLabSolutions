@@ -9,6 +9,7 @@ const ProfileSettings = ({ onClose, onProfileUpdate }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [nickname, setNickname] = useState('');
+  const [whatsappNumber, setWhatsappNumber] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [profilePictureFile, setProfilePictureFile] = useState(null);
@@ -28,6 +29,7 @@ const ProfileSettings = ({ onClose, onProfileUpdate }) => {
             setEmail(data.email);
             setNickname(data.nickname || '');
             setProfilePictureUrl(data.profilePicture || '');
+            setWhatsappNumber(data.whatsappNumber || '');
           } else {
             const errorData = await response.json();
             setError(errorData.message || 'Error al cargar el perfil');
@@ -60,6 +62,7 @@ const ProfileSettings = ({ onClose, onProfileUpdate }) => {
       formData.append('name', name);
       formData.append('email', email);
       formData.append('nickname', nickname);
+      formData.append('whatsappNumber', whatsappNumber);
       if (password) {
         formData.append('password', password);
       }
@@ -74,7 +77,7 @@ const ProfileSettings = ({ onClose, onProfileUpdate }) => {
 
       if (response.ok) {
         const updatedUser = await response.json();
-        login({ ...user, ...updatedUser }); // Update context
+        login({ ...user, ...updatedUser, whatsappNumber: updatedUser.whatsappNumber }); // Update context
         onProfileUpdate(); // Refetch profile data on parent
         setMessage('Perfil actualizado exitosamente. El modal se cerrará en 3 segundos...');
         setTimeout(() => {
@@ -129,6 +132,10 @@ const ProfileSettings = ({ onClose, onProfileUpdate }) => {
             <div className="mb-4">
               <label htmlFor="nickname" className="block text-gray-700 text-sm font-bold mb-2">Nickname</label>
               <input type="text" id="nickname" value={nickname} onChange={(e) => setNickname(e.target.value)} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700" />
+            </div>
+            <div className="mb-4">
+              <label htmlFor="whatsappNumber" className="block text-gray-700 text-sm font-bold mb-2">Número de WhatsApp</label>
+              <input type="text" id="whatsappNumber" value={whatsappNumber} onChange={(e) => setWhatsappNumber(e.target.value)} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700" />
             </div>
             <div className="mb-4">
               <label htmlFor="email" className="block text-gray-700 text-sm font-bold mb-2">Email</label>

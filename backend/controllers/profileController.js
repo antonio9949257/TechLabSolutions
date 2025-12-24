@@ -31,7 +31,7 @@ const updateMyProfile = async (req, res) => {
       return res.status(404).json({ message: 'Usuario no encontrado' });
     }
 
-    const { name, email, password, nickname } = req.body;
+    const { name, email, password, nickname, whatsappNumber } = req.body;
 
     // Manual Validation
     if (name && name.trim() === '') {
@@ -60,6 +60,7 @@ const updateMyProfile = async (req, res) => {
     user.name = name || user.name;
     user.email = email || user.email;
     user.nickname = nickname || user.nickname;
+    user.whatsappNumber = whatsappNumber || user.whatsappNumber;
 
     // Handle password update
     if (password) {

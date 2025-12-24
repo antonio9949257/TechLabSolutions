@@ -7,7 +7,7 @@ const { createNotification } = require('./notificationController'); // Import cr
 // @route   POST /api/users/register
 // @access  Public
 const registerUser = async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, whatsappNumber } = req.body;
   let role = req.body.role;
 
   if (!name || !email || !password) {
@@ -34,6 +34,7 @@ const registerUser = async (req, res) => {
     email,
     password: hashedPassword,
     role, // Usar el rol sanitizado
+    whatsappNumber,
     profilePicture: `https://ui-avatars.com/api/?name=${name.charAt(0)}&background=random`,
   });
 
@@ -43,6 +44,7 @@ const registerUser = async (req, res) => {
       name: user.name,
       email: user.email,
       role: user.role,
+      whatsappNumber: user.whatsappNumber,
       token: generateToken(user._id),
     });
   } else {
@@ -78,6 +80,7 @@ const loginUser = async (req, res, io) => { // Accept io
       role: user.role,
       nickname: user.nickname,
       profilePicture: user.profilePicture,
+      whatsappNumber: user.whatsappNumber,
       token: generateToken(user._id),
     });
   } else {
@@ -110,7 +113,7 @@ const getAllUsers = async (req, res) => {
 // @route   POST /api/users
 // @access  Private/Admin
 const createUser = async (req, res) => {
-  const { name, email, password, role } = req.body;
+  const { name, email, password, role, whatsappNumber } = req.body;
 
   if (!name || !email || !password || !role) {
     return res.status(400).json({ message: 'Por favor, completa todos los campos' });
@@ -133,6 +136,7 @@ const createUser = async (req, res) => {
     email,
     password: hashedPassword,
     role,
+    whatsappNumber,
     profilePicture: `https://ui-avatars.com/api/?name=${name.charAt(0)}&background=random`,
   });
 
@@ -142,6 +146,7 @@ const createUser = async (req, res) => {
       name: user.name,
       email: user.email,
       role: user.role,
+      whatsappNumber: user.whatsappNumber,
     });
   } else {
     res.status(400).json({ message: 'Datos de usuario inválidos' });
@@ -152,7 +157,7 @@ const createUser = async (req, res) => {
 // @route   PUT /api/users/:id
 // @access  Private/Admin
 const updateUser = async (req, res) => {
-  const { name, email, role, status } = req.body; // Add status to destructuring
+  const { name, email, role, status, whatsappNumber } = req.body; // Add status to destructuring
 
   const user = await User.findById(req.params.id);
 
@@ -172,6 +177,7 @@ const updateUser = async (req, res) => {
   user.email = email || user.email;
   user.role = role || user.role;
   user.status = status || user.status; // Update status
+  user.whatsappNumber = whatsappNumber || user.whatsappNumber;
 
   const updatedUser = await user.save();
 
@@ -181,6 +187,7 @@ const updateUser = async (req, res) => {
     email: updatedUser.email,
     role: updatedUser.role,
     status: updatedUser.status, // Include status in response
+    whatsappNumber: updatedUser.whatsappNumber,
   });
 };
 

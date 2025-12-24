@@ -16,6 +16,10 @@ const userSchema = mongoose.Schema(
       required: [true, 'Por favor, añade un email'],
       unique: true,
     },
+    whatsappNumber: {
+      type: String,
+      required: false,
+    },
     password: {
       type: String,
       required: [true, 'Por favor, añade una contraseña'],

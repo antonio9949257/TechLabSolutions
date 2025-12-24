@@ -7,6 +7,7 @@ const RegisterModal = ({ onClose, onSuccess, openLoginModal }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [whatsappNumber, setWhatsappNumber] = useState('');
   const [error, setError] = useState(null);
   const navigate = useNavigate(); // Keep navigate for OIDC redirect
 
@@ -16,7 +17,7 @@ const RegisterModal = ({ onClose, onSuccess, openLoginModal }) => {
     try {
       const response = await authenticatedFetch('/users/register', {
         method: 'POST',
-        body: JSON.stringify({ name, email, password }),
+        body: JSON.stringify({ name, email, password, whatsappNumber }),
       });
 
       const data = await response.json();
@@ -71,6 +72,16 @@ const RegisterModal = ({ onClose, onSuccess, openLoginModal }) => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+            />
+          </div>
+          <div className="mb-4">
+            <label htmlFor="whatsappNumber" className="block text-text-primary text-sm font-bold mb-2">Número de WhatsApp</label>
+            <input
+              type="text"
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              id="whatsappNumber"
+              value={whatsappNumber}
+              onChange={(e) => setWhatsappNumber(e.target.value)}
             />
           </div>
           <div className="mb-6">
