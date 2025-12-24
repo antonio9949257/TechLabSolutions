@@ -66,6 +66,7 @@ app.use('/api/quotes', require('./routes/quoteRoutes'));
 app.use('/api/projects', require('./routes/projectRoutes'));
 app.use('/api/categories', require('./routes/categoryRoutes'));
 app.use('/api/dashboard', require('./routes/dashboardRoutes'));
+app.use('/api/notifications', require('./routes/notificationRoutes')(io)); // Add notification routes and pass io
 
 // Error handling middleware
 app.use((err, req, res, next) => {
@@ -81,6 +82,7 @@ io.on('connection', (socket) => {
 
   socket.on('userOnline', (userId) => {
     onlineUsers.set(userId, socket.id);
+    socket.join(userId); // User joins a room named after their ID
     io.emit('updateUserStatus', { userId, status: 'online' });
     console.log(`User ${userId} is online. Total online: ${onlineUsers.size}`);
   });

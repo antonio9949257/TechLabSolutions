@@ -30,9 +30,11 @@ import CartSidebar from './components/CartSidebar'; // Import CartSidebar
 import FloatingCartButton from './components/FloatingCartButton'; // Import FloatingCartButton
 import FloatingUserListButton from './components/FloatingUserListButton'; // Import FloatingUserListButton
 import UserListSidebar from './components/UserListSidebar'; // Import UserListSidebar
+import NotificationTray from './components/NotificationTray'; // Import NotificationTray
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import { SocketProvider } from './context/SocketContext'; // Import SocketProvider
+import { NotificationProvider } from './context/NotificationContext'; // Import NotificationProvider
 
 function App() {
   const [isUserListOpen, setUserListOpen] = useState(false);
@@ -44,54 +46,57 @@ function App() {
   return (
     <AuthProvider>
       <CartProvider>
-        <SocketProvider> {/* Wrap with SocketProvider */}
-          <div className="flex flex-col min-h-screen">
-              <Navbar />
-              <SearchNavbar /> {/* Render the new SearchNavbar */}
-              <CartSidebar />
-              <FloatingCartButton />
-              <FloatingUserListButton toggleUserList={toggleUserList} />
-              <UserListSidebar isOpen={isUserListOpen} onClose={() => setUserListOpen(false)} />
-              <main className="flex-grow">
-                <Routes>
-                  <Route path="/" element={<Home />} />
-                  {/* <Route path="/login" element={<Login />} /> */} {/* Removed */}
-                  {/* <Route path="/register" element={<Register />} /> */} {/* Removed */}
-                  <Route path="/auth/callback" element={<AuthCallback />} /> {/* New OIDC callback route */}
-                  <Route path="/products" element={<Products />} />
-                  <Route path="/products/:id" element={<ProductDetail />} />
-                  <Route path="/services" element={<Services />} />
-                  <Route path="/services/:id" element={<ServiceDetail />} />
-                  <Route path="/quote/:serviceId" element={<Quote />} />
-                  <Route path="/search" element={<SearchResults />} />
-                  <Route path="/projects" element={<Projects />} />
-                  <Route path="/projects/:id" element={<ProjectDetail />} />
-                  <Route path="/users/:id" element={<Profile />} /> {/* New route for viewing any user's profile */}
+        <SocketProvider>
+          <NotificationProvider> {/* Wrap with NotificationProvider */}
+            <div className="flex flex-col min-h-screen">
+                <Navbar />
+                <SearchNavbar /> {/* Render the new SearchNavbar */}
+                <CartSidebar />
+                <FloatingCartButton />
+                <FloatingUserListButton toggleUserList={toggleUserList} />
+                <UserListSidebar isOpen={isUserListOpen} onClose={() => setUserListOpen(false)} />
+                <NotificationTray /> {/* Render NotificationTray */}
+                <main className="flex-grow">
+                  <Routes>
+                    <Route path="/" element={<Home />} />
+                    {/* <Route path="/login" element={<Login />} */} {/* Removed */}
+                    {/* <Route path="/register" element={<Register />} */} {/* Removed */}
+                    <Route path="/auth/callback" element={<AuthCallback />} /> {/* New OIDC callback route */}
+                    <Route path="/products" element={<Products />} />
+                    <Route path="/products/:id" element={<ProductDetail />} />
+                    <Route path="/services" element={<Services />} />
+                    <Route path="/services/:id" element={<ServiceDetail />} />
+                    <Route path="/quote/:serviceId" element={<Quote />} />
+                    <Route path="/search" element={<SearchResults />} />
+                    <Route path="/projects" element={<Projects />} />
+                    <Route path="/projects/:id" element={<ProjectDetail />} />
+                    <Route path="/users/:id" element={<Profile />} /> {/* New route for viewing any user's profile */}
 
-                  {/* Protected Routes */}
-                  <Route element={<ProtectedRoute allowedRoles={['admin', 'cliente']} />}>
-                    <Route path="/profile" element={<Profile />} />
-                    <Route path="/checkout" element={<Checkout />} />
-                    <Route path="/quote/:serviceId" element={<Quote />} /> {/* Now protected */}
-                  </Route>
+                    {/* Protected Routes */}
+                    <Route element={<ProtectedRoute allowedRoles={['admin', 'cliente']} />}>
+                      <Route path="/profile" element={<Profile />} />
+                      <Route path="/checkout" element={<Checkout />} />
+                      <Route path="/quote/:serviceId" element={<Quote />} /> {/* Now protected */}
+                    </Route>
 
-                  {/* Admin-only routes */}
-                  <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
-                    <Route path="/admin" element={<Dashboard />} /> {/* New admin dashboard route */}
-                    <Route path="/admin-users" element={<AdminUsers />} />
-                    <Route path="/admin-products" element={<AdminProducts />} />
-                    <Route path="/admin-services" element={<AdminServices />} />
-                    <Route path="/admin-projects" element={<AdminProjects />} />
-                    <Route path="/admin-project-form" element={<AdminProjectForm />} />
-                    <Route path="/admin-project-form/:id" element={<AdminProjectForm />} />
-                    <Route path="/admin-categories" element={<AdminCategories />} />
-                    <Route path="/admin/orders" element={<AdminOrders />} /> {/* New Admin Orders Route */}
-                  </Route>
+                    {/* Admin-only routes */}
+                    <Route element={<ProtectedRoute allowedRoles={['admin']} />}>
+                      <Route path="/admin" element={<Dashboard />} /> {/* New admin dashboard route */}
+                      <Route path="/admin-users" element={<AdminUsers />} />
+                      <Route path="/admin-products" element={<AdminProducts />} />
+                      <Route path="/admin-services" element={<AdminServices />} />
+                      <Route path="/admin-projects" element={<AdminProjects />} />
+                      <Route path="/admin-project-form" element={<AdminProjectForm />} />
+                      <Route path="/admin-project-form/:id" element={<AdminProjectForm />} />
+                      <Route path="/admin-categories" element={<AdminCategories />} />
+                      <Route path="/admin/orders" element={<AdminOrders />} /> {/* New Admin Orders Route */}
+                    </Route>
 
-                </Routes>
-              </main>
-              <Footer />
-            </div>
+                  </Routes>
+                </main>
+                <Footer />
+              </div>
+            </NotificationProvider>
           </SocketProvider>
       </CartProvider>
     </AuthProvider>

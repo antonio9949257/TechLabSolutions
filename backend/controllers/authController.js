@@ -1,6 +1,7 @@
-const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const User = require('../models/User');
+const Notification = require('../models/Notification'); // Import Notification model
+const { createNotification } = require('./notificationController'); // Import createNotification
 
 // @desc    Registrar un nuevo usuario
 // @route   POST /api/users/register
@@ -60,6 +61,15 @@ const loginUser = async (req, res, io) => { // Accept io
   if (user && (await bcrypt.compare(password, user.password))) {
     // Emit user online status via Socket.IO
     io.emit('updateUserStatus', { userId: user._id, status: 'online' });
+
+    // Fetch unread notifications for the user
+    const unreadNotifications = await Notification.find({ recipient: user._id, read: false })
+      .sort({ createdAt: -1 })
+      .populate('sender', 'name profilePicture');
+
+    // Send unread notifications to the specific user via Socket.IO
+    // This assumes the user's socket is known, which is handled in server.js
+    io.to(user._id.toString()).emit('notifications', unreadNotifications); // Emit to specific user's room
 
     res.json({
       _id: user.id,
