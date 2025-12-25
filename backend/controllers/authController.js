@@ -1,4 +1,5 @@
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const Notification = require('../models/Notification'); // Import Notification model
 const { createNotification } = require('./notificationController'); // Import createNotification

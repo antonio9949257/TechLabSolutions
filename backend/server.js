@@ -1,6 +1,8 @@
 const express = require('express');
 const http = require('http'); // Import http module
 const { Server } = require('socket.io'); // Import Server from socket.io
+const jwt = require('jsonwebtoken');
+const User = require('./models/User');
 const dotenv = require('dotenv');
 const cors = require('cors');
 const passport = require('passport'); // Add passport
@@ -77,30 +79,40 @@ app.use((err, req, res, next) => {
 // Socket.IO connection handling
 const onlineUsers = new Map(); // Map to store online users: userId -> socketId
 
+// Socket.IO authentication middleware
+io.use(async (socket, next) => {
+  const token = socket.handshake.auth.token;
+  if (!token) {
+    return next(new Error('Authentication error: No token provided'));
+  }
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await User.findById(decoded.id).select('-password');
+    if (!user) {
+      return next(new Error('Authentication error: User not found'));
+    }
+    socket.user = user;
+    next();
+  } catch (err) {
+    return next(new Error('Authentication error: Invalid token'));
+  }
+});
+
 io.on('connection', (socket) => {
   console.log('A user connected:', socket.id);
+  const userId = socket.user._id.toString();
 
-  socket.on('userOnline', (userId) => {
-    onlineUsers.set(userId, socket.id);
-    socket.join(userId); // User joins a room named after their ID
-    io.emit('updateUserStatus', { userId, status: 'online' });
-    console.log(`User ${userId} is online. Total online: ${onlineUsers.size}`);
-  });
+  // Add user to online list and join room
+  onlineUsers.set(userId, socket.id);
+  socket.join(userId);
+  io.emit('updateUserStatus', { userId, status: 'online' });
+  console.log(`User ${userId} is online. Total online: ${onlineUsers.size}`);
 
   socket.on('disconnect', () => {
     console.log('User disconnected:', socket.id);
-    let disconnectedUserId = null;
-    for (let [userId, socketId] of onlineUsers.entries()) {
-      if (socketId === socket.id) {
-        disconnectedUserId = userId;
-        onlineUsers.delete(userId);
-        break;
-      }
-    }
-    if (disconnectedUserId) {
-      io.emit('updateUserStatus', { userId: disconnectedUserId, status: 'offline' });
-      console.log(`User ${disconnectedUserId} is offline. Total online: ${onlineUsers.size}`);
-    }
+    onlineUsers.delete(userId);
+    io.emit('updateUserStatus', { userId, status: 'offline' });
+    console.log(`User ${userId} is offline. Total online: ${onlineUsers.size}`);
   });
 });
 

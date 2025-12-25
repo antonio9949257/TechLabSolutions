@@ -11,8 +11,12 @@ export const SocketProvider = ({ children }) => {
 
   useEffect(() => {
     if (token && user) {
-      // Connect to Socket.IO server
-      socketRef.current = io(process.env.REACT_APP_BACKEND_URL || 'http://localhost:5000');
+      // Connect to Socket.IO server with auth token
+      socketRef.current = io(process.env.REACT_APP_BACKEND_URL || 'http://localhost:5000', {
+        auth: {
+          token: token,
+        },
+      });
 
       socketRef.current.on('connect', () => {
         console.log('Connected to Socket.IO server');
