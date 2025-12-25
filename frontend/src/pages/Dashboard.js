@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { People, BoxSeam, Briefcase, Folder, CardList, Bell } from 'react-bootstrap-icons'; // Import Bell icon
+import { People, BoxSeam, Briefcase, Folder, CardList, Bell, CloudArrowDown } from 'react-bootstrap-icons'; // Import Bell icon
 import { authenticatedFetch } from '../utils/api';
 import AdminNotificationForm from '../components/AdminNotificationForm'; // Import AdminNotificationForm
 
@@ -70,6 +70,12 @@ const Dashboard = () => {
       path: '/admin/orders',
       icon: <CardList size={40} />,
       description: 'Ver y gestionar los pedidos de los clientes.',
+    },
+    {
+      name: 'Database Backups',
+      path: '/admin/backups',
+      icon: <CloudArrowDown size={40} />,
+      description: 'Export, import, and manage database backups.',
     },
     {
       name: 'Enviar Notificación',

@@ -65,9 +65,11 @@ const Navbar = ({ toggleUserList }) => { // Accept toggleUserList prop
               <House className="inline mr-1" />
               Home
             </NavLink>
-            <NavLink to="/projects" className="hover:text-primary">
-              Proyectos
-            </NavLink>
+            {user?.role === 'admin' && (
+              <NavLink to="/projects" className="hover:text-primary">
+                Proyectos
+              </NavLink>
+            )}
             {user?.role === 'admin' && (
               <NavLink to="/admin" className="hover:text-primary">
                 <Speedometer2 className="inline mr-1" />
@@ -261,9 +263,11 @@ const Navbar = ({ toggleUserList }) => { // Accept toggleUserList prop
               <House className="inline mr-1" />
               Home
             </NavLink>
-            <NavLink to="/projects" className="hover:text-primary block py-2" onClick={() => setIsNavOpen(false)}>
-              Proyectos
-            </NavLink>
+            {user?.role === 'admin' && (
+              <NavLink to="/projects" className="hover:text-primary block py-2" onClick={() => setIsNavOpen(false)}>
+                Proyectos
+              </NavLink>
+            )}
             {user?.role === 'admin' && (
               <NavLink to="/admin" className="hover:text-primary block py-2" onClick={() => setIsNavOpen(false)}>
                 <Speedometer2 className="inline mr-1" />

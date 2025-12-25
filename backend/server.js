@@ -69,6 +69,7 @@ app.use('/api/projects', require('./routes/projectRoutes'));
 app.use('/api/categories', require('./routes/categoryRoutes'));
 app.use('/api/dashboard', require('./routes/dashboardRoutes'));
 app.use('/api/notifications', require('./routes/notificationRoutes')(io)); // Add notification routes and pass io
+app.use('/api/backup', require('./routes/backupRoutes'));
 
 // Error handling middleware
 app.use((err, req, res, next) => {

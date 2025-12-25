@@ -19,6 +19,10 @@ const AdminProducts = () => {
   const [showEditModal, setShowEditModal] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
 
+  const [showCategoryModal, setShowCategoryModal] = useState(false);
+  const [newCategoryName, setNewCategoryName] = useState('');
+  const [newCategoryDescription, setNewCategoryDescription] = useState('');
+
   const [form, setForm] = useState({
     nombre: '',
     descripcion: '',
@@ -99,6 +103,28 @@ const AdminProducts = () => {
     fetchProducts();
   };
 
+  const handleCreateCategory = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await authenticatedFetch('/categories', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: newCategoryName, description: newCategoryDescription }),
+      });
+      if (response.ok) {
+        setShowCategoryModal(false);
+        setNewCategoryName('');
+        setNewCategoryDescription('');
+        fetchCategories(); // Refresh categories list
+      } else {
+        const errorData = await response.json();
+        alert(errorData.message || 'Error al crear la categoría');
+      }
+    } catch (err) {
+      alert('Error de conexión al crear la categoría.');
+    }
+  };
+
   const handleExport = async () => {
     const res = await authenticatedFetch('/products/export');
     const blob = await res.blob();
@@ -127,6 +153,12 @@ const AdminProducts = () => {
           }}
         >
           Crear Producto
+        </button>
+        <button
+          className="bg-purple-600 text-white px-4 py-2 rounded"
+          onClick={() => setShowCategoryModal(true)}
+        >
+          Crear Categoría
         </button>
         <button
           className="bg-green-600 text-white px-4 py-2 rounded"
@@ -265,6 +297,45 @@ const AdminProducts = () => {
               </button>
               <button className="px-4 py-2 bg-blue-600 text-white rounded">
                 Guardar
+              </button>
+            </div>
+          </form>
+        </div>
+      )}
+
+      {/* Category Modal */}
+      {showCategoryModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <form
+            onSubmit={handleCreateCategory}
+            className="bg-white p-6 rounded w-full max-w-lg"
+          >
+            <h3 className="text-xl font-bold mb-4">Crear Nueva Categoría</h3>
+            <input
+              name="name"
+              placeholder="Nombre de la categoría"
+              className="w-full border p-2 rounded mb-3"
+              value={newCategoryName}
+              onChange={(e) => setNewCategoryName(e.target.value)}
+              required
+            />
+            <textarea
+              name="description"
+              placeholder="Descripción de la categoría"
+              className="w-full border p-2 rounded mb-3"
+              value={newCategoryDescription}
+              onChange={(e) => setNewCategoryDescription(e.target.value)}
+            />
+            <div className="flex justify-end gap-2">
+              <button
+                type="button"
+                className="px-4 py-2 bg-gray-300 rounded"
+                onClick={() => setShowCategoryModal(false)}
+              >
+                Cancelar
+              </button>
+              <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded">
+                Crear
               </button>
             </div>
           </form>

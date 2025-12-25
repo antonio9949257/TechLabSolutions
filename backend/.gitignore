@@ -13,3 +13,7 @@ yarn-error.log*
 
 # Misc
 .DS_Store
+db_backups/
+*.bson
+*.gz
+*.zip

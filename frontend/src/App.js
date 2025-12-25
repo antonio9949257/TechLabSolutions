@@ -18,6 +18,7 @@ import AdminProjects from './pages/AdminProjects'; // Import AdminProjects
 import AdminProjectForm from './pages/AdminProjectForm'; // Import AdminProjectForm
 import AdminCategories from './pages/AdminCategories'; // Import AdminCategories
 import AdminOrders from './pages/AdminOrders'; // Import AdminOrders
+import AdminBackups from './pages/AdminBackups'; // Import AdminBackups
 import Profile from './pages/Profile';
 import Checkout from './pages/Checkout'; // Import Checkout
 import SearchResults from './pages/SearchResults'; // Import SearchResults
@@ -68,8 +69,6 @@ function App() {
                     <Route path="/services/:id" element={<ServiceDetail />} />
                     <Route path="/quote/:serviceId" element={<Quote />} />
                     <Route path="/search" element={<SearchResults />} />
-                    <Route path="/projects" element={<Projects />} />
-                    <Route path="/projects/:id" element={<ProjectDetail />} />
                     <Route path="/users/:id" element={<Profile />} /> {/* New route for viewing any user's profile */}
 
                     {/* Protected Routes */}
@@ -90,6 +89,10 @@ function App() {
                       <Route path="/admin-project-form/:id" element={<AdminProjectForm />} />
                       <Route path="/admin-categories" element={<AdminCategories />} />
                       <Route path="/admin/orders" element={<AdminOrders />} /> {/* New Admin Orders Route */}
+                      <Route path="/admin/backups" element={<AdminBackups />} />
+                      {/* Project routes moved to admin only */}
+                      <Route path="/projects" element={<Projects />} />
+                      <Route path="/projects/:id" element={<ProjectDetail />} />
                     </Route>
 
                   </Routes>
