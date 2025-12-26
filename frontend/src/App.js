@@ -19,6 +19,8 @@ import AdminProjectForm from './pages/AdminProjectForm'; // Import AdminProjectF
 import AdminCategories from './pages/AdminCategories'; // Import AdminCategories
 import AdminOrders from './pages/AdminOrders'; // Import AdminOrders
 import AdminBackups from './pages/AdminBackups'; // Import AdminBackups
+import AdminCreateKit from './pages/AdminCreateKit'; // Import AdminCreateKit
+import AdminKits from './pages/AdminKits'; // Import AdminKits
 import Profile from './pages/Profile';
 import Checkout from './pages/Checkout'; // Import Checkout
 import SearchResults from './pages/SearchResults'; // Import SearchResults
@@ -90,6 +92,8 @@ function App() {
                       <Route path="/admin-categories" element={<AdminCategories />} />
                       <Route path="/admin/orders" element={<AdminOrders />} /> {/* New Admin Orders Route */}
                       <Route path="/admin/backups" element={<AdminBackups />} />
+                      <Route path="/admin/create-kit" element={<AdminCreateKit />} />
+                      <Route path="/admin/kits" element={<AdminKits />} />
                       {/* Project routes moved to admin only */}
                       <Route path="/projects" element={<Projects />} />
                       <Route path="/projects/:id" element={<ProjectDetail />} />

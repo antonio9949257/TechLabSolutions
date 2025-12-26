@@ -93,12 +93,26 @@ export const CartProvider = ({ children }) => {
     }
   };
 
+  const clearCart = async () => {
+    try {
+      const response = await authenticatedFetch('/cart', {
+        method: 'DELETE',
+      });
+      if (response.ok) {
+        setCart({ items: [], totalPrice: 0 });
+      }
+    } catch (error) {
+      console.error('Error clearing cart:', error);
+    }
+  };
+
   const value = {
     cart,
     loading,
     addToCart,
     removeFromCart,
     updateCartItem,
+    clearCart, // Export clearCart
     fetchCart,
     isCartOpen,
     openCart,

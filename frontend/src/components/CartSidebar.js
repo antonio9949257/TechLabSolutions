@@ -2,6 +2,7 @@ import React from 'react';
 import { useCart } from '../context/CartContext';
 import { useNavigate } from 'react-router-dom';
 import { Trash } from 'react-bootstrap-icons';
+import { useAuth } from '../context/AuthContext'; // Import useAuth
 
 const CartSidebar = () => {
   const {
@@ -14,6 +15,7 @@ const CartSidebar = () => {
   } = useCart();
 
   const navigate = useNavigate();
+  const { user } = useAuth(); // Get user from context
 
   const handleQuantityChange = (itemId, newQuantity) => {
     const quantity = Math.max(1, Number(newQuantity));
@@ -23,6 +25,11 @@ const CartSidebar = () => {
   const handleCheckout = () => {
     closeCart();
     navigate('/checkout');
+  };
+
+  const handleCreateKit = () => {
+    closeCart();
+    navigate('/admin/create-kit');
   };
 
   const handleViewItems = () => {
@@ -133,12 +140,21 @@ const CartSidebar = () => {
               Total: Bs {cart.totalPrice.toFixed(2)}
             </h4>
 
-            <button
-              onClick={handleCheckout}
-              className="w-full bg-primary text-white py-2 rounded hover:opacity-90 transition"
-            >
-              Proceder al Pago
-            </button>
+            {user && user.role === 'admin' ? (
+              <button
+                onClick={handleCreateKit}
+                className="w-full bg-green-500 text-white py-2 rounded hover:bg-green-600 transition"
+              >
+                Crear Kit
+              </button>
+            ) : (
+              <button
+                onClick={handleCheckout}
+                className="w-full bg-primary text-white py-2 rounded hover:opacity-90 transition"
+              >
+                Proceder al Pago
+              </button>
+            )}
           </div>
         )}
       </div>

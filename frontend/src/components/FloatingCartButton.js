@@ -5,15 +5,14 @@ import { Cart } from 'react-bootstrap-icons';
 import './FloatingCartButton.css';
 
 const FloatingCartButton = () => {
-  const { user } = useAuth();
   const { cart, toggleCart } = useCart();
 
   const cartItemCount =
     cart?.items?.reduce((acc, item) => acc + item.quantity, 0) || 0;
 
-  if (user?.role !== 'cliente') {
-    return null;
-  }
+  // The cart button should be visible to all users, including admins,
+  // as admins now use the cart to select items for kit creation.
+  // The logic inside CartSidebar will differentiate between admin and client actions.
 
   return (
     <button onClick={toggleCart} className="floating-cart-button">

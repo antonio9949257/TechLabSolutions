@@ -176,6 +176,16 @@ const Navbar = ({ toggleUserList }) => { // Accept toggleUserList prop
                           >
                             Gestionar Pedidos
                           </Link>
+                          <Link
+                            to="/admin/kits"
+                            className="block px-4 py-2 hover:bg-background"
+                            onClick={() => {
+                              setIsProfileDropdownOpen(false);
+                              setIsNavOpen(false);
+                            }}
+                          >
+                            Admin Kits
+                          </Link>
                         </>
                       )}
 

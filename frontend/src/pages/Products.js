@@ -136,7 +136,7 @@ const Products = () => {
                   <p className="text-secondary text-sm">
                     Categoría: {product.categoria?.name || 'Sin categoría'}
                   </p>
-                  {user && user.role === 'cliente' && (
+                  {(user && (user.role === 'cliente' || user.role === 'admin')) && (
                     <p className="text-text-primary font-bold mt-2">
                       Precio: Bs {product.precio ? parseFloat(product.precio.toFixed(2)) : '0.00'}
                     </p>
@@ -144,7 +144,7 @@ const Products = () => {
                 </div>
                 <div className="p-4 border-t border-secondary">
                   {user ? (
-                    user.role === 'cliente' ? (
+                    (user.role === 'cliente' || user.role === 'admin') ? (
                       <div className="flex space-x-2">
                         <Link
                           to={`/products/${product._id}`}
