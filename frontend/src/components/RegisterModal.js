@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Keep navigate for OIDC redirect
+import { useNavigate } from 'react-router-dom';
 import { authenticatedFetch } from '../utils/api';
 import { XCircle } from 'react-bootstrap-icons'; // Import XCircle for close button
 

@@ -10,7 +10,6 @@ import {
   Display,
   Gear,
   Speedometer2,
-  PeopleFill, // Import PeopleFill icon
   BellFill, // Import BellFill icon
 } from 'react-bootstrap-icons';
 import { useTheme } from '../context/ThemeContext';

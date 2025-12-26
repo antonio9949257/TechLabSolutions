@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { authenticatedFetch } from '../utils/api';
 import { useAuth } from '../context/AuthContext';
-import { Link } from 'react-router-dom'; // Import Link
 
 const AdminUsers = () => {
   const { user } = useAuth();

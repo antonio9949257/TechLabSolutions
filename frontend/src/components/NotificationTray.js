@@ -1,5 +1,5 @@
 import React from 'react';
-import { XCircle, BellFill } from 'react-bootstrap-icons';
+import { XCircle } from 'react-bootstrap-icons';
 import { useNotifications } from '../context/NotificationContext';
 import { Link } from 'react-router-dom';
 
