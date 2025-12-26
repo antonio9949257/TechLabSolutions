@@ -5,6 +5,7 @@ const {
   addToCart,
   removeFromCart,
   updateCartItem,
+  clearCart, // Import clearCart
 } = require('../controllers/cartController');
 const { protect } = require('../middleware/authMiddleware');
 const { isCliente } = require('../middleware/clientMiddleware');
@@ -12,7 +13,7 @@ const { isCliente } = require('../middleware/clientMiddleware');
 // All cart routes are protected and for clients only
 router.use(protect, isCliente);
 
-router.route('/').get(getCart).post(addToCart);
+router.route('/').get(getCart).post(addToCart).delete(clearCart);
 
 router.route('/items/:itemId').delete(removeFromCart).put(updateCartItem);
 

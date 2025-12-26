@@ -152,9 +152,30 @@ const updateCartItem = async (req, res) => {
   }
 };
 
+// @desc    Clear user's cart
+// @route   DELETE /api/cart
+// @access  Private/Cliente
+const clearCart = async (req, res) => {
+  try {
+    const cart = await Cart.findOne({ user: req.user._id });
+
+    if (!cart) {
+      return res.status(404).json({ message: 'Carrito no encontrado' });
+    }
+
+    cart.items = [];
+    await cart.save();
+    res.json({ message: 'Carrito vaciado exitosamente', items: [], totalPrice: 0 });
+  } catch (error) {
+    console.error('Error clearing cart:', error);
+    res.status(500).json({ message: 'Error interno del servidor' });
+  }
+};
+
 module.exports = {
   getCart,
   addToCart,
   removeFromCart,
   updateCartItem,
+  clearCart, // Export clearCart
 };
