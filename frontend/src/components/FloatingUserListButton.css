@@ -1,8 +1,8 @@
 .floating-userlist-button {
   position: fixed;
-  bottom: 20px;
-  right: 90px; /* Adjust position to not overlap with cart button */
-  background-color: var(--color-primary);
+  bottom: 7rem; /* Position above the cart button */
+  right: 2rem;
+  background-color: var(--primary-color);
   color: white;
   border-radius: 50%;
   width: 56px;
@@ -18,5 +18,5 @@
 }
 
 .floating-userlist-button:hover {
-  background-color: var(--color-primary-dark);
+  background-color: #2980b9; /* A darker shade of the primary blue */
 }

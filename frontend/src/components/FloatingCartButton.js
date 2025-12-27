@@ -4,8 +4,8 @@ import { useAuth } from '../context/AuthContext';
 import { Cart } from 'react-bootstrap-icons';
 import './FloatingCartButton.css';
 
-const FloatingCartButton = () => {
-  const { cart, toggleCart } = useCart();
+const FloatingCartButton = ({ onClick }) => {
+  const { cart } = useCart();
 
   const cartItemCount =
     cart?.items?.reduce((acc, item) => acc + item.quantity, 0) || 0;
@@ -15,7 +15,7 @@ const FloatingCartButton = () => {
   // The logic inside CartSidebar will differentiate between admin and client actions.
 
   return (
-    <button onClick={toggleCart} className="floating-cart-button">
+    <button onClick={onClick} className="floating-cart-button">
       <Cart className="w-6 h-6" />
       {cartItemCount > 0 && (
         <span className="cart-count">{cartItemCount}</span>

@@ -39,7 +39,7 @@ const UserListSidebar = ({ isOpen, onClose }) => {
   }
 
   return (
-    <div className="fixed top-0 right-0 h-full w-80 bg-gray-900 backdrop-blur-sm bg-opacity-70 shadow-lg z-50 transform transition-transform duration-300 ease-in-out translate-x-0 flex flex-col">
+    <div className="fixed top-0 right-0 h-full w-80 bg-card-bg shadow-lg z-sidebar transform transition-transform duration-300 ease-in-out translate-x-0 flex flex-col">
       <div className="flex items-center justify-between p-4 border-b">
         <h3 className="text-xl font-semibold text-text-primary">Users</h3>
         <button onClick={onClose} className="text-secondary hover:text-primary">
@@ -54,7 +54,7 @@ const UserListSidebar = ({ isOpen, onClose }) => {
             return (
               <li
                 key={user._id}
-                className="flex items-center mb-4 p-2 rounded-lg hover:bg-gray-700 cursor-pointer transition-colors duration-200"
+                className="flex items-center mb-4 p-2 rounded-lg hover:bg-background cursor-pointer transition-colors duration-200"
                 onClick={() => handleUserClick(user._id)}
               >
                 <img

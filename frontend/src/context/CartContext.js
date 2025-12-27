@@ -8,13 +8,8 @@ export const useCart = () => useContext(CartContext);
 
 export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState({ items: [], totalPrice: 0 });
-  const [isCartOpen, setIsCartOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const { token } = useAuth();
-
-  const openCart = () => setIsCartOpen(true);
-  const toggleCart = () => setIsCartOpen(!isCartOpen);
-  const closeCart = () => setIsCartOpen(false);
 
   const fetchCart = useCallback(async () => {
     if (!token) {
@@ -55,11 +50,6 @@ export const CartProvider = ({ children }) => {
       });
       if (response.ok) {
         await fetchCart();
-        // Only open cart automatically if not on a mobile screen
-        // or if the cart is already open (to keep it open if user wants)
-        if (!isCartOpen && window.innerWidth >= 1024) { // Assuming 1024px as desktop breakpoint
-          openCart();
-        }
       }
     } catch (error) {
       console.error('Error adding to cart:', error);
@@ -114,10 +104,6 @@ export const CartProvider = ({ children }) => {
     updateCartItem,
     clearCart, // Export clearCart
     fetchCart,
-    isCartOpen,
-    openCart,
-    toggleCart,
-    closeCart,
   };
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

@@ -24,6 +24,7 @@ import AdminKits from './pages/AdminKits'; // Import AdminKits
 import Profile from './pages/Profile';
 import Checkout from './pages/Checkout'; // Import Checkout
 import SearchResults from './pages/SearchResults'; // Import SearchResults
+import KitDetail from './pages/KitDetail'; // Import KitDetail
 import ProductDetail from './pages/ProductDetail'; // Import ProductDetail
 import ServiceDetail from './pages/ServiceDetail'; // Import ServiceDetail
 import Quote from './pages/Quote'; // Import Quote
@@ -40,10 +41,10 @@ import { SocketProvider } from './context/SocketContext'; // Import SocketProvid
 import { NotificationProvider } from './context/NotificationContext'; // Import NotificationProvider
 
 function App() {
-  const [isUserListOpen, setUserListOpen] = useState(false);
+  const [activeSidebar, setActiveSidebar] = useState(null); // null, 'cart', or 'userlist'
 
-  const toggleUserList = () => {
-    setUserListOpen(!isUserListOpen);
+  const toggleSidebar = (sidebar) => {
+    setActiveSidebar(current => (current === sidebar ? null : sidebar));
   };
 
   return (
@@ -54,10 +55,10 @@ function App() {
             <div className="flex flex-col min-h-screen">
                 <Navbar />
                 <SearchNavbar /> {/* Render the new SearchNavbar */}
-                <CartSidebar />
-                <FloatingCartButton />
-                <FloatingUserListButton toggleUserList={toggleUserList} />
-                <UserListSidebar isOpen={isUserListOpen} onClose={() => setUserListOpen(false)} />
+                <CartSidebar isOpen={activeSidebar === 'cart'} onClose={() => setActiveSidebar(null)} />
+                <FloatingCartButton onClick={() => toggleSidebar('cart')} />
+                <FloatingUserListButton onClick={() => toggleSidebar('userlist')} />
+                <UserListSidebar isOpen={activeSidebar === 'userlist'} onClose={() => setActiveSidebar(null)} />
                 <NotificationTray /> {/* Render NotificationTray */}
                 <main className="flex-grow">
                   <Routes>
@@ -67,6 +68,7 @@ function App() {
                     <Route path="/auth/callback" element={<AuthCallback />} /> {/* New OIDC callback route */}
                     <Route path="/products" element={<Products />} />
                     <Route path="/products/:id" element={<ProductDetail />} />
+                    <Route path="/kits/:id" element={<KitDetail />} />
                     <Route path="/services" element={<Services />} />
                     <Route path="/services/:id" element={<ServiceDetail />} />
                     <Route path="/quote/:serviceId" element={<Quote />} />

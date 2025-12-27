@@ -39,3 +39,35 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.fixed-navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+}
+
+.fixed-search-navbar {
+  position: fixed;
+  top: 68px; /* Adjust this value based on the actual height of the top navbar */
+  left: 0;
+  right: 0;
+  z-index: 999;
+}
+
+main {
+  margin-top: 132px; /* Adjust this value based on the actual combined height of the navbars */
+}
+
+.sticky-sidebar {
+  position: -webkit-sticky; /* For Safari */
+  position: sticky;
+  top: 140px; /* Height of the navbars + some extra space */
+  height: calc(100vh - 140px);
+  overflow-y: auto;
+}
+
+.z-sidebar {
+  z-index: 1001;
+}

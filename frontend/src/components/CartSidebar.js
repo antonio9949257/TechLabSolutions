@@ -4,14 +4,12 @@ import { useNavigate } from 'react-router-dom';
 import { Trash } from 'react-bootstrap-icons';
 import { useAuth } from '../context/AuthContext'; // Import useAuth
 
-const CartSidebar = () => {
+const CartSidebar = ({ isOpen, onClose }) => {
   const {
     cart,
     loading,
     removeFromCart,
     updateCartItem,
-    isCartOpen,
-    closeCart,
   } = useCart();
 
   const navigate = useNavigate();
@@ -23,17 +21,17 @@ const CartSidebar = () => {
   };
 
   const handleCheckout = () => {
-    closeCart();
+    onClose();
     navigate('/checkout');
   };
 
   const handleCreateKit = () => {
-    closeCart();
+    onClose();
     navigate('/admin/create-kit');
   };
 
   const handleViewItems = () => {
-    closeCart();
+    onClose();
     navigate('/products');
   };
 
@@ -41,9 +39,9 @@ const CartSidebar = () => {
     <>
       <div
         className={`
-          fixed top-0 right-0 w-80 h-full bg-gray-900 backdrop-blur-sm bg-opacity-70 shadow-lg z-50
+          fixed top-0 right-0 w-80 h-full bg-card-bg shadow-lg z-sidebar
           transform transition-transform duration-300 ease-in-out
-          ${isCartOpen ? 'translate-x-0' : 'translate-x-full'}
+          ${isOpen ? 'translate-x-0' : 'translate-x-full'}
           flex flex-col // Added flexbox for column layout
         `}
       >
@@ -51,7 +49,7 @@ const CartSidebar = () => {
         <div className="flex items-center justify-between p-4 border-b">
           <h5 className="text-xl font-semibold">Tu Carrito</h5>
           <button
-            onClick={closeCart}
+            onClick={onClose}
             className="text-secondary hover:text-primary"
           >
             ✕

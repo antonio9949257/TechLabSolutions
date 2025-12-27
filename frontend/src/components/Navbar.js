@@ -40,7 +40,7 @@ const Navbar = ({ toggleUserList }) => { // Accept toggleUserList prop
   };
 
   return (
-    <nav className="bg-navbar-bg text-navbar-text shadow-md">
+    <nav className="bg-navbar-bg text-navbar-text shadow-md fixed-navbar">
       <div className="max-w-7xl mx-auto px-4 relative">
         <div className="relative flex items-center justify-between py-4">
           {/* Logo */}

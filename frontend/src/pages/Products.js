@@ -48,8 +48,8 @@ const Products = () => {
     fetchProducts();
   }, []);
 
-  const handleAddToCart = (productId) => {
-    addToCart(productId, 1, 'Product');
+  const handleAddToCart = (productId, isKit) => {
+    addToCart(productId, 1, isKit ? 'Kit' : 'Product');
   };
 
   const filterProducts = (products, category) => {
@@ -76,6 +76,7 @@ const Products = () => {
         ];
         return products.filter(p => accessoryCategories.includes(p.categoria?.name));
       case 'Kits de Vigilancia':
+        return products.filter(p => p.isKit);
       case 'Alarmas':
       case 'Sensores de Movimiento':
       case 'Video Porteros':
@@ -94,7 +95,7 @@ const Products = () => {
   return (
     <div className="container mx-auto px-4 py-8 flex">
       {/* Category Sidebar */}
-      <aside className="w-1/4 pr-8">
+      <aside className="w-1/4 pr-8 sticky-sidebar">
         <h3 className="text-xl font-bold mb-4">Categorías</h3>
         <ul className="space-y-2">
           {categories.map(category => (
@@ -147,19 +148,19 @@ const Products = () => {
                     (user.role === 'cliente' || user.role === 'admin') ? (
                       <div className="flex space-x-2">
                         <Link
-                          to={`/products/${product._id}`}
+                          to={product.isKit ? `/kits/${product._id}` : `/products/${product._id}`}
                           className="flex-1 py-2 px-4 border border-secondary rounded-md text-secondary hover:bg-background transition duration-300 text-center"
                         >
                           Ver Detalles
                         </Link>
                         <button
                           className={`flex-1 py-2 px-4 rounded-md text-white transition duration-300 ${
-                            product.stock > 0
+                            (product.stock > 0 || product.isKit)
                               ? 'bg-primary hover:opacity-90'
                               : 'bg-secondary cursor-not-allowed'
                           }`}
-                          onClick={() => handleAddToCart(product._id)}
-                          disabled={product.stock === 0}
+                          onClick={() => handleAddToCart(product._id, product.isKit)}
+                          disabled={!product.isKit && product.stock === 0}
                         >
                           Añadir al Carrito
                         </button>

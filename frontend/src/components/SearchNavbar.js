@@ -15,7 +15,7 @@ const SearchNavbar = () => {
   };
 
   return (
-    <nav className="bg-background shadow-sm py-3">
+    <nav className="bg-background shadow-sm py-3 fixed-search-navbar">
       <div className="max-w-7xl mx-auto px-4">
         <form onSubmit={handleSearchSubmit} className="flex items-center justify-center">
           <input

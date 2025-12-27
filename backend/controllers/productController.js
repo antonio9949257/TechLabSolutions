@@ -1,5 +1,6 @@
 const { validationResult } = require('express-validator');
 const Product = require('../models/Product');
+const Kit = require('../models/Kit');
 const { minioClient } = require('../config/minio');
 const crypto = require('crypto');
 const xlsx = require('xlsx');
@@ -12,7 +13,25 @@ const getProducts = async (req, res) => {
   const filter = categoria ? { categoria } : {};
 
   const products = await Product.find(filter).populate('categoria');
-  res.json(products);
+  
+  let allItems = [...products];
+
+  // Si no hay filtro de categoría, o si la categoría es "Kits de Vigilancia"
+  if (!categoria || categoria === 'Kits de Vigilancia') {
+    const kits = await Kit.find({});
+    const formattedKits = kits.map(kit => ({
+      _id: kit._id,
+      nombre: kit.name,
+      descripcion: kit.description,
+      precio: kit.price,
+      img_url: kit.imageUrl,
+      isKit: true,
+      categoria: { name: 'Kits de Vigilancia' } // Asignar una categoría para el frontend
+    }));
+    allItems = [...allItems, ...formattedKits];
+  }
+
+  res.json(allItems);
 };
 
 // @desc    Obtener un producto por ID
