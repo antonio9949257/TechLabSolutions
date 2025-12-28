@@ -89,7 +89,7 @@ export const CartProvider = ({ children }) => {
         method: 'DELETE',
       });
       if (response.ok) {
-        setCart({ items: [], totalPrice: 0 });
+        await fetchCart();
       }
     } catch (error) {
       console.error('Error clearing cart:', error);

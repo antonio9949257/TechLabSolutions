@@ -109,23 +109,23 @@ const Profile = () => {
               <p className="text-xl text-secondary mt-1">@{profileData.nickname}</p>
             )}
             <div className="w-full mt-8">
-              <div className="flex justify-between py-3 border-b border-gray-200">
-                <span className="font-semibold text-gray-600">Email:</span>
-                <span className="text-gray-800">{profileData.email}</span>
+              <div className="flex justify-between py-3 border-b border-secondary">
+                <span className="font-semibold text-secondary">Email:</span>
+                <span className="text-text-primary">{profileData.email}</span>
               </div>
-              <div className="flex justify-between py-3 border-b border-gray-200">
-                <span className="font-semibold text-gray-600">Rol:</span>
-                <span className="text-gray-800 capitalize">{profileData.role}</span>
+              <div className="flex justify-between py-3 border-b border-secondary">
+                <span className="font-semibold text-secondary">Rol:</span>
+                <span className="text-text-primary capitalize">{profileData.role}</span>
               </div>
-              <div className="flex justify-between py-3 border-b border-gray-200"> {/* Added border-b */}
-                <span className="font-semibold text-gray-600">Estado:</span>
-                <span className={`text-gray-800 capitalize ${profileData.status === 'active' ? 'text-green-500' : 'text-red-500'}`}>
+              <div className="flex justify-between py-3 border-b border-secondary"> {/* Added border-b */}
+                <span className="font-semibold text-secondary">Estado:</span>
+                <span className={`text-text-primary capitalize ${profileData.status === 'active' ? 'text-green-500' : 'text-red-500'}`}>
                   {profileData.status}
                 </span>
               </div>
               <div className="flex justify-between py-3">
-                <span className="font-semibold text-gray-600">Miembro desde:</span>
-                <span className="text-gray-800">{new Date(profileData.createdAt).toLocaleDateString()}</span>
+                <span className="font-semibold text-secondary">Miembro desde:</span>
+                <span className="text-text-primary">{new Date(profileData.createdAt).toLocaleDateString()}</span>
               </div>
             </div>
             {canChangeStatus && (

@@ -126,35 +126,35 @@ const ProfileSettings = ({ onClose, onProfileUpdate }) => {
           <form onSubmit={handleSubmit}>
             {/* Form fields remain the same */}
             <div className="mb-4">
-              <label htmlFor="name" className="block text-gray-700 text-sm font-bold mb-2">Nombre</label>
-              <input type="text" id="name" value={name} onChange={(e) => setName(e.target.value)} required className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700" />
+              <label htmlFor="name" className="block text-text-primary text-sm font-bold mb-2">Nombre</label>
+              <input type="text" id="name" value={name} onChange={(e) => setName(e.target.value)} required className="shadow appearance-none border rounded w-full py-2 px-3 text-text-primary bg-background" />
             </div>
             <div className="mb-4">
-              <label htmlFor="nickname" className="block text-gray-700 text-sm font-bold mb-2">Nickname</label>
-              <input type="text" id="nickname" value={nickname} onChange={(e) => setNickname(e.target.value)} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700" />
+              <label htmlFor="nickname" className="block text-text-primary text-sm font-bold mb-2">Nickname</label>
+              <input type="text" id="nickname" value={nickname} onChange={(e) => setNickname(e.target.value)} className="shadow appearance-none border rounded w-full py-2 px-3 text-text-primary bg-background" />
             </div>
             <div className="mb-4">
-              <label htmlFor="whatsappNumber" className="block text-gray-700 text-sm font-bold mb-2">Número de WhatsApp</label>
-              <input type="text" id="whatsappNumber" value={whatsappNumber} onChange={(e) => setWhatsappNumber(e.target.value)} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700" />
+              <label htmlFor="whatsappNumber" className="block text-text-primary text-sm font-bold mb-2">Número de WhatsApp</label>
+              <input type="text" id="whatsappNumber" value={whatsappNumber} onChange={(e) => setWhatsappNumber(e.target.value)} className="shadow appearance-none border rounded w-full py-2 px-3 text-text-primary bg-background" />
             </div>
             <div className="mb-4">
-              <label htmlFor="email" className="block text-gray-700 text-sm font-bold mb-2">Email</label>
-              <input type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} required className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700" />
+              <label htmlFor="email" className="block text-text-primary text-sm font-bold mb-2">Email</label>
+              <input type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} required className="shadow appearance-none border rounded w-full py-2 px-3 text-text-primary bg-background" />
             </div>
             <div className="mb-4">
-              <label htmlFor="profilePicture" className="block text-gray-700 text-sm font-bold mb-2">Foto de Perfil</label>
-              <input type="file" id="profilePicture" onChange={(e) => setProfilePictureFile(e.target.files[0])} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700" />
+              <label htmlFor="profilePicture" className="block text-text-primary text-sm font-bold mb-2">Foto de Perfil</label>
+              <input type="file" id="profilePicture" onChange={(e) => setProfilePictureFile(e.target.files[0])} className="shadow appearance-none border rounded w-full py-2 px-3 text-text-primary bg-background" />
               {profilePictureUrl && !profilePictureFile && (
                 <div className="mt-4"><img src={profilePictureUrl} alt="Profile" className="w-24 h-24 object-cover rounded-full" /></div>
               )}
             </div>
             <div className="mb-4">
-              <label htmlFor="password" className="block text-gray-700 text-sm font-bold mb-2">Nueva Contraseña</label>
-              <input type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700" />
+              <label htmlFor="password" className="block text-text-primary text-sm font-bold mb-2">Nueva Contraseña</label>
+              <input type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} className="shadow appearance-none border rounded w-full py-2 px-3 text-text-primary bg-background" />
             </div>
             <div className="mb-6">
-              <label htmlFor="confirmPassword" className="block text-gray-700 text-sm font-bold mb-2">Confirmar Contraseña</label>
-              <input type="password" id="confirmPassword" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700" />
+              <label htmlFor="confirmPassword" className="block text-text-primary text-sm font-bold mb-2">Confirmar Contraseña</label>
+              <input type="password" id="confirmPassword" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} className="shadow appearance-none border rounded w-full py-2 px-3 text-text-primary bg-background" />
             </div>
             <button type="submit" className="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700">Actualizar Perfil</button>
           </form>

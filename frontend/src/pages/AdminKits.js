@@ -101,7 +101,8 @@ const AdminKits = () => {
                 <th className="py-3 px-4 text-left font-semibold">Imagen</th>
                 <th className="py-3 px-4 text-left font-semibold">Nombre</th>
                 <th className="py-3 px-4 text-left font-semibold">Descripción</th>
-                <th className="py-3 px-4 text-left font-semibold">Precio</th>
+                <th className="py-3 px-4 text-left font-semibold">Precio Total (sin desc.)</th>
+                <th className="py-3 px-4 text-left font-semibold">Precio Final</th>
                 <th className="py-3 px-4 text-left font-semibold">Acciones</th>
               </tr>
             </thead>
@@ -115,7 +116,8 @@ const AdminKits = () => {
                   </td>
                   <td className="py-3 px-4">{kit.name}</td>
                   <td className="py-3 px-4">{kit.description.substring(0, 50)}...</td>
-                  <td className="py-3 px-4">Bs {kit.price.toFixed(2)}</td>
+                  <td className="py-3 px-4">Bs {kit.totalPriceBeforeDiscount ? kit.totalPriceBeforeDiscount.toFixed(2) : 'N/A'}</td>
+                  <td className="py-3 px-4">Bs {kit.finalPrice ? kit.finalPrice.toFixed(2) : 'N/A'}</td>
                   <td className="py-3 px-4">
                     <button
                       onClick={() => handleEditClick(kit._id)}

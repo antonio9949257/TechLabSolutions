@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { authenticatedFetch } from '../utils/api';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
@@ -24,8 +24,18 @@ const Products = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState('Todos');
-  const { addToCart } = useCart();
+  const { addToCart, clearCart } = useCart();
   const { user, openLoginModal } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const category = params.get('category');
+    if (category) {
+      setSelectedCategory(category);
+    }
+  }, [location.search]);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -50,6 +60,56 @@ const Products = () => {
 
   const handleAddToCart = (productId, isKit) => {
     addToCart(productId, 1, isKit ? 'Kit' : 'Product');
+  };
+
+  const handleBuyNow = async (productId, isKit) => {
+    if (isKit) {
+      const confirmClear = window.confirm(
+        'Al comprar este kit, tu carrito actual será vaciado y se llenará con los productos de este kit. ¿Deseas continuar?'
+      );
+
+      if (!confirmClear) {
+        return; // User cancelled
+      }
+
+      try {
+        console.log('handleBuyNow: Fetching kit details for', productId);
+        const response = await authenticatedFetch(`/kits/${productId}`);
+        if (!response.ok) {
+          throw new Error('Kit no encontrado');
+        }
+        const kit = await response.json();
+        console.log('handleBuyNow: Kit details fetched', kit);
+
+        console.log('handleBuyNow: Clearing cart');
+        await clearCart();
+        console.log('handleBuyNow: Cart cleared');
+
+        console.log('handleBuyNow: Adding kit products to cart');
+        for (const item of kit.products) {
+          await addToCart(item.productId._id, item.quantity, 'Product');
+          console.log(`handleBuyNow: Added product ${item.productId.nombre} (x${item.quantity})`);
+        }
+        console.log('handleBuyNow: All kit products added');
+
+        // Store kit prices in localStorage
+        localStorage.setItem('kitTotalPriceBeforeDiscount', kit.totalPriceBeforeDiscount);
+        localStorage.setItem('kitFinalPrice', kit.finalPrice);
+        console.log('handleBuyNow: Kit prices stored in localStorage');
+
+        // 4. Navigate to checkout
+        navigate('/checkout');
+      } catch (error) {
+        console.error('Error in handleBuyNow:', error);
+      }
+    } else {
+      // Clear any previous kit price data from localStorage
+      localStorage.removeItem('kitTotalPriceBeforeDiscount');
+      localStorage.removeItem('kitFinalPrice');
+      console.log('handleBuyNow: Cleared kit prices from localStorage for non-kit purchase');
+      await addToCart(productId, 1, 'Product');
+      navigate('/checkout');
+    }
   };
 
   const filterProducts = (products, category) => {
@@ -134,13 +194,30 @@ const Products = () => {
                 <div className="p-4 flex flex-col flex-grow">
                   <h5 className="text-xl font-semibold mb-2">{product.nombre}</h5>
                   <p className="text-secondary mb-2 flex-grow">{product.descripcion}</p>
+                  {product.isKit && product.products && (
+                    <div className="mb-2">
+                      <p className="text-sm font-semibold">Incluye:</p>
+                      <ul className="list-disc list-inside text-sm text-secondary">
+                        {product.products.map((item, index) => (
+                          <li key={index}>{item.nombre} (x{item.quantity})</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
                   <p className="text-secondary text-sm">
                     Categoría: {product.categoria?.name || 'Sin categoría'}
                   </p>
                   {(user && (user.role === 'cliente' || user.role === 'admin')) && (
-                    <p className="text-text-primary font-bold mt-2">
-                      Precio: Bs {product.precio ? parseFloat(product.precio.toFixed(2)) : '0.00'}
-                    </p>
+                    <>
+                      {product.isKit && product.totalPriceBeforeDiscount && (
+                        <p className="text-text-primary text-sm mt-2">
+                          Precio Total (sin desc.): Bs {product.totalPriceBeforeDiscount.toFixed(2)}
+                        </p>
+                      )}
+                      <p className="text-text-primary font-bold mt-2">
+                        Precio: Bs {product.finalPrice ? product.finalPrice.toFixed(2) : (product.precio ? parseFloat(product.precio.toFixed(2)) : '0.00')}
+                      </p>
+                    </>
                   )}
                 </div>
                 <div className="p-4 border-t border-secondary">
@@ -153,17 +230,26 @@ const Products = () => {
                         >
                           Ver Detalles
                         </Link>
-                        <button
-                          className={`flex-1 py-2 px-4 rounded-md text-white transition duration-300 ${
-                            (product.stock > 0 || product.isKit)
-                              ? 'bg-primary hover:opacity-90'
-                              : 'bg-secondary cursor-not-allowed'
-                          }`}
-                          onClick={() => handleAddToCart(product._id, product.isKit)}
-                          disabled={!product.isKit && product.stock === 0}
-                        >
-                          Añadir al Carrito
-                        </button>
+                        {product.isKit ? (
+                          <button
+                            className="flex-1 py-2 px-4 rounded-md text-white bg-primary hover:opacity-90 transition duration-300"
+                            onClick={() => handleBuyNow(product._id, product.isKit)}
+                          >
+                            Comprar
+                          </button>
+                        ) : (
+                          <button
+                            className={`flex-1 py-2 px-4 rounded-md text-white transition duration-300 ${
+                              (product.stock > 0 || product.isKit)
+                                ? 'bg-primary hover:opacity-90'
+                                : 'bg-secondary cursor-not-allowed'
+                            }`}
+                            onClick={() => handleAddToCart(product._id, product.isKit)}
+                            disabled={!product.isKit && product.stock === 0}
+                          >
+                            Añadir al Carrito
+                          </button>
+                        )}
                       </div>
                     ) : null
                   ) : (

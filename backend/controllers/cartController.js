@@ -1,6 +1,7 @@
 const Cart = require('../models/Cart');
 const Product = require('../models/Product');
 const Service = require('../models/Service'); // Import Service model
+const Kit = require('../models/Kit'); // Import Kit model
 
 // @desc    Get user's cart
 // @route   GET /api/cart
@@ -37,7 +38,7 @@ const getCart = async (req, res) => {
 const addToCart = async (req, res) => {
   const { itemId, quantity, itemType } = req.body;
 
-  if (!['Product', 'Service'].includes(itemType)) {
+  if (!['Product', 'Service', 'Kit'].includes(itemType)) {
     return res.status(400).json({ message: 'Tipo de item inválido.' });
   }
 
@@ -45,8 +46,10 @@ const addToCart = async (req, res) => {
     let item;
     if (itemType === 'Product') {
       item = await Product.findById(itemId);
-    } else {
+    } else if (itemType === 'Service') {
       item = await Service.findById(itemId);
+    } else if (itemType === 'Kit') {
+      item = await Kit.findById(itemId);
     }
 
     if (!item) {
@@ -73,7 +76,7 @@ const addToCart = async (req, res) => {
         item: itemId,
         itemType,
         quantity,
-        price: item.precio || item.price, // 'precio' for Product, 'price' for Service
+        price: item.precio || item.price, // 'precio' for Product, 'price' for Service or Kit
       });
     }
 

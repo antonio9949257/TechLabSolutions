@@ -18,16 +18,31 @@ const getProducts = async (req, res) => {
 
   // Si no hay filtro de categoría, o si la categoría es "Kits de Vigilancia"
   if (!categoria || categoria === 'Kits de Vigilancia') {
-    const kits = await Kit.find({});
-    const formattedKits = kits.map(kit => ({
-      _id: kit._id,
-      nombre: kit.name,
-      descripcion: kit.description,
-      precio: kit.price,
-      img_url: kit.imageUrl,
-      isKit: true,
-      categoria: { name: 'Kits de Vigilancia' } // Asignar una categoría para el frontend
-    }));
+    const kits = await Kit.find({}).populate('products.productId', 'nombre precio');
+    const formattedKits = kits.map(kit => {
+      const totalPriceBeforeDiscount = kit.products.reduce((acc, item) => {
+        return acc + (item.productId?.precio || 0) * item.quantity;
+      }, 0);
+
+      const finalPrice = totalPriceBeforeDiscount * (1 - (kit.discountPercentage || 0) / 100);
+
+      return {
+        _id: kit._id,
+        nombre: kit.name,
+        descripcion: kit.description,
+        precio: finalPrice, // Use the calculated final price for consistency
+        img_url: kit.imageUrl,
+        isKit: true,
+        categoria: { name: 'Kits de Vigilancia' }, // Asignar una categoría para el frontend
+        products: kit.products.map(p => ({ // Include populated products
+          _id: p.productId._id,
+          nombre: p.productId.nombre,
+          quantity: p.quantity,
+        })),
+        totalPriceBeforeDiscount: totalPriceBeforeDiscount,
+        finalPrice: finalPrice,
+      };
+    });
     allItems = [...allItems, ...formattedKits];
   }
 

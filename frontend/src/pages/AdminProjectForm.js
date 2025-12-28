@@ -79,10 +79,10 @@ const AdminProjectForm = () => {
       {error && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative my-4">{error}</div>}
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
-          <label htmlFor="title" className="block text-gray-700 text-sm font-bold mb-2">Título</label>
+          <label htmlFor="title" className="block text-text-primary text-sm font-bold mb-2">Título</label>
           <input
             type="text"
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-text-primary bg-background leading-tight focus:outline-none focus:shadow-outline"
             id="title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
@@ -90,9 +90,9 @@ const AdminProjectForm = () => {
           />
         </div>
         <div className="mb-4">
-          <label htmlFor="description" className="block text-gray-700 text-sm font-bold mb-2">Descripción</label>
+          <label htmlFor="description" className="block text-text-primary text-sm font-bold mb-2">Descripción</label>
           <textarea
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline h-40"
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-text-primary bg-background leading-tight focus:outline-none focus:shadow-outline h-40"
             id="description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
@@ -101,19 +101,19 @@ const AdminProjectForm = () => {
         </div>
         {isEditMode && currentImage && (
           <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2">Imagen Actual</label>
+            <label className="block text-text-primary text-sm font-bold mb-2">Imagen Actual</label>
             <div>
               <img src={currentImage} alt="Imagen actual del proyecto" className="w-48 h-auto rounded-md object-cover" />
             </div>
           </div>
         )}
         <div className="mb-6">
-          <label htmlFor="image" className="block text-gray-700 text-sm font-bold mb-2">
+          <label htmlFor="image" className="block text-text-primary text-sm font-bold mb-2">
             {isEditMode ? 'Reemplazar Imagen' : 'Subir Imagen (Opcional)'}
           </label>
           <input
             type="file"
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-text-primary bg-background leading-tight focus:outline-none focus:shadow-outline"
             id="image"
             accept="image/*"
             onChange={handleFileChange}

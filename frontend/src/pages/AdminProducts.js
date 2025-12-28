@@ -171,13 +171,13 @@ const AdminProducts = () => {
       {/* Filters */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
         <input
-          className="border p-2 rounded"
+          className="border p-2 rounded bg-background text-text-primary border-secondary"
           placeholder="Buscar por nombre"
           value={filterNombre}
           onChange={e => setFilterNombre(e.target.value)}
         />
         <select
-          className="border p-2 rounded"
+          className="border p-2 rounded bg-background text-text-primary border-secondary"
           value={filterCategoria}
           onChange={e => setFilterCategoria(e.target.value)}
         >
@@ -192,8 +192,8 @@ const AdminProducts = () => {
 
       {/* Table */}
       <div className="overflow-x-auto">
-        <table className="w-full bg-white shadow rounded">
-          <thead className="bg-gray-100">
+        <table className="w-full bg-card-bg shadow rounded">
+          <thead className="bg-background">
             <tr>
               <th className="p-3">Nombre</th>
               <th>Categoría</th>
@@ -238,7 +238,7 @@ const AdminProducts = () => {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <form
             onSubmit={handleSubmit}
-            className="bg-white p-6 rounded w-full max-w-xl"
+            className="bg-card-bg text-text-primary p-6 rounded w-full max-w-xl"
           >
             <h3 className="text-xl font-bold mb-4">
               {editingProduct ? 'Editar' : 'Crear'} Producto
@@ -249,7 +249,7 @@ const AdminProducts = () => {
                 key={f}
                 name={f}
                 placeholder={f}
-                className="w-full border p-2 rounded mb-3"
+                className="w-full border p-2 rounded mb-3 bg-background text-text-primary border-secondary"
                 value={form[f] || ''}
                 onChange={handleChange}
               />
@@ -257,7 +257,7 @@ const AdminProducts = () => {
 
             <select
               name="categoria"
-              className="w-full border p-2 rounded mb-3"
+              className="w-full border p-2 rounded mb-3 bg-background text-text-primary border-secondary"
               value={form.categoria || ''}
               onChange={handleChange}
             >
@@ -271,7 +271,7 @@ const AdminProducts = () => {
 
             <textarea
               name="especificaciones"
-              className="w-full border p-2 rounded mb-3"
+              className="w-full border p-2 rounded mb-3 bg-background text-text-primary border-secondary"
               placeholder="Especificaciones JSON"
               value={form.especificaciones || ''}
               onChange={handleChange}
@@ -308,13 +308,13 @@ const AdminProducts = () => {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <form
             onSubmit={handleCreateCategory}
-            className="bg-white p-6 rounded w-full max-w-lg"
+            className="bg-card-bg text-text-primary p-6 rounded w-full max-w-lg"
           >
             <h3 className="text-xl font-bold mb-4">Crear Nueva Categoría</h3>
             <input
               name="name"
               placeholder="Nombre de la categoría"
-              className="w-full border p-2 rounded mb-3"
+              className="w-full border p-2 rounded mb-3 bg-background text-text-primary border-secondary"
               value={newCategoryName}
               onChange={(e) => setNewCategoryName(e.target.value)}
               required
@@ -322,7 +322,7 @@ const AdminProducts = () => {
             <textarea
               name="description"
               placeholder="Descripción de la categoría"
-              className="w-full border p-2 rounded mb-3"
+              className="w-full border p-2 rounded mb-3 bg-background text-text-primary border-secondary"
               value={newCategoryDescription}
               onChange={(e) => setNewCategoryDescription(e.target.value)}
             />

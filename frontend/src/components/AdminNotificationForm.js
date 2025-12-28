@@ -47,7 +47,7 @@ const AdminNotificationForm = ({ onClose }) => {
           <label htmlFor="message" className="block text-text-primary text-sm font-bold mb-2">Mensaje</label>
           <textarea
             id="message"
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-text-primary bg-background leading-tight focus:outline-none focus:shadow-outline"
             rows="3"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
@@ -60,7 +60,7 @@ const AdminNotificationForm = ({ onClose }) => {
           <input
             type="url"
             id="link"
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-text-primary bg-background leading-tight focus:outline-none focus:shadow-outline"
             value={link}
             onChange={(e) => setLink(e.target.value)}
             disabled={loading}

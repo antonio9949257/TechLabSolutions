@@ -18,7 +18,7 @@ const cartSchema = mongoose.Schema(
         itemType: {
           type: String,
           required: true,
-          enum: ['Product', 'Service'],
+          enum: ['Product', 'Service', 'Kit'],
         },
         quantity: {
           type: Number,

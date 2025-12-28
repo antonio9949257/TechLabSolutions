@@ -85,7 +85,23 @@ const createKit = asyncHandler(async (req, res) => {
 // @access  Private/Admin
 const getKits = asyncHandler(async (req, res) => {
   const kits = await Kit.find({}).populate('products.productId', 'nombre precio');
-  res.status(200).json(kits);
+
+  const kitsWithCalculatedPrices = kits.map(kit => {
+    const totalPriceBeforeDiscount = kit.products.reduce((acc, item) => {
+      // Ensure item.productId and item.productId.precio exist
+      return acc + (item.productId?.precio || 0) * item.quantity;
+    }, 0);
+
+    const finalPrice = totalPriceBeforeDiscount * (1 - (kit.discountPercentage || 0) / 100);
+
+    return {
+      ...kit.toObject(), // Convert Mongoose document to plain JavaScript object
+      totalPriceBeforeDiscount: totalPriceBeforeDiscount,
+      finalPrice: finalPrice,
+    };
+  });
+
+  res.status(200).json(kitsWithCalculatedPrices);
 });
 
 // @desc    Get single kit
@@ -99,7 +115,17 @@ const getKit = asyncHandler(async (req, res) => {
     throw new Error('Kit no encontrado');
   }
 
-  res.status(200).json(kit);
+  const totalPriceBeforeDiscount = kit.products.reduce((acc, item) => {
+    return acc + (item.productId?.precio || 0) * item.quantity;
+  }, 0);
+
+  const finalPrice = totalPriceBeforeDiscount * (1 - (kit.discountPercentage || 0) / 100);
+
+  res.status(200).json({
+    ...kit.toObject(),
+    totalPriceBeforeDiscount: totalPriceBeforeDiscount,
+    finalPrice: finalPrice,
+  });
 });
 
 // @desc    Delete a kit

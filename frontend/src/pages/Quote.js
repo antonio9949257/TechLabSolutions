@@ -92,7 +92,7 @@ const Quote = () => {
                   <label htmlFor="name" className="block text-secondary text-sm font-bold mb-2">Nombre Completo</label>
                   <input
                     type="text"
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-secondary leading-tight focus:outline-none focus:shadow-outline bg-background border-secondary focus:ring-primary"
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-text-primary leading-tight focus:outline-none focus:shadow-outline bg-background border-secondary focus:ring-primary"
                     id="name"
                     name="name"
                     value={formData.name}
@@ -104,7 +104,7 @@ const Quote = () => {
                   <label htmlFor="email" className="block text-secondary text-sm font-bold mb-2">Correo Electrónico</label>
                   <input
                     type="email"
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-secondary leading-tight focus:outline-none focus:shadow-outline bg-background border-secondary focus:ring-primary"
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-text-primary leading-tight focus:outline-none focus:shadow-outline bg-background border-secondary focus:ring-primary"
                     id="email"
                     name="email"
                     value={formData.email}
@@ -116,7 +116,7 @@ const Quote = () => {
                   <label htmlFor="phone" className="block text-secondary text-sm font-bold mb-2">Teléfono (Opcional)</label>
                   <input
                     type="tel"
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-secondary leading-tight focus:outline-none focus:shadow-outline bg-background border-secondary focus:ring-primary"
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-text-primary leading-tight focus:outline-none focus:shadow-outline bg-background border-secondary focus:ring-primary"
                     id="phone"
                     name="phone"
                     value={formData.phone}
@@ -126,7 +126,7 @@ const Quote = () => {
                 <div className="mb-6">
                   <label htmlFor="message" className="block text-secondary text-sm font-bold mb-2">Mensaje</label>
                   <textarea
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-secondary leading-tight focus:outline-none focus:shadow-outline h-32 bg-background border-secondary focus:ring-primary"
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-text-primary leading-tight focus:outline-none focus:shadow-outline h-32 bg-background border-secondary focus:ring-primary"
                     id="message"
                     name="message"
                     rows="4"

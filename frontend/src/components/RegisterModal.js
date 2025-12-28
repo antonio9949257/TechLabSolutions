@@ -41,8 +41,8 @@ const RegisterModal = ({ onClose, onSuccess, openLoginModal }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="relative w-full max-w-md bg-card-bg p-8 rounded-lg shadow-lg">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-modal">
+      <div className="relative w-full max-w-md bg-card-bg p-8 rounded-lg shadow-lg max-h-screen overflow-y-auto">
         <button
           onClick={onClose}
           className="absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-2xl"
@@ -56,7 +56,7 @@ const RegisterModal = ({ onClose, onSuccess, openLoginModal }) => {
             <label htmlFor="name" className="block text-text-primary text-sm font-bold mb-2">Nombre Completo</label>
             <input
               type="text"
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-text-primary bg-background leading-tight focus:outline-none focus:shadow-outline"
               id="name"
               value={name}
               onChange={(e) => setName(e.target.value)}
@@ -67,7 +67,7 @@ const RegisterModal = ({ onClose, onSuccess, openLoginModal }) => {
             <label htmlFor="email" className="block text-text-primary text-sm font-bold mb-2">Correo Electrónico</label>
             <input
               type="email"
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-text-primary bg-background leading-tight focus:outline-none focus:shadow-outline"
               id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -78,7 +78,7 @@ const RegisterModal = ({ onClose, onSuccess, openLoginModal }) => {
             <label htmlFor="whatsappNumber" className="block text-text-primary text-sm font-bold mb-2">Número de WhatsApp</label>
             <input
               type="text"
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-text-primary bg-background leading-tight focus:outline-none focus:shadow-outline"
               id="whatsappNumber"
               value={whatsappNumber}
               onChange={(e) => setWhatsappNumber(e.target.value)}
@@ -88,7 +88,7 @@ const RegisterModal = ({ onClose, onSuccess, openLoginModal }) => {
             <label htmlFor="password" className="block text-text-primary text-sm font-bold mb-2">Contraseña</label>
             <input
               type="password"
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+              className="shadow appearance-none border rounded w-full py-2 px-3 text-text-primary bg-background mb-3 leading-tight focus:outline-none focus:shadow-outline"
               id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}

@@ -173,7 +173,7 @@ const AdminServices = () => {
       {/* Create Service Modal */}
       {showCreateModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-2xl mx-auto">
+          <div className="bg-card-bg text-text-primary rounded-lg shadow-xl p-6 w-full max-w-2xl mx-auto">
             <div className="flex justify-between items-center pb-3 border-b border-gray-200">
               <h5 className="text-xl font-bold">Crear Nuevo Servicio</h5>
               <button type="button" className="text-gray-400 hover:text-gray-600" onClick={() => setShowCreateModal(false)}>
@@ -185,10 +185,10 @@ const AdminServices = () => {
             <div className="py-4">
               <form onSubmit={handleCreateService}>
                 <div className="mb-4">
-                  <label htmlFor="newServiceName" className="block text-gray-700 text-sm font-bold mb-2">Nombre</label>
+                  <label htmlFor="newServiceName" className="block text-text-primary text-sm font-bold mb-2">Nombre</label>
                   <input
                     type="text"
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-text-primary bg-background leading-tight focus:outline-none focus:shadow-outline"
                     id="newServiceName"
                     value={newServiceName}
                     onChange={(e) => setNewServiceName(e.target.value)}
@@ -196,9 +196,9 @@ const AdminServices = () => {
                   />
                 </div>
                 <div className="mb-4">
-                  <label htmlFor="newServiceDescription" className="block text-gray-700 text-sm font-bold mb-2">Descripción</label>
+                  <label htmlFor="newServiceDescription" className="block text-text-primary text-sm font-bold mb-2">Descripción</label>
                   <textarea
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-text-primary bg-background leading-tight focus:outline-none focus:shadow-outline"
                     id="newServiceDescription"
                     value={newServiceDescription}
                     onChange={(e) => setNewServiceDescription(e.target.value)}
@@ -206,10 +206,10 @@ const AdminServices = () => {
                   ></textarea>
                 </div>
                 <div className="mb-4">
-                  <label htmlFor="newServicePrice" className="block text-gray-700 text-sm font-bold mb-2">Precio</label>
+                  <label htmlFor="newServicePrice" className="block text-text-primary text-sm font-bold mb-2">Precio</label>
                   <input
                     type="number"
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-text-primary bg-background leading-tight focus:outline-none focus:shadow-outline"
                     id="newServicePrice"
                     value={newServicePrice}
                     onChange={(e) => setNewServicePrice(e.target.value)}
@@ -217,10 +217,10 @@ const AdminServices = () => {
                   />
                 </div>
                 <div className="mb-4">
-                  <label htmlFor="newServiceCategory" className="block text-gray-700 text-sm font-bold mb-2">Categoría</label>
+                  <label htmlFor="newServiceCategory" className="block text-text-primary text-sm font-bold mb-2">Categoría</label>
                   <input
                     type="text"
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-text-primary bg-background leading-tight focus:outline-none focus:shadow-outline"
                     id="newServiceCategory"
                     value={newServiceCategory}
                     onChange={(e) => setNewServiceCategory(e.target.value)}
@@ -228,10 +228,10 @@ const AdminServices = () => {
                   />
                 </div>
                 <div className="mb-6">
-                  <label htmlFor="newServiceImage" className="block text-gray-700 text-sm font-bold mb-2">Imagen</label>
+                  <label htmlFor="newServiceImage" className="block text-text-primary text-sm font-bold mb-2">Imagen</label>
                   <input
                     type="file"
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-text-primary bg-background leading-tight focus:outline-none focus:shadow-outline"
                     id="newServiceImage"
                     onChange={(e) => setNewServiceImage(e.target.files[0])}
                   />
@@ -252,8 +252,8 @@ const AdminServices = () => {
         <p className="text-gray-600">No hay servicios registrados.</p>
       ) : (
         <div className="overflow-x-auto">
-          <table className="w-full border-collapse bg-white shadow-md rounded-lg">
-            <thead className="bg-gray-200 text-gray-700">
+          <table className="w-full border-collapse bg-card-bg shadow-md rounded-lg">
+            <thead className="bg-background text-text-primary">
               <tr>
                 <th className="py-3 px-4 text-left font-semibold">Imagen</th>
                 <th className="py-3 px-4 text-left font-semibold">Nombre</th>
@@ -296,7 +296,7 @@ const AdminServices = () => {
       {/* Edit Service Modal */}
       {showEditModal && editingService && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-2xl mx-auto">
+          <div className="bg-card-bg text-text-primary rounded-lg shadow-xl p-6 w-full max-w-2xl mx-auto">
             <div className="flex justify-between items-center pb-3 border-b border-gray-200">
               <h5 className="text-xl font-bold">Editar Servicio</h5>
               <button type="button" className="text-gray-400 hover:text-gray-600" onClick={() => setShowEditModal(false)}>
@@ -308,10 +308,10 @@ const AdminServices = () => {
             <div className="py-4">
               <form onSubmit={handleUpdateService}>
                 <div className="mb-4">
-                  <label htmlFor="editServiceName" className="block text-gray-700 text-sm font-bold mb-2">Nombre</label>
+                  <label htmlFor="editServiceName" className="block text-text-primary text-sm font-bold mb-2">Nombre</label>
                   <input
                     type="text"
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-text-primary bg-background leading-tight focus:outline-none focus:shadow-outline"
                     id="editServiceName"
                     value={editServiceName}
                     onChange={(e) => setEditServiceName(e.target.value)}
@@ -319,9 +319,9 @@ const AdminServices = () => {
                   />
                 </div>
                 <div className="mb-4">
-                  <label htmlFor="editServiceDescription" className="block text-gray-700 text-sm font-bold mb-2">Descripción</label>
+                  <label htmlFor="editServiceDescription" className="block text-text-primary text-sm font-bold mb-2">Descripción</label>
                   <textarea
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-text-primary bg-background leading-tight focus:outline-none focus:shadow-outline"
                     id="editServiceDescription"
                     value={editServiceDescription}
                     onChange={(e) => setEditServiceDescription(e.target.value)}
@@ -329,10 +329,10 @@ const AdminServices = () => {
                   ></textarea>
                 </div>
                 <div className="mb-4">
-                  <label htmlFor="editServicePrice" className="block text-gray-700 text-sm font-bold mb-2">Precio</label>
+                  <label htmlFor="editServicePrice" className="block text-text-primary text-sm font-bold mb-2">Precio</label>
                   <input
                     type="number"
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-text-primary bg-background leading-tight focus:outline-none focus:shadow-outline"
                     id="editServicePrice"
                     value={editServicePrice}
                     onChange={(e) => setEditServicePrice(e.target.value)}
@@ -340,10 +340,10 @@ const AdminServices = () => {
                   />
                 </div>
                 <div className="mb-4">
-                  <label htmlFor="editServiceCategory" className="block text-gray-700 text-sm font-bold mb-2">Categoría</label>
+                  <label htmlFor="editServiceCategory" className="block text-text-primary text-sm font-bold mb-2">Categoría</label>
                   <input
                     type="text"
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-text-primary bg-background leading-tight focus:outline-none focus:shadow-outline"
                     id="editServiceCategory"
                     value={editServiceCategory}
                     onChange={(e) => setEditServiceCategory(e.target.value)}
@@ -351,10 +351,10 @@ const AdminServices = () => {
                   />
                 </div>
                 <div className="mb-6">
-                  <label htmlFor="editServiceImage" className="block text-gray-700 text-sm font-bold mb-2">Imagen</label>
+                  <label htmlFor="editServiceImage" className="block text-text-primary text-sm font-bold mb-2">Imagen</label>
                   <input
                     type="file"
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    className="shadow appearance-none border rounded w-full py-2 px-3 text-text-primary bg-background leading-tight focus:outline-none focus:shadow-outline"
                     id="editServiceImage"
                     onChange={(e) => setEditServiceImage(e.target.files[0])}
                   />

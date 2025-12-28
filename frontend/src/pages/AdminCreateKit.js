@@ -124,7 +124,7 @@ const AdminCreateKit = () => {
           <input
             type="text"
             id="kitName"
-            className="w-full p-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary"
+            className="w-full p-2 border border-secondary rounded-md focus:ring-primary focus:border-primary bg-background text-text-primary"
             value={kitName}
             onChange={(e) => setKitName(e.target.value)}
             required
@@ -136,7 +136,7 @@ const AdminCreateKit = () => {
           <textarea
             id="kitDescription"
             rows="4"
-            className="w-full p-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary"
+            className="w-full p-2 border border-secondary rounded-md focus:ring-primary focus:border-primary bg-background text-text-primary"
             value={kitDescription}
             onChange={(e) => setKitDescription(e.target.value)}
             required
@@ -148,7 +148,7 @@ const AdminCreateKit = () => {
           <input
             type="number"
             id="kitPrice"
-            className="w-full p-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary"
+            className="w-full p-2 border border-secondary rounded-md focus:ring-primary focus:border-primary bg-background text-text-primary"
             value={kitPrice}
             onChange={(e) => setKitPrice(e.target.value)}
             step="0.01"
@@ -161,7 +161,7 @@ const AdminCreateKit = () => {
           <input
             type="number"
             id="discountPercentage"
-            className="w-full p-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary"
+            className="w-full p-2 border border-secondary rounded-md focus:ring-primary focus:border-primary bg-background text-text-primary"
             value={discountPercentage}
             onChange={(e) => setDiscountPercentage(e.target.value)}
             step="0.01"
@@ -178,7 +178,7 @@ const AdminCreateKit = () => {
             id="kitImage"
             accept="image/*"
             onChange={handleImageChange}
-            className="w-full p-2 border border-gray-300 rounded-md file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-white hover:file:bg-blue-700"
+            className="w-full p-2 border border-secondary rounded-md file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-white hover:file:bg-blue-700 bg-background text-text-primary"
             required
           />
           {kitImage && (

@@ -102,7 +102,7 @@ const AdminEditKit = ({ kitId, onClose, onSuccess }) => {
 
   if (loadingKit) {
     return (
-      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-modal">
         <div className="bg-card-bg p-8 rounded-lg shadow-lg w-full max-w-md relative">
           <p>Cargando kit...</p>
         </div>
@@ -111,8 +111,8 @@ const AdminEditKit = ({ kitId, onClose, onSuccess }) => {
   }
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-card-bg p-8 rounded-lg shadow-lg w-full max-w-md relative">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-modal">
+      <div className="bg-card-bg p-8 rounded-lg shadow-lg w-full max-w-md relative max-h-screen overflow-y-auto">
         <button
           onClick={onClose}
           className="absolute top-4 right-4 text-gray-500 hover:text-gray-800 text-2xl"
@@ -132,7 +132,7 @@ const AdminEditKit = ({ kitId, onClose, onSuccess }) => {
             <input
               type="text"
               id="kitName"
-              className="w-full p-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary"
+              className="w-full p-2 border border-secondary rounded-md focus:ring-primary focus:border-primary bg-background text-text-primary"
               value={kitName}
               onChange={(e) => setKitName(e.target.value)}
               required
@@ -144,7 +144,7 @@ const AdminEditKit = ({ kitId, onClose, onSuccess }) => {
             <textarea
               id="kitDescription"
               rows="4"
-              className="w-full p-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary"
+              className="w-full p-2 border border-secondary rounded-md focus:ring-primary focus:border-primary bg-background text-text-primary"
               value={kitDescription}
               onChange={(e) => setKitDescription(e.target.value)}
               required
@@ -156,7 +156,7 @@ const AdminEditKit = ({ kitId, onClose, onSuccess }) => {
             <input
               type="number"
               id="kitPrice"
-              className="w-full p-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary"
+              className="w-full p-2 border border-secondary rounded-md focus:ring-primary focus:border-primary bg-background text-text-primary"
               value={kitPrice}
               onChange={(e) => setKitPrice(e.target.value)}
               step="0.01"
@@ -169,7 +169,7 @@ const AdminEditKit = ({ kitId, onClose, onSuccess }) => {
             <input
               type="number"
               id="discountPercentage"
-              className="w-full p-2 border border-gray-300 rounded-md focus:ring-primary focus:border-primary"
+              className="w-full p-2 border border-secondary rounded-md focus:ring-primary focus:border-primary bg-background text-text-primary"
               value={discountPercentage}
               onChange={(e) => setDiscountPercentage(e.target.value)}
               step="0.01"
@@ -212,7 +212,7 @@ const AdminEditKit = ({ kitId, onClose, onSuccess }) => {
               id="kitImage"
               accept="image/*"
               onChange={handleImageChange}
-              className="w-full p-2 border border-gray-300 rounded-md file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-white hover:file:bg-blue-700"
+              className="w-full p-2 border border-secondary rounded-md file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-white hover:file:bg-blue-700 bg-background text-text-primary"
             />
             {kitImage && (
               <p className="text-sm text-secondary mt-2">Nuevo archivo seleccionado: {kitImage.name}</p>

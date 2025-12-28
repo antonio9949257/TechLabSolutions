@@ -6,6 +6,7 @@
   --background-color: #f4f7f9; /* Light Grayish Blue */
   --text-color: #1a202c; /* Dark Gray */
   --primary-color: #3498db; /* Bright Blue */
+  --primary-color-rgb: 52, 152, 219;
   --secondary-color: #95a5a6; /* Silver */
   --card-bg: #ffffff; /* White */
   --navbar-bg: #ffffff; /* White */
@@ -18,6 +19,7 @@
   --background-color: #1a202c; /* Dark Gray */
   --text-color: #ecf0f1; /* Light Silver */
   --primary-color: #64b5f6; /* Lighter Blue for Dark Theme */
+  --primary-color-rgb: 100, 181, 246;
   --secondary-color: #7f8c8d; /* Grayish */
   --card-bg: #2c3e50; /* Midnight Blue */
   --navbar-bg: #2c3e50; /* Midnight Blue */
@@ -70,4 +72,56 @@ main {
 
 .z-sidebar {
   z-index: 1001;
+}
+
+.z-modal {
+  z-index: 1002;
+}
+
+/* Bootstrap overrides for theme */
+.modal-content {
+  background-color: var(--card-bg);
+  color: var(--text-color);
+}
+
+.form-control {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  border-color: var(--secondary-color);
+}
+
+.form-control:focus {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 0.25rem rgba(var(--primary-color-rgb), 0.25);
+}
+
+.form-label {
+  color: var(--text-color);
+}
+
+.table {
+  color: var(--text-color);
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: rgba(0,0,0,0.05);
+}
+
+[data-theme='dark'] .table-striped tbody tr:nth-of-type(odd) {
+  background-color: rgba(255,255,255,0.05);
+}
+
+.modal-header, .modal-footer {
+    border-bottom-color: var(--secondary-color);
+    border-top-color: var(--secondary-color);
+}
+
+.btn-close {
+    filter: invert(0.5);
+}
+
+[data-theme='dark'] .btn-close {
+    filter: invert(1);
 }

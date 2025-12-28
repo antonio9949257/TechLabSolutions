@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useCart } from '../context/CartContext';
 import { useNavigate } from 'react-router-dom';
 import { authenticatedFetch } from '../utils/api';
@@ -6,6 +6,21 @@ import { authenticatedFetch } from '../utils/api';
 const Checkout = () => {
   const { cart, fetchCart } = useCart();
   const navigate = useNavigate();
+  const [kitTotalPriceBeforeDiscount, setKitTotalPriceBeforeDiscount] = useState(null);
+  const [kitFinalPrice, setKitFinalPrice] = useState(null);
+
+  useEffect(() => {
+    const storedTotalPrice = localStorage.getItem('kitTotalPriceBeforeDiscount');
+    const storedFinalPrice = localStorage.getItem('kitFinalPrice');
+
+    if (storedTotalPrice && storedFinalPrice) {
+      setKitTotalPriceBeforeDiscount(parseFloat(storedTotalPrice));
+      setKitFinalPrice(parseFloat(storedFinalPrice));
+    } else {
+      setKitTotalPriceBeforeDiscount(null);
+      setKitFinalPrice(null);
+    }
+  }, []);
 
   const handleCreateOrder = async () => {
     try {
@@ -18,7 +33,7 @@ const Checkout = () => {
             qty: cartItem.quantity,
             price: cartItem.price,
           })),
-          totalPrice: cart.totalPrice,
+          totalPrice: kitFinalPrice || cart.totalPrice, // Use kitFinalPrice if available, else cart.totalPrice
         }),
       });
 
@@ -87,6 +102,16 @@ const Checkout = () => {
           </tbody>
 
           <tfoot>
+            {kitTotalPriceBeforeDiscount && (
+              <tr>
+                <td colSpan="3" className="py-2 px-4 text-right">
+                  Precio Total (sin desc.)
+                </td>
+                <td className="py-2 px-4 text-right font-medium line-through">
+                  Bs {kitTotalPriceBeforeDiscount.toFixed(2)}
+                </td>
+              </tr>
+            )}
             <tr className="border-t-2">
               <td
                 colSpan="3"
@@ -95,7 +120,7 @@ const Checkout = () => {
                 Total General
               </td>
               <td className="py-4 px-4 text-right font-bold">
-                Bs {parseFloat(cart.totalPrice.toFixed(2))}
+                Bs {kitFinalPrice ? kitFinalPrice.toFixed(2) : parseFloat(cart.totalPrice.toFixed(2))}
               </td>
             </tr>
           </tfoot>
