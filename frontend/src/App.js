@@ -35,13 +35,14 @@ import FloatingCartButton from './components/FloatingCartButton'; // Import Floa
 import FloatingUserListButton from './components/FloatingUserListButton'; // Import FloatingUserListButton
 import UserListSidebar from './components/UserListSidebar'; // Import UserListSidebar
 import NotificationTray from './components/NotificationTray'; // Import NotificationTray
+import OrderHistorySidebar from './components/OrderHistorySidebar'; // Import OrderHistorySidebar
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import { SocketProvider } from './context/SocketContext'; // Import SocketProvider
 import { NotificationProvider } from './context/NotificationContext'; // Import NotificationProvider
 
 function App() {
-  const [activeSidebar, setActiveSidebar] = useState(null); // null, 'cart', 'userlist', or 'notification'
+  const [activeSidebar, setActiveSidebar] = useState(null); // null, 'cart', 'userlist', 'notification', or 'orders'
 
   const toggleSidebar = (sidebar) => {
     setActiveSidebar(current => (current === sidebar ? null : sidebar));
@@ -53,13 +54,17 @@ function App() {
         <SocketProvider>
           <NotificationProvider> {/* Wrap with NotificationProvider */}
             <div className="flex flex-col min-h-screen">
-                <Navbar toggleNotificationSidebar={() => toggleSidebar('notification')} />
+                <Navbar
+                  toggleNotificationSidebar={() => toggleSidebar('notification')}
+                  toggleOrderSidebar={() => toggleSidebar('orders')} // Pass toggleOrderSidebar
+                />
                 <SearchNavbar /> {/* Render the new SearchNavbar */}
                 <CartSidebar isOpen={activeSidebar === 'cart'} onClose={() => setActiveSidebar(null)} />
                 <FloatingCartButton onClick={() => toggleSidebar('cart')} />
                 <FloatingUserListButton onClick={() => toggleSidebar('userlist')} />
                 <UserListSidebar isOpen={activeSidebar === 'userlist'} onClose={() => setActiveSidebar(null)} />
                 <NotificationTray isOpen={activeSidebar === 'notification'} onClose={() => setActiveSidebar(null)} />
+                <OrderHistorySidebar isOpen={activeSidebar === 'orders'} onClose={() => setActiveSidebar(null)} /> {/* Render OrderHistorySidebar */}
                 <main className="flex-grow">
                   <Routes>
                     <Route path="/" element={<Home />} />
@@ -77,7 +82,7 @@ function App() {
 
                     {/* Protected Routes */}
                     <Route element={<ProtectedRoute allowedRoles={['admin', 'cliente']} />}>
-                      <Route path="/profile" element={<Profile />} />
+                      <Route path="/profile" element={<Profile toggleOrderSidebar={() => toggleSidebar('orders')} />} />
                       <Route path="/checkout" element={<Checkout />} />
                       <Route path="/quote/:serviceId" element={<Quote />} /> {/* Now protected */}
                     </Route>

@@ -11,13 +11,14 @@ import {
   Gear,
   Speedometer2,
   BellFill, // Import BellFill icon
+  Receipt, // Import Receipt icon for orders
 } from 'react-bootstrap-icons';
 import { useTheme } from '../context/ThemeContext';
 import { useNotifications } from '../context/NotificationContext'; // Import useNotifications
 import LoginModal from './LoginModal'; // Import LoginModal
 import RegisterModal from './RegisterModal'; // Import RegisterModal
 
-const Navbar = ({ toggleUserList, toggleNotificationSidebar }) => { // Accept toggleUserList and toggleNotificationSidebar prop
+const Navbar = ({ toggleUserList, toggleNotificationSidebar, toggleOrderSidebar }) => { // Accept toggleOrderSidebar prop
   const { token, user, logout, showLoginModal, closeLoginModal, openLoginModal, showRegisterModal, closeRegisterModal, openRegisterModal } = useAuth();
   const { theme, changeTheme } = useTheme();
   const { unreadCount } = useNotifications(); // Get unreadCount
@@ -81,6 +82,11 @@ const Navbar = ({ toggleUserList, toggleNotificationSidebar }) => { // Accept to
           <div className="ml-auto lg:ml-4 flex items-center gap-4"> {/* Added flex and gap for spacing */}
             {token ? (
               <>
+                {/* Order History Button */}
+                <button onClick={toggleOrderSidebar} className="relative p-2 rounded-full hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-300">
+                  <Receipt className="w-6 h-6" />
+                </button>
+
                 {/* Notification Button */}
                 <button onClick={toggleNotificationSidebar} className="relative p-2 rounded-full hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-300">
                   <BellFill className="w-6 h-6" />

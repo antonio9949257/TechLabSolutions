@@ -12,10 +12,10 @@ exports.search = async (req, res) => {
 
     const products = await Product.find({
       $or: [
-        { name: regex },
-        { description: regex }
+        { nombre: regex },
+        { descripcion: regex }
       ]
-    });
+    }).populate('categoria', 'name'); // Populate 'categoria' field and select only the 'name'
 
     const services = await Service.find({
       $or: [

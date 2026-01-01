@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext'; // Import useAuth
+import { authenticatedFetch } from '../utils/api'; // Import authenticatedFetch
 import './Home.css'; // We'll create this for custom styles
 
 const categories = [
@@ -22,6 +23,61 @@ const Home = () => {
   const { user } = useAuth(); // Get user from context
   const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState('Todos');
+
+  const [featuredCameras, setFeaturedCameras] = useState([]);
+  const [loadingCameras, setLoadingCameras] = useState(true);
+  const [errorCameras, setErrorCameras] = useState(null);
+
+  const [featuredKits, setFeaturedKits] = useState([]);
+  const [loadingKits, setLoadingKits] = useState(true);
+  const [errorKits, setErrorKits] = useState(null);
+
+  useEffect(() => {
+    const fetchFeaturedCameras = async () => {
+      try {
+        const response = await authenticatedFetch('/products?category=Cámaras de Seguridad&limit=3'); // Assuming a limit of 3 for featured
+        if (response.ok) {
+          const data = await response.json();
+          if (data && data.products) { // Add check for data and data.products
+            setFeaturedCameras(data.products);
+          } else {
+            setFeaturedCameras([]); // Ensure it's an empty array if data is malformed
+          }
+        } else {
+          setErrorCameras('Error al cargar cámaras destacadas');
+        }
+      } catch (err) {
+        console.error('Error fetching featured cameras:', err);
+        setErrorCameras('Error de conexión al servidor');
+      } finally {
+        setLoadingCameras(false);
+      }
+    };
+
+    const fetchFeaturedKits = async () => {
+      try {
+        const response = await authenticatedFetch('/kits?limit=2'); // Assuming a limit of 2 for featured kits
+        if (response.ok) {
+          const data = await response.json();
+          if (data) { // Add check for data
+            setFeaturedKits(data); // Kits endpoint returns an array directly
+          } else {
+            setFeaturedKits([]); // Ensure it's an empty array if data is malformed
+          }
+        } else {
+          setErrorKits('Error al cargar kits destacados');
+        }
+      } catch (err) {
+        console.error('Error fetching featured kits:', err);
+        setErrorKits('Error de conexión al servidor');
+      } finally {
+        setLoadingKits(false);
+      }
+    };
+
+    fetchFeaturedCameras();
+    fetchFeaturedKits();
+  }, []); // Empty dependency array means this runs once on mount
 
   const handleCategoryClick = (category) => {
     setSelectedCategory(category);
@@ -50,7 +106,7 @@ const Home = () => {
             )}
           </h1>
           <p className="text-lg mb-5 mx-auto max-w-3xl">
-            Soluciones accesibles en automatización, electrónica e informática industrial
+            Soluciones integrales en seguridad y vigilancia para hogares y negocios, garantizando tu tranquilidad.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-3">
             <Link to="/products" className="bg-card-bg text-primary hover:bg-background py-3 px-6 text-lg rounded-md transition duration-300">
@@ -93,35 +149,26 @@ const Home = () => {
           <section className="py-12 bg-background">
             <div className="container mx-auto px-4">
               <h2 className="text-4xl font-bold text-center text-text-primary mb-8">Cámaras de Seguridad Destacadas</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {/* Product 1 */}
-                <div className="bg-card-bg rounded-lg shadow-md overflow-hidden">
-                  <img src="https://images.unsplash.com/photo-1617038201066-246697090540?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Dahua Camera" className="w-full h-48 object-cover" />
-                  <div className="p-6">
-                    <h3 className="text-xl font-bold text-text-primary mb-2">Cámara IP Dahua 4MP</h3>
-                    <p className="text-secondary mb-4">Resolución 4MP, visión nocturna, detección de movimiento. Ideal para exteriores.</p>
-                    <Link to="/products" className="bg-primary text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-300">Ver Producto</Link>
-                  </div>
+              {loadingCameras ? (
+                <p className="text-center text-text-primary">Cargando cámaras destacadas...</p>
+              ) : errorCameras ? (
+                <p className="text-center text-red-600">Error: {errorCameras}</p>
+              ) : featuredCameras.length === 0 ? (
+                <p className="text-center text-text-primary">No hay cámaras destacadas disponibles.</p>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                  {featuredCameras.map((camera) => (
+                    <div key={camera._id} className="bg-card-bg rounded-lg shadow-md overflow-hidden">
+                      <img src={camera.imagen || 'https://via.placeholder.com/300'} alt={camera.nombre} className="w-full h-48 object-cover" />
+                      <div className="p-6">
+                        <h3 className="text-xl font-bold text-text-primary mb-2">{camera.nombre}</h3>
+                        <p className="text-secondary mb-4">{camera.descripcion}</p>
+                        <Link to={`/products/${camera._id}`} className="bg-primary text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-300">Ver Producto</Link>
+                      </div>
+                    </div>
+                  ))}
                 </div>
-                {/* Product 2 */}
-                <div className="bg-card-bg rounded-lg shadow-md overflow-hidden">
-                  <img src="https://images.unsplash.com/photo-1593642632823-8f785ba67e45?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Hikvision Camera" className="w-full h-48 object-cover" />
-                  <div className="p-6">
-                    <h3 className="text-xl font-bold text-text-primary mb-2">Cámara Domo Hikvision 2MP</h3>
-                    <p className="text-secondary mb-4">Cámara domo Full HD, resistente al vandalismo, audio bidireccional.</p>
-                    <Link to="/products" className="bg-primary text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-300">Ver Producto</Link>
-                  </div>
-                </div>
-                {/* Product 3 */}
-                <div className="bg-card-bg rounded-lg shadow-md overflow-hidden">
-                  <img src="https://images.unsplash.com/photo-1587825140708-cb042864f13b?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="PTZ Camera" className="w-full h-48 object-cover" />
-                  <div className="p-6">
-                    <h3 className="text-xl font-bold text-text-primary mb-2">Cámara PTZ Exterior</h3>
-                    <p className="text-secondary mb-4">Control de paneo, inclinación y zoom. Cobertura de 360 grados.</p>
-                    <Link to="/products" className="bg-primary text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-300">Ver Producto</Link>
-                  </div>
-                </div>
-              </div>
+              )}
             </div>
           </section>
 
@@ -129,49 +176,43 @@ const Home = () => {
           <section className="py-12">
             <div className="container mx-auto px-4">
               <h2 className="text-4xl font-bold text-center text-text-primary mb-8">Kits de Seguridad Completos</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {/* Kit 1 */}
-                <div className="bg-card-bg rounded-lg shadow-md overflow-hidden flex flex-col md:flex-row">
-                  <img src="https://images.unsplash.com/photo-1587825140708-cb042864f13b?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Kit Básico" className="w-full md:w-1/3 h-48 md:h-auto object-cover" />
-                  <div className="p-6 flex-1">
-                    <h3 className="text-xl font-bold text-text-primary mb-2">Kit Básico de Vigilancia</h3>
-                    <p className="text-secondary mb-4">Incluye 2 cámaras, DVR de 4 canales y accesorios. Fácil instalación.</p>
-                    <Link to="/products" className="bg-primary text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-300">Ver Kit</Link>
-                  </div>
+              {loadingKits ? (
+                <p className="text-center text-text-primary">Cargando kits destacados...</p>
+              ) : errorKits ? (
+                <p className="text-center text-red-600">Error: {errorKits}</p>
+              ) : featuredKits.length === 0 ? (
+                <p className="text-center text-text-primary">No hay kits destacados disponibles.</p>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  {featuredKits.map((kit) => (
+                    <div key={kit._id} className="bg-card-bg rounded-lg shadow-md overflow-hidden flex flex-col md:flex-row">
+                      <img src={kit.imageUrl || 'https://via.placeholder.com/300'} alt={kit.name} className="w-full md:w-1/3 h-48 md:h-auto object-cover" />
+                      <div className="p-6 flex-1">
+                        <h3 className="text-xl font-bold text-text-primary mb-2">{kit.name}</h3>
+                        <p className="text-secondary mb-2">{kit.description}</p>
+                        {kit.totalPriceBeforeDiscount && (
+                          <p className="text-md text-gray-500 line-through">Precio Original: ${kit.totalPriceBeforeDiscount.toFixed(2)}</p>
+                        )}
+                        <p className="text-lg font-semibold text-text-primary mb-2">Precio Final: ${kit.finalPrice ? kit.finalPrice.toFixed(2) : kit.price.toFixed(2)}</p>
+                        {kit.products && kit.products.length > 0 && (
+                          <div className="mb-4">
+                            <h4 className="text-md font-semibold text-text-primary">Incluye:</h4>
+                            <ul className="list-disc list-inside text-secondary text-sm">
+                              {kit.products.map((item, index) => (
+                                <li key={index}>{item.productId.nombre} (x{item.quantity})</li>
+                              ))}
+                            </ul>
+                          </div>
+                        )}
+                        <Link to={`/kits/${kit._id}`} className="bg-primary text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-300">Ver Kit</Link>
+                      </div>
+                    </div>
+                  ))}
                 </div>
-                {/* Kit 2 */}
-                <div className="bg-card-bg rounded-lg shadow-md overflow-hidden flex flex-col md:flex-row">
-                  <img src="https://images.unsplash.com/photo-1617038201066-246697090540?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Kit Avanzado" className="w-full md:w-1/3 h-48 md:h-auto object-cover" />
-                  <div className="p-6 flex-1">
-                    <h3 className="text-xl font-bold text-text-primary mb-2">Kit Avanzado con IA</h3>
-                    <p className="text-secondary mb-4">4 cámaras con IA, NVR de 8 canales, detección facial y analíticas avanzadas.</p>
-                    <Link to="/products" className="bg-primary text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-300">Ver Kit</Link>
-                  </div>
-                </div>
-              </div>
+              )}
             </div>
           </section>
-
-          {/* Product Categories Section */}
-          <section className="py-12 bg-background">
-            <div className="container mx-auto px-4">
-              <h2 className="text-4xl font-bold text-center text-text-primary mb-8">Explora Nuestras Categorías</h2>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <Link to="/products?category=ip-cameras" className="bg-card-bg p-6 rounded-lg shadow-md text-center hover:shadow-lg transition duration-300">
-                  <h3 className="text-xl font-bold text-text-primary">Cámaras IP</h3>
-                </Link>
-                <Link to="/products?category=dvrs" className="bg-card-bg p-6 rounded-lg shadow-md text-center hover:shadow-lg transition duration-300">
-                  <h3 className="text-xl font-bold text-text-primary">DVRs</h3>
-                </Link>
-                <Link to="/products?category=nvrs" className="bg-card-bg p-6 rounded-lg shadow-md text-center hover:shadow-lg transition duration-300">
-                  <h3 className="text-xl font-bold text-text-primary">NVRs</h3>
-                </Link>
-                <Link to="/products?category=accessories" className="bg-card-bg p-6 rounded-lg shadow-md text-center hover:shadow-lg transition duration-300">
-                  <h3 className="text-xl font-bold text-text-primary">Accesorios</h3>
-                </Link>
-              </div>
-            </div>
-          </section>
+    
 
           {/* Services Section */}
           <section className="py-12">

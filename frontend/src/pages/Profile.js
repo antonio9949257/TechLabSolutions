@@ -4,16 +4,14 @@ import { authenticatedFetch } from '../utils/api';
 import { useAuth } from '../context/AuthContext';
 import { PersonCircle, Gear, BoxSeam, ToggleOn, ToggleOff } from 'react-bootstrap-icons'; // Import ToggleOn and ToggleOff icons
 import ProfileSettings from './ProfileSettings'; // Import the settings component
-import OrderHistory from '../components/OrderHistory'; // Import the OrderHistory component
 
-const Profile = () => {
+const Profile = ({ toggleOrderSidebar }) => { // Accept toggleOrderSidebar as a prop
   const { user, token } = useAuth();
   const { id } = useParams(); // Get id from URL parameters
   const [profileData, setProfileData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
-  const [showOrderHistory, setShowOrderHistory] = useState(false); // New state for order history
 
   const fetchUserProfile = useCallback(async () => {
     if (token) { // Only proceed if authenticated
@@ -159,7 +157,7 @@ const Profile = () => {
                   Configuración de Perfil
                 </button>
                 <button
-                  onClick={() => setShowOrderHistory(true)}
+                  onClick={toggleOrderSidebar} // Call toggleOrderSidebar directly
                   className="inline-flex items-center gap-2 bg-secondary text-white py-2 px-6 rounded-lg shadow-md hover:bg-secondary-dark transition duration-300"
                 >
                   <BoxSeam className="w-5 h-5" />
@@ -178,10 +176,6 @@ const Profile = () => {
             onProfileUpdate={handleProfileUpdate}
           />
         </div>
-      )}
-
-      {showOrderHistory && (
-        <OrderHistory onClose={() => setShowOrderHistory(false)} />
       )}
     </>
   );
