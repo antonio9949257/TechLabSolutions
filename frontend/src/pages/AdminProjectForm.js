@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { authenticatedFetch, publicFetch } from '../utils/api';
+import ImageUpload from '../components/ImageUpload'; // Import the new component
 
 const AdminProjectForm = () => {
   const { id } = useParams();
@@ -33,10 +34,6 @@ const AdminProjectForm = () => {
       fetchProject();
     }
   }, [id, isEditMode]);
-
-  const handleFileChange = (e) => {
-    setImageFile(e.target.files[0]);
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -99,24 +96,11 @@ const AdminProjectForm = () => {
             required
           ></textarea>
         </div>
-        {isEditMode && currentImage && (
-          <div className="mb-4">
-            <label className="block text-text-primary text-sm font-bold mb-2">Imagen Actual</label>
-            <div>
-              <img src={currentImage} alt="Imagen actual del proyecto" className="w-48 h-auto rounded-md object-cover" />
-            </div>
-          </div>
-        )}
         <div className="mb-6">
-          <label htmlFor="image" className="block text-text-primary text-sm font-bold mb-2">
-            {isEditMode ? 'Reemplazar Imagen' : 'Subir Imagen (Opcional)'}
-          </label>
-          <input
-            type="file"
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-text-primary bg-background leading-tight focus:outline-none focus:shadow-outline"
-            id="image"
-            accept="image/*"
-            onChange={handleFileChange}
+          <ImageUpload
+            fieldName="image"
+            onFileSelect={setImageFile}
+            existingImageUrl={currentImage}
           />
         </div>
         <button type="submit" className="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-300" disabled={isSubmitting}>

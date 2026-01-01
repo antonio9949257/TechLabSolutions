@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { authenticatedFetch } from '../utils/api';
 import { useAuth } from '../context/AuthContext';
+import ImageUpload from '../components/ImageUpload';
 
 const ProfileSettings = ({ onClose, onProfileUpdate }) => {
   const { user, token, login, logout } = useAuth();
@@ -77,11 +78,11 @@ const ProfileSettings = ({ onClose, onProfileUpdate }) => {
 
       if (response.ok) {
         const updatedUser = await response.json();
-        login({ ...user, ...updatedUser, whatsappNumber: updatedUser.whatsappNumber }); // Update context
-        onProfileUpdate(); // Refetch profile data on parent
+        login({ ...user, ...updatedUser, whatsappNumber: updatedUser.whatsappNumber });
+        onProfileUpdate();
         setMessage('Perfil actualizado exitosamente. El modal se cerrará en 3 segundos...');
         setTimeout(() => {
-          onClose(); // Close modal after a delay
+          onClose();
         }, 3000);
       } else {
         const errorData = await response.json();
@@ -124,7 +125,6 @@ const ProfileSettings = ({ onClose, onProfileUpdate }) => {
       ) : (
         <>
           <form onSubmit={handleSubmit}>
-            {/* Form fields remain the same */}
             <div className="mb-4">
               <label htmlFor="name" className="block text-text-primary text-sm font-bold mb-2">Nombre</label>
               <input type="text" id="name" value={name} onChange={(e) => setName(e.target.value)} required className="shadow appearance-none border rounded w-full py-2 px-3 text-text-primary bg-background" />
@@ -142,11 +142,11 @@ const ProfileSettings = ({ onClose, onProfileUpdate }) => {
               <input type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} required className="shadow appearance-none border rounded w-full py-2 px-3 text-text-primary bg-background" />
             </div>
             <div className="mb-4">
-              <label htmlFor="profilePicture" className="block text-text-primary text-sm font-bold mb-2">Foto de Perfil</label>
-              <input type="file" id="profilePicture" onChange={(e) => setProfilePictureFile(e.target.files[0])} className="shadow appearance-none border rounded w-full py-2 px-3 text-text-primary bg-background" />
-              {profilePictureUrl && !profilePictureFile && (
-                <div className="mt-4"><img src={profilePictureUrl} alt="Profile" className="w-24 h-24 object-cover rounded-full" /></div>
-              )}
+              <ImageUpload
+                fieldName="profilePicture"
+                onFileSelect={setProfilePictureFile}
+                existingImageUrl={profilePictureUrl}
+              />
             </div>
             <div className="mb-4">
               <label htmlFor="password" className="block text-text-primary text-sm font-bold mb-2">Nueva Contraseña</label>
@@ -176,4 +176,3 @@ const ProfileSettings = ({ onClose, onProfileUpdate }) => {
 };
 
 export default ProfileSettings;
-

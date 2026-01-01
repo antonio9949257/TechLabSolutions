@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { authenticatedFetch } from '../utils/api';
 import { useAuth } from '../context/AuthContext';
+import ImageUpload from '../components/ImageUpload';
 
 const AdminServices = () => {
   const { user } = useAuth();
@@ -13,7 +14,7 @@ const AdminServices = () => {
   const [newServiceDescription, setNewServiceDescription] = useState('');
   const [newServicePrice, setNewServicePrice] = useState('');
   const [newServiceCategory, setNewServiceCategory] = useState('');
-  const [newServiceImage, setNewServiceImage] = useState(null); // For file input
+  const [newServiceImage, setNewServiceImage] = useState(null);
 
   // State for Edit Service modal
   const [showEditModal, setShowEditModal] = useState(false);
@@ -22,7 +23,7 @@ const AdminServices = () => {
   const [editServiceDescription, setEditServiceDescription] = useState('');
   const [editServicePrice, setEditServicePrice] = useState('');
   const [editServiceCategory, setEditServiceCategory] = useState('');
-  const [editServiceImage, setEditServiceImage] = useState(null); // For file input
+  const [editServiceImage, setEditServiceImage] = useState(null);
 
   // State for Create Service Modal visibility
   const [showCreateModal, setShowCreateModal] = useState(false);
@@ -78,8 +79,8 @@ const AdminServices = () => {
         setNewServicePrice('');
         setNewServiceCategory('');
         setNewServiceImage(null);
-        setShowCreateModal(false); // Close modal
-        fetchServices(); // Refresh service list
+        setShowCreateModal(false);
+        fetchServices();
       } else {
         const errorData = await response.json();
         alert(errorData.message || 'Error al crear servicio');
@@ -99,7 +100,7 @@ const AdminServices = () => {
 
         if (response.ok) {
           alert('Servicio eliminado exitosamente');
-          fetchServices(); // Refresh service list
+          fetchServices();
         } else {
           const errorData = await response.json();
           alert(errorData.message || 'Error al eliminar servicio');
@@ -117,7 +118,7 @@ const AdminServices = () => {
     setEditServiceDescription(serviceToEdit.description);
     setEditServicePrice(serviceToEdit.price);
     setEditServiceCategory(serviceToEdit.category);
-    setEditServiceImage(null); // Clear previous image selection
+    setEditServiceImage(null);
     setShowEditModal(true);
   };
 
@@ -142,7 +143,7 @@ const AdminServices = () => {
         alert('Servicio actualizado exitosamente');
         setShowEditModal(false);
         setEditingService(null);
-        fetchServices(); // Refresh service list
+        fetchServices();
       } else {
         const errorData = await response.json();
         alert(errorData.message || 'Error al actualizar servicio');
@@ -165,12 +166,10 @@ const AdminServices = () => {
     <div className="container mx-auto px-4 py-8">
       <h2 className="text-3xl font-bold mb-6">Gestión de Servicios</h2>
 
-      {/* Button to open Create Service Modal */}
       <button className="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-300 mb-6" onClick={() => setShowCreateModal(true)}>
         Crear Nuevo Servicio
       </button>
 
-      {/* Create Service Modal */}
       {showCreateModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-card-bg text-text-primary rounded-lg shadow-xl p-6 w-full max-w-2xl mx-auto">
@@ -228,12 +227,9 @@ const AdminServices = () => {
                   />
                 </div>
                 <div className="mb-6">
-                  <label htmlFor="newServiceImage" className="block text-text-primary text-sm font-bold mb-2">Imagen</label>
-                  <input
-                    type="file"
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-text-primary bg-background leading-tight focus:outline-none focus:shadow-outline"
-                    id="newServiceImage"
-                    onChange={(e) => setNewServiceImage(e.target.files[0])}
+                  <ImageUpload
+                    fieldName="newServiceImage"
+                    onFileSelect={setNewServiceImage}
                   />
                 </div>
                 <div className="flex justify-end">
@@ -246,7 +242,6 @@ const AdminServices = () => {
         </div>
       )}
 
-      {/* Service List Table */}
       <h3 className="text-2xl font-bold mb-4">Servicios Existentes</h3>
       {services.length === 0 ? (
         <p className="text-gray-600">No hay servicios registrados.</p>
@@ -293,7 +288,6 @@ const AdminServices = () => {
           </table>
         </div>
       )}
-      {/* Edit Service Modal */}
       {showEditModal && editingService && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-card-bg text-text-primary rounded-lg shadow-xl p-6 w-full max-w-2xl mx-auto">
@@ -351,19 +345,11 @@ const AdminServices = () => {
                   />
                 </div>
                 <div className="mb-6">
-                  <label htmlFor="editServiceImage" className="block text-text-primary text-sm font-bold mb-2">Imagen</label>
-                  <input
-                    type="file"
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-text-primary bg-background leading-tight focus:outline-none focus:shadow-outline"
-                    id="editServiceImage"
-                    onChange={(e) => setEditServiceImage(e.target.files[0])}
+                  <ImageUpload
+                    fieldName="editServiceImage"
+                    onFileSelect={setEditServiceImage}
+                    existingImageUrl={editingService.image}
                   />
-                  {editingService.image && (
-                    <div className="mt-4">
-                      <p className="text-gray-700 mb-2">Imagen actual:</p>
-                      <img src={editingService.image} alt="Current Service" className="w-24 h-24 object-cover rounded-md" />
-                    </div>
-                  )}
                 </div>
                 <div className="flex justify-end">
                   <button type="submit" className="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-300">Guardar Cambios</button>

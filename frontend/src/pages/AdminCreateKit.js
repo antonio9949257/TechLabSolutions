@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useCart } from '../context/CartContext';
 import { useNavigate } from 'react-router-dom';
-import { authenticatedFetch } from '../utils/api'; // Assuming this handles file uploads or we'll need a dedicated one
+import { authenticatedFetch } from '../utils/api';
+import ImageUpload from '../components/ImageUpload';
 
 const AdminCreateKit = () => {
   const { cart, loading, clearCart } = useCart();
@@ -10,7 +11,7 @@ const AdminCreateKit = () => {
   const [kitName, setKitName] = useState('');
   const [kitDescription, setKitDescription] = useState('');
   const [kitPrice, setKitPrice] = useState(cart ? cart.totalPrice.toFixed(2) : '0.00');
-  const [discountPercentage, setDiscountPercentage] = useState('0'); // New state for discount percentage
+  const [discountPercentage, setDiscountPercentage] = useState('0');
   const [kitImage, setKitImage] = useState(null);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
@@ -35,12 +36,6 @@ const AdminCreateKit = () => {
     );
   }
 
-  const handleImageChange = (e) => {
-    if (e.target.files && e.target.files[0]) {
-      setKitImage(e.target.files[0]);
-    }
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
@@ -57,7 +52,7 @@ const AdminCreateKit = () => {
     formData.append('name', kitName);
     formData.append('description', kitDescription);
     formData.append('price', kitPrice);
-    formData.append('discountPercentage', discountPercentage); // Add discount percentage
+    formData.append('discountPercentage', discountPercentage);
     formData.append('image', kitImage);
     formData.append('products', JSON.stringify(cart.items.map(item => ({
       productId: item.item._id,
@@ -66,19 +61,17 @@ const AdminCreateKit = () => {
     }))));
 
     try {
-      // This will require a new backend endpoint for kit creation
       const response = await authenticatedFetch('/kits', {
         method: 'POST',
         body: formData,
-        // Do NOT set Content-Type header for FormData, browser does it automatically
       });
 
       const data = await response.json();
 
       if (response.ok) {
         setSuccess(data.message || 'Kit creado exitosamente.');
-        clearCart(); // Clear the cart after kit creation
-        navigate('/admin/kits'); // Navigate to the kits management page
+        clearCart();
+        navigate('/admin/kits');
       } else {
         setError(data.message || 'Error al crear el kit.');
       }
@@ -172,18 +165,10 @@ const AdminCreateKit = () => {
         </div>
 
         <div className="mb-6">
-          <label htmlFor="kitImage" className="block text-sm font-medium text-text-primary mb-2">Imagen del Kit</label>
-          <input
-            type="file"
-            id="kitImage"
-            accept="image/*"
-            onChange={handleImageChange}
-            className="w-full p-2 border border-secondary rounded-md file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary file:text-white hover:file:bg-blue-700 bg-background text-text-primary"
-            required
+          <ImageUpload
+            fieldName="kitImage"
+            onFileSelect={setKitImage}
           />
-          {kitImage && (
-            <p className="text-sm text-secondary mt-2">Archivo seleccionado: {kitImage.name}</p>
-          )}
         </div>
 
         <button
