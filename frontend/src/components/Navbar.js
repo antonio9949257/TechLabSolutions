@@ -17,10 +17,10 @@ import { useNotifications } from '../context/NotificationContext'; // Import use
 import LoginModal from './LoginModal'; // Import LoginModal
 import RegisterModal from './RegisterModal'; // Import RegisterModal
 
-const Navbar = ({ toggleUserList }) => { // Accept toggleUserList prop
+const Navbar = ({ toggleUserList, toggleNotificationSidebar }) => { // Accept toggleUserList and toggleNotificationSidebar prop
   const { token, user, logout, showLoginModal, closeLoginModal, openLoginModal, showRegisterModal, closeRegisterModal, openRegisterModal } = useAuth();
   const { theme, changeTheme } = useTheme();
-  const { unreadCount, toggleTray } = useNotifications(); // Get unreadCount and toggleTray
+  const { unreadCount } = useNotifications(); // Get unreadCount
 
   const [isNavOpen, setIsNavOpen] = useState(false);
   const [isProfileDropdownOpen, setIsProfileDropdownOpen] = useState(false);
@@ -82,7 +82,7 @@ const Navbar = ({ toggleUserList }) => { // Accept toggleUserList prop
             {token ? (
               <>
                 {/* Notification Button */}
-                <button onClick={toggleTray} className="relative p-2 rounded-full hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-300">
+                <button onClick={toggleNotificationSidebar} className="relative p-2 rounded-full hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-300">
                   <BellFill className="w-6 h-6" />
                   {unreadCount > 0 && (
                     <span className="absolute top-0 right-0 inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-red-100 bg-red-600 rounded-full">

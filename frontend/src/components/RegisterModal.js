@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { authenticatedFetch } from '../utils/api';
 import { XCircle } from 'react-bootstrap-icons'; // Import XCircle for close button
 
@@ -9,7 +8,6 @@ const RegisterModal = ({ onClose, onSuccess, openLoginModal }) => {
   const [password, setPassword] = useState('');
   const [whatsappNumber, setWhatsappNumber] = useState('');
   const [error, setError] = useState(null);
-  const navigate = useNavigate(); // Keep navigate for OIDC redirect
 
   const handleSubmit = async (e) => {
     e.preventDefault();

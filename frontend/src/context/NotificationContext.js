@@ -10,7 +10,6 @@ export const NotificationProvider = ({ children }) => {
   const { socket } = useSocket();
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
-  const [isTrayOpen, setIsTrayOpen] = useState(false);
 
   // Fetch initial notifications
   useEffect(() => {
@@ -103,22 +102,11 @@ export const NotificationProvider = ({ children }) => {
     }
   };
 
-  const toggleTray = () => {
-    setIsTrayOpen(!isTrayOpen);
-  };
-
-  const closeTray = () => {
-    setIsTrayOpen(false);
-  };
-
   return (
     <NotificationContext.Provider
       value={{
         notifications,
         unreadCount,
-        isTrayOpen,
-        toggleTray,
-        closeTray,
         markAsRead,
         markAllAsRead,
       }}

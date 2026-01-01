@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { authenticatedFetch } from '../utils/api';
 import { XCircle } from 'react-bootstrap-icons'; // Import XCircle for close button
@@ -8,7 +7,6 @@ const LoginModal = ({ onClose, onSuccess, openRegisterModal }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState(null);
-  const navigate = useNavigate();
   const { login } = useAuth();
 
   const handleSubmit = async (e) => {

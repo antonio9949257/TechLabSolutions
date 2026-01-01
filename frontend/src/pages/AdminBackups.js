@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { authenticatedFetch } from '../utils/api';
-import { useAuth } from '../context/AuthContext';
 
 const AdminBackups = () => {
   const [backups, setBackups] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
-  const {  } = useAuth();
 
   const fetchBackups = async () => {
     setIsLoading(true);

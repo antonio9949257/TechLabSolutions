@@ -1,6 +1,5 @@
 import React from 'react';
 import { useCart } from '../context/CartContext';
-import { useAuth } from '../context/AuthContext';
 import { Cart } from 'react-bootstrap-icons';
 import './FloatingCartButton.css';
 

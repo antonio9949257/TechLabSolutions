@@ -3,18 +3,18 @@ import { XCircle } from 'react-bootstrap-icons';
 import { useNotifications } from '../context/NotificationContext';
 import { Link } from 'react-router-dom';
 
-const NotificationTray = () => {
-  const { notifications, isTrayOpen, closeTray, markAsRead, markAllAsRead } = useNotifications();
-
-  if (!isTrayOpen) {
-    return null;
-  }
+const NotificationTray = ({ isOpen, onClose }) => {
+  const { notifications, markAsRead, markAllAsRead } = useNotifications();
 
   return (
-    <div className="fixed top-0 right-0 h-full w-80 bg-gray-900 backdrop-blur-sm bg-opacity-70 shadow-lg z-50 transform transition-transform duration-300 ease-in-out translate-x-0 flex flex-col">
+    <div
+      className={`fixed top-0 right-0 h-full w-80 bg-gray-900 backdrop-blur-sm bg-opacity-70 shadow-lg z-notification transform transition-transform duration-300 ease-in-out flex flex-col ${
+        isOpen ? 'translate-x-0' : 'translate-x-full'
+      }`}
+    >
       <div className="flex items-center justify-between p-4 border-b">
         <h3 className="text-xl font-semibold text-text-primary">Notificaciones</h3>
-        <button onClick={closeTray} className="text-secondary hover:text-primary">
+        <button onClick={onClose} className="text-secondary hover:text-primary">
           <XCircle className="w-7 h-7" />
         </button>
       </div>
@@ -42,7 +42,7 @@ const NotificationTray = () => {
                   )}
                 </div>
                 {notification.link && (
-                  <Link to={notification.link} onClick={closeTray} className="text-blue-400 hover:underline text-sm mt-1 block">
+                  <Link to={notification.link} onClick={onClose} className="text-blue-400 hover:underline text-sm mt-1 block">
                     Ver detalles
                   </Link>
                 )}

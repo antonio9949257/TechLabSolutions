@@ -41,7 +41,7 @@ import { SocketProvider } from './context/SocketContext'; // Import SocketProvid
 import { NotificationProvider } from './context/NotificationContext'; // Import NotificationProvider
 
 function App() {
-  const [activeSidebar, setActiveSidebar] = useState(null); // null, 'cart', or 'userlist'
+  const [activeSidebar, setActiveSidebar] = useState(null); // null, 'cart', 'userlist', or 'notification'
 
   const toggleSidebar = (sidebar) => {
     setActiveSidebar(current => (current === sidebar ? null : sidebar));
@@ -53,13 +53,13 @@ function App() {
         <SocketProvider>
           <NotificationProvider> {/* Wrap with NotificationProvider */}
             <div className="flex flex-col min-h-screen">
-                <Navbar />
+                <Navbar toggleNotificationSidebar={() => toggleSidebar('notification')} />
                 <SearchNavbar /> {/* Render the new SearchNavbar */}
                 <CartSidebar isOpen={activeSidebar === 'cart'} onClose={() => setActiveSidebar(null)} />
                 <FloatingCartButton onClick={() => toggleSidebar('cart')} />
                 <FloatingUserListButton onClick={() => toggleSidebar('userlist')} />
                 <UserListSidebar isOpen={activeSidebar === 'userlist'} onClose={() => setActiveSidebar(null)} />
-                <NotificationTray /> {/* Render NotificationTray */}
+                <NotificationTray isOpen={activeSidebar === 'notification'} onClose={() => setActiveSidebar(null)} />
                 <main className="flex-grow">
                   <Routes>
                     <Route path="/" element={<Home />} />
