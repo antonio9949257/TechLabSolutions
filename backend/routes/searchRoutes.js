@@ -2,6 +2,11 @@ const express = require('express');
 const router = express.Router();
 const searchController = require('../controllers/searchController');
 
+// @route   GET /api/search/autocomplete
+// @desc    Autocomplete search for products and services
+// @access  Public
+router.get('/autocomplete', searchController.autocomplete);
+
 // @route   GET /api/search
 // @desc    Search for products and services
 // @access  Public
