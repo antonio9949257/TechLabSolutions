@@ -34,12 +34,12 @@ const UserListSidebar = ({ isOpen, onClose }) => {
     navigate(`/users/${userId}`); // Navigate to the user's profile
   };
 
-  if (!isOpen) {
-    return null;
-  }
-
   return (
-    <div className="fixed top-0 right-0 h-full w-80 bg-card-bg shadow-lg z-sidebar transform transition-transform duration-300 ease-in-out translate-x-0 flex flex-col">
+    <div
+      className={`fixed top-0 right-0 h-full w-80 bg-card-bg shadow-lg z-sidebar transform transition-transform duration-300 ease-in-out flex flex-col ${
+        isOpen ? 'translate-x-0' : 'translate-x-full'
+      }`}
+    >
       <div className="flex items-center justify-between p-4 border-b">
         <h3 className="text-xl font-semibold text-text-primary">Users</h3>
         <button onClick={onClose} className="text-secondary hover:text-primary">
