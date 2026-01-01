@@ -14,7 +14,7 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   cursor: pointer;
   transition: background-color 0.3s ease;
-  z-index: 1000;
+  z-index: 1050;
 }
 
 .floating-userlist-button:hover {
