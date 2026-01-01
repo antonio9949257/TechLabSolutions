@@ -19,6 +19,21 @@ const categories = [
   'Accesorios'
 ];
 
+// Mapping from display category names to backend category names
+const categoryMap = {
+  'Cámaras de Seguridad': 'Cámaras CCTV',
+  'Cámaras IP': 'Cámaras CCTV',
+  'Cámaras WiFi': 'Cámaras CCTV',
+  'Cámaras PTZ': 'Cámaras CCTV',
+  'Kits de Vigilancia': 'Kits de Vigilancia',
+  'DVR / NVR': 'Grabadores CCTV',
+  'Alarmas': 'Alarmas',
+  'Sensores de Movimiento': 'Sensores de Movimiento',
+  'Video Porteros': 'Video Porteros',
+  'Control de Acceso': 'Control de Acceso',
+  'Accesorios': 'Accesorios CCTV',
+};
+
 const Products = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -39,8 +54,12 @@ const Products = () => {
 
   useEffect(() => {
     const fetchProducts = async () => {
+      setLoading(true);
+      setError(null);
       try {
-        const response = await authenticatedFetch('/products');
+        const backendCategoryName = categoryMap[selectedCategory] || selectedCategory;
+        const categoryParam = selectedCategory !== 'Todos' ? `?category=${encodeURIComponent(backendCategoryName)}` : '';
+        const response = await authenticatedFetch(`/products${categoryParam}`);
         if (response.ok) {
           const data = await response.json();
           setProducts(data);
@@ -56,7 +75,7 @@ const Products = () => {
       }
     };
     fetchProducts();
-  }, []);
+  }, [selectedCategory]); // Re-fetch when selectedCategory changes
 
   const handleAddToCart = (productId, isKit) => {
     addToCart(productId, 1, isKit ? 'Kit' : 'Product');
@@ -112,42 +131,10 @@ const Products = () => {
     }
   };
 
-  const filterProducts = (products, category) => {
-    switch (category) {
-      case 'Todos':
-        return products;
-      case 'Cámaras de Seguridad':
-        return products.filter(p => p.categoria?.name === 'Cámaras CCTV');
-      case 'Cámaras IP':
-        return products.filter(p => p.categoria?.name === 'Cámaras CCTV' && p.nombre.toLowerCase().includes('ip'));
-      case 'Cámaras WiFi':
-        return products.filter(p => p.categoria?.name === 'Cámaras CCTV' && p.nombre.toLowerCase().includes('wifi'));
-      case 'Cámaras PTZ':
-        return products.filter(p => p.categoria?.name === 'Cámaras CCTV' && p.nombre.toLowerCase().includes('ptz'));
-      case 'DVR / NVR':
-        return products.filter(p => p.categoria?.name === 'Grabadores CCTV');
-      case 'Accesorios':
-        const accessoryCategories = [
-          'Accesorios CCTV',
-          'Energía y Fuentes',
-          'Cableado',
-          'Canalización y Montaje',
-          'Protección Eléctrica'
-        ];
-        return products.filter(p => accessoryCategories.includes(p.categoria?.name));
-      case 'Kits de Vigilancia':
-        return products.filter(p => p.isKit);
-      case 'Alarmas':
-      case 'Sensores de Movimiento':
-      case 'Video Porteros':
-      case 'Control de Acceso':
-        return []; // No products for these categories yet
-      default:
-        return [];
-    }
-  };
+  // Frontend filtering is no longer needed as it's done on the backend
+  // const filterProducts = (products, category) => { ... };
 
-  const filteredProducts = filterProducts(products, selectedCategory);
+  // const filteredProducts = filterProducts(products, selectedCategory); // No longer needed
 
   if (loading) return <div className="container mx-auto px-4 mt-8">Cargando productos...</div>;
   if (error) return <div className="container mx-auto px-4 mt-8 text-red-500">Error: {error}</div>;
@@ -178,11 +165,11 @@ const Products = () => {
       {/* Products Grid */}
       <main className="w-3/4">
         <h2 className="text-3xl font-bold mb-6">Nuestros Productos</h2>
-        {filteredProducts.length === 0 ? (
+        {products.length === 0 ? (
           <p className="text-secondary">No hay productos disponibles en esta categoría.</p>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredProducts.map((product) => (
+            {products.map((product) => (
               <div key={product._id} className="bg-card-bg rounded-lg shadow-md h-full flex flex-col">
                 {product.img_url && (
                   <img

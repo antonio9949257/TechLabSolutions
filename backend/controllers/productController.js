@@ -1,6 +1,7 @@
 const { validationResult } = require('express-validator');
 const Product = require('../models/Product');
 const Kit = require('../models/Kit');
+const Category = require('../models/Category'); // Import Category model
 const { minioClient } = require('../config/minio');
 const crypto = require('crypto');
 const xlsx = require('xlsx');
@@ -9,15 +10,31 @@ const xlsx = require('xlsx');
 // @route   GET /api/products
 // @access  Public
 const getProducts = async (req, res) => {
-  const { categoria } = req.query;
-  const filter = categoria ? { categoria } : {};
+  const { category } = req.query; // Changed from 'categoria' to 'category' for consistency with frontend
+  let productFilter = {};
 
-  const products = await Product.find(filter).populate('categoria');
+  if (category && category !== 'Todos') {
+    if (category === 'Kits de Vigilancia') {
+      productFilter.isKit = true; // Filter by isKit property for kits
+    } else {
+      const categoryDoc = await Category.findOne({ name: category }); // Find category by name
+
+      if (categoryDoc) {
+        productFilter.categoria = categoryDoc._id; // Use category _id for filtering
+      } else {
+        // If category not found, no products will match this filter
+        productFilter.categoria = null; 
+      }
+    }
+  }
+
+  const products = await Product.find(productFilter).populate('categoria');
   
   let allItems = [...products];
 
-  // Si no hay filtro de categoría, o si la categoría es "Kits de Vigilancia"
-  if (!categoria || categoria === 'Kits de Vigilancia') {
+  // If no category filter is applied, or if the category is "Kits de Vigilancia" (handled above)
+  // we still need to fetch kits if they are not filtered by category
+  if (!category || category === 'Todos' || category === 'Kits de Vigilancia') {
     const kits = await Kit.find({}).populate('products.productId', 'nombre precio');
     const formattedKits = kits.map(kit => {
       const totalPriceBeforeDiscount = kit.products.reduce((acc, item) => {
@@ -43,7 +60,12 @@ const getProducts = async (req, res) => {
         finalPrice: finalPrice,
       };
     });
-    allItems = [...allItems, ...formattedKits];
+    // Only add kits if they match the filter or no filter is applied
+    if (!category || category === 'Todos') {
+      allItems = [...allItems, ...formattedKits];
+    } else if (category === 'Kits de Vigilancia') {
+      allItems = [...formattedKits]; // If only kits are requested, only return kits
+    }
   }
 
   res.json(allItems);
