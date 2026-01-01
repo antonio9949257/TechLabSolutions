@@ -46,7 +46,7 @@ const Navbar = ({ toggleUserList, toggleNotificationSidebar, toggleOrderSidebar 
         <div className="relative flex items-center justify-between py-4">
           {/* Logo */}
           <Link to="/" className="text-2xl font-bold text-text-primary">
-            TechLab
+            Segtec
           </Link>
 
           {/* Mobile Home/Proyectos button */}

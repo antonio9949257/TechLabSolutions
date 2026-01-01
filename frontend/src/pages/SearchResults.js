@@ -4,6 +4,36 @@ import { publicFetch, authenticatedFetch } from '../utils/api'; // Add authentic
 import { useCart } from '../context/CartContext'; // Import useCart
 import { useAuth } from '../context/AuthContext'; // Import useAuth
 
+const categories = [
+  'Todos',
+  'Cámaras de Seguridad',
+  'Cámaras IP',
+  'Cámaras WiFi',
+  'Cámaras PTZ',
+  'Kits de Vigilancia',
+  'DVR / NVR',
+  'Alarmas',
+  'Sensores de Movimiento',
+  'Video Porteros',
+  'Control de Acceso',
+  'Accesorios'
+];
+
+// Mapping from display category names to backend category names
+const categoryMap = {
+  'Cámaras de Seguridad': 'Cámaras CCTV',
+  'Cámaras IP': 'Cámaras CCTV',
+  'Cámaras WiFi': 'Cámaras CCTV',
+  'Cámaras PTZ': 'Cámaras CCTV',
+  'Kits de Vigilancia': 'Kits de Vigilancia',
+  'DVR / NVR': 'Grabadores CCTV',
+  'Alarmas': 'Alarmas',
+  'Sensores de Movimiento': 'Sensores de Movimiento',
+  'Video Porteros': 'Video Porteros',
+  'Control de Acceso': 'Control de Acceso',
+  'Accesorios': 'Accesorios CCTV',
+};
+
 const SearchResults = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate(); // Initialize useNavigate
@@ -13,6 +43,7 @@ const SearchResults = () => {
   const [results, setResults] = useState({ products: [], services: [] });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState('Todos'); // Add selectedCategory state
 
   const query = searchParams.get('q');
 
@@ -71,7 +102,9 @@ const SearchResults = () => {
       setLoading(true);
       setError(null);
       try {
-        const response = await publicFetch(`/search?q=${encodeURIComponent(query)}`);
+        const backendCategoryName = categoryMap[selectedCategory] || selectedCategory;
+        const categoryParam = selectedCategory !== 'Todos' ? `&category=${encodeURIComponent(backendCategoryName)}` : '';
+        const response = await publicFetch(`/search?q=${encodeURIComponent(query)}${categoryParam}`);
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
@@ -86,7 +119,7 @@ const SearchResults = () => {
     };
 
     fetchResults();
-  }, [query]); // Removed selectedCategory, searchParams, navigate from dependencies
+  }, [query, selectedCategory]); // Add selectedCategory to dependencies
 
   if (loading) {
     return <div className="container mx-auto px-4 mt-8"><h4 className="text-xl font-semibold">Buscando...</h4></div>;
@@ -102,9 +135,34 @@ const SearchResults = () => {
 
   const { products, services } = results;
 
+  const handleCategoryClick = (category) => {
+    setSelectedCategory(category);
+  };
+
   return (
-    <div className="container mx-auto px-4 py-8"> {/* Removed flex */}
-      <main className="w-full"> {/* Changed to w-full */}
+    <div className="container mx-auto px-4 py-8 flex"> {/* Added flex */}
+      {/* Category Sidebar */}
+      <aside className="w-1/4 pr-8 sticky-sidebar">
+        <h3 className="text-xl font-bold mb-4">Categorías</h3>
+        <ul className="space-y-2">
+          {categories.map(category => (
+            <li key={category}>
+              <button
+                onClick={() => handleCategoryClick(category)}
+                className={`w-full text-left px-4 py-2 rounded-md transition duration-200 ${
+                  selectedCategory === category
+                    ? 'bg-primary text-white'
+                    : 'hover:bg-gray-200 dark:hover:bg-gray-700'
+                }`}
+              >
+                {category}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </aside>
+
+      <main className="w-3/4"> {/* Changed to w-3/4 */}
         <h2 className="text-3xl font-bold mb-4">Resultados de la búsqueda para: "{query}"</h2>
         <hr className="border-t border-gray-300 my-4" />
 

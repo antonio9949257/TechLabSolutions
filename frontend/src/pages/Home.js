@@ -115,7 +115,7 @@ const Home = () => {
             <Link to="/services" className="border border-white text-white hover:bg-white hover:text-primary py-3 px-6 text-lg rounded-md transition duration-300">
               Nuestros Servicios
             </Link>
-            <Link to="/products?category=Kits de Vigilancia" className="bg-green-500 text-white hover:bg-green-600 py-3 px-6 text-lg rounded-md transition duration-300">
+            <Link to="/products?category=Kits de Vigilancia" className="bg-black text-white hover:bg-gray-800 py-3 px-6 text-lg rounded-md transition duration-300">
               Nuestros Kits
             </Link>
           </div>
