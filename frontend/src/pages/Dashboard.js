@@ -60,10 +60,10 @@ const Dashboard = () => {
       description: 'Gestionar los servicios ofrecidos.',
     },
     {
-      name: 'Gestionar Proyectos',
-      path: '/admin-projects',
+      name: 'Gestionar Historial de Servicios',
+      path: '/admin-service-history',
       icon: <Folder size={40} />,
-      description: 'Gestionar los proyectos del portfolio.',
+      description: 'Gestionar el historial de servicios.',
     },
     {
       name: 'Gestionar Pedidos',
@@ -96,7 +96,7 @@ const Dashboard = () => {
             <StatCard title="Usuarios" value={stats.users} icon={<People size={30} />} />
             <StatCard title="Productos" value={stats.products} icon={<BoxSeam size={30} />} />
             <StatCard title="Servicios" value={stats.services} icon={<Briefcase size={30} />} />
-            <StatCard title="Proyectos" value={stats.projects} icon={<Folder size={30} />} />
+            <StatCard title="Historial de Servicios" value={stats.projects} icon={<Folder size={30} />} />
             <StatCard title="Pedidos" value={stats.orders} icon={<CardList size={30} />} />
           </div>
         )}

@@ -25,21 +25,21 @@ const StarRating = ({ rating }) => {
 };
 
 
-const Projects = () => {
-  const [projects, setProjects] = useState([]);
+const ServiceHistory = () => {
+  const [serviceHistory, setServiceHistory] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { user } = useAuth(); // Get user from context
 
   useEffect(() => {
-    const fetchProjects = async () => {
+    const fetchServiceHistory = async () => {
       try {
-        const response = await publicFetch('/projects');
+        const response = await publicFetch('/service-history');
         if (!response.ok) {
-          throw new Error('No se pudieron cargar los proyectos.');
+          throw new Error('No se pudieron cargar los historiales de servicio.');
         }
         const data = await response.json();
-        setProjects(data);
+        setServiceHistory(data);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -47,16 +47,16 @@ const Projects = () => {
       }
     };
 
-    fetchProjects();
+    fetchServiceHistory();
   }, []);
 
-  const featuredProjects = useMemo(() => {
-    return [...projects].sort((a, b) => b.stars - a.stars).slice(0, 3);
-  }, [projects]);
+  const featuredServiceHistory = useMemo(() => {
+    return [...serviceHistory].sort((a, b) => b.stars - a.stars).slice(0, 3);
+  }, [serviceHistory]);
 
-  const otherProjects = useMemo(() => {
-    return projects.filter(p => !featuredProjects.some(fp => fp._id === p._id));
-  }, [projects, featuredProjects]);
+  const otherServiceHistory = useMemo(() => {
+    return serviceHistory.filter(p => !featuredServiceHistory.some(fp => fp._id === p._id));
+  }, [serviceHistory, featuredServiceHistory]);
 
 
   if (loading) {
@@ -78,34 +78,34 @@ const Projects = () => {
       {user && user.role === 'admin' && (
         <div className="mb-8 text-right">
           <Link
-            to="/admin-project-form"
+            to="/admin-service-history-form"
             className="bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 transition duration-300"
           >
-            Crear Nuevo Proyecto
+            Crear Nuevo Historial de Servicio
           </Link>
         </div>
       )}
 
-      {/* Featured Projects Section */}
-      {featuredProjects.length > 0 && (
+      {/* Featured Service History Section */}
+      {featuredServiceHistory.length > 0 && (
         <div className="mb-16">
-          <h2 className="text-3xl font-bold mb-8 text-center border-b-2 border-primary pb-3">Proyectos Destacados</h2>
+          <h2 className="text-3xl font-bold mb-8 text-center border-b-2 border-primary pb-3">Historial de Servicios Destacados</h2>
           <div className="flex flex-col gap-12">
-            {featuredProjects.map((project) => (
-              <div key={project._id} className="bg-card-bg rounded-xl shadow-lg flex flex-col md:flex-row overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
-                {project.image && (
-                  <img src={project.image} className="w-full md:w-2/5 lg:w-1/3 h-64 md:h-auto object-cover" alt={project.title} />
+            {featuredServiceHistory.map((serviceHistory) => (
+              <div key={serviceHistory._id} className="bg-card-bg rounded-xl shadow-lg flex flex-col md:flex-row overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
+                {serviceHistory.image && (
+                  <img src={serviceHistory.image} className="w-full md:w-2/5 lg:w-1/3 h-64 md:h-auto object-cover" alt={serviceHistory.title} />
                 )}
                 <div className="p-6 flex flex-col flex-grow">
                   <div>
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center gap-3">
-                        {project.user?.profilePicture ? (
+                        {serviceHistory.user?.profilePicture ? (
                           <img
-                            src={project.user.profilePicture.startsWith("http")
-                              ? project.user.profilePicture
-                              : `${API_URL}/${project.user.profilePicture}`}
-                            alt={project.user.name}
+                            src={serviceHistory.user.profilePicture.startsWith("http")
+                              ? serviceHistory.user.profilePicture
+                              : `${API_URL}/${serviceHistory.user.profilePicture}`}
+                            alt={serviceHistory.user.name}
                             className="w-12 h-12 rounded-full object-cover"
                             onError={(e) => e.target.style.display = 'none'}
                           />
@@ -113,29 +113,29 @@ const Projects = () => {
                           <PersonCircle className="w-12 h-12 text-secondary" />
                         )}
                         <div>
-                          <p className="font-semibold text-text-primary">{project.user?.name || 'Admin'}</p>
-                          <p className="text-secondary text-sm">{new Date(project.createdAt).toLocaleDateString()}</p>
+                          <p className="font-semibold text-text-primary">{serviceHistory.user?.name || 'Admin'}</p>
+                          <p className="text-secondary text-sm">{new Date(serviceHistory.createdAt).toLocaleDateString()}</p>
                         </div>
                       </div>
-                      <StarRating rating={project.stars} />
+                      <StarRating rating={serviceHistory.stars} />
                     </div>
-                    <h5 className="text-3xl font-bold mb-3 text-text-primary">{project.title}</h5>
+                    <h5 className="text-3xl font-bold mb-3 text-text-primary">{serviceHistory.title}</h5>
                     <p className="text-text-secondary mb-6">
-                      {project.description.substring(0, 200)}...
+                      {serviceHistory.description.substring(0, 200)}...
                     </p>
                   </div>
                   <div className="mt-auto flex items-center justify-between">
-                    <Link to={`/projects/${project._id}`} className="py-2 px-6 bg-primary text-white font-semibold rounded-lg shadow-md hover:bg-primary-dark transition duration-300 text-center">
+                    <Link to={`/service-history/${serviceHistory._id}`} className="py-2 px-6 bg-primary text-white font-semibold rounded-lg shadow-md hover:bg-primary-dark transition duration-300 text-center">
                       Leer Más
                     </Link>
                     <div className="flex items-center gap-6 text-secondary">
                       <span className="flex items-center gap-2">
                         <Heart className="w-5 h-5" />
-                        <span className="font-medium">{project.likes.length}</span>
+                        <span className="font-medium">{serviceHistory.likes.length}</span>
                       </span>
                       <span className="flex items-center gap-2">
                         <ChatSquareText className="w-5 h-5" />
-                        <span className="font-medium">{project.comments.length}</span>
+                        <span className="font-medium">{serviceHistory.comments.length}</span>
                       </span>
                     </div>
                   </div>
@@ -146,24 +146,24 @@ const Projects = () => {
         </div>
       )}
 
-      <h1 className="text-4xl font-bold mb-8 text-center">Todos los Proyectos</h1>
+      <h1 className="text-4xl font-bold mb-8 text-center">Todos los Historiales de Servicio</h1>
       <div className="flex flex-col gap-12">
-        {otherProjects.length > 0 ? (
-          otherProjects.map((project) => (
-            <div key={project._id} className="bg-card-bg rounded-xl shadow-lg flex flex-col md:flex-row overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
-              {project.image && (
-                <img src={project.image} className="w-full md:w-2/5 lg:w-1/3 h-64 md:h-auto object-cover" alt={project.title} />
+        {otherServiceHistory.length > 0 ? (
+          otherServiceHistory.map((serviceHistory) => (
+            <div key={serviceHistory._id} className="bg-card-bg rounded-xl shadow-lg flex flex-col md:flex-row overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
+              {serviceHistory.image && (
+                <img src={serviceHistory.image} className="w-full md:w-2/5 lg:w-1/3 h-64 md:h-auto object-cover" alt={serviceHistory.title} />
               )}
               <div className="p-6 flex flex-col flex-grow">
                 <div>
                   <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center gap-3">
-                        {project.user?.profilePicture ? (
+                        {serviceHistory.user?.profilePicture ? (
                           <img
-                            src={project.user.profilePicture.startsWith("http")
-                              ? project.user.profilePicture
-                              : `${API_URL}/${project.user.profilePicture}`}
-                            alt={project.user.name}
+                            src={serviceHistory.user.profilePicture.startsWith("http")
+                              ? serviceHistory.user.profilePicture
+                              : `${API_URL}/${serviceHistory.user.profilePicture}`}
+                            alt={serviceHistory.user.name}
                             className="w-12 h-12 rounded-full object-cover"
                             onError={(e) => e.target.style.display = 'none'}
                           />
@@ -171,29 +171,29 @@ const Projects = () => {
                           <PersonCircle className="w-12 h-12 text-secondary" />
                         )}
                       <div>
-                        <p className="font-semibold text-text-primary">{project.user?.name || 'Admin'}</p>
-                        <p className="text-secondary text-sm">{new Date(project.createdAt).toLocaleDateString()}</p>
+                        <p className="font-semibold text-text-primary">{serviceHistory.user?.name || 'Admin'}</p>
+                        <p className="text-secondary text-sm">{new Date(serviceHistory.createdAt).toLocaleDateString()}</p>
                       </div>
                     </div>
-                    <StarRating rating={project.stars} />
+                    <StarRating rating={serviceHistory.stars} />
                   </div>
-                  <h5 className="text-3xl font-bold mb-3 text-text-primary">{project.title}</h5>
+                  <h5 className="text-3xl font-bold mb-3 text-text-primary">{serviceHistory.title}</h5>
                   <p className="text-text-secondary mb-6">
-                    {project.description.substring(0, 200)}...
+                    {serviceHistory.description.substring(0, 200)}...
                   </p>
                 </div>
                 <div className="mt-auto flex items-center justify-between">
-                  <Link to={`/projects/${project._id}`} className="py-2 px-6 bg-primary text-white font-semibold rounded-lg shadow-md hover:bg-primary-dark transition duration-300 text-center">
+                  <Link to={`/service-history/${serviceHistory._id}`} className="py-2 px-6 bg-primary text-white font-semibold rounded-lg shadow-md hover:bg-primary-dark transition duration-300 text-center">
                     Leer Más
                   </Link>
                   <div className="flex items-center gap-6 text-secondary">
                     <span className="flex items-center gap-2">
                       <Heart className="w-5 h-5" />
-                      <span className="font-medium">{project.likes.length}</span>
+                      <span className="font-medium">{serviceHistory.likes.length}</span>
                     </span>
                     <span className="flex items-center gap-2">
                       <ChatSquareText className="w-5 h-5" />
-                      <span className="font-medium">{project.comments.length}</span>
+                      <span className="font-medium">{serviceHistory.comments.length}</span>
                     </span>
                   </div>
                 </div>
@@ -201,11 +201,11 @@ const Projects = () => {
             </div>
           ))
         ) : (
-          <p className="text-secondary text-center">No hay más proyectos publicados en este momento.</p>
+          <p className="text-secondary text-center">No hay más historiales de servicio publicados en este momento.</p>
         )}
       </div>
     </div>
   );
 };
 
-export default Projects;
+export default ServiceHistory;

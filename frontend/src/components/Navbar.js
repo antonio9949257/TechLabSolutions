@@ -65,8 +65,8 @@ const Navbar = ({ toggleUserList, toggleNotificationSidebar }) => { // Accept to
               Home
             </NavLink>
             {user?.role === 'admin' && (
-              <NavLink to="/projects" className="hover:text-primary">
-                Proyectos
+              <NavLink to="/service-history" className="hover:text-primary">
+                Historial de Servicios
               </NavLink>
             )}
             {user?.role === 'admin' && (
@@ -157,14 +157,14 @@ const Navbar = ({ toggleUserList, toggleNotificationSidebar }) => { // Accept to
                             Admin Servicios
                           </Link>
                           <Link
-                            to="/admin-projects"
+                            to="/admin-service-history"
                             className="block px-4 py-2 hover:bg-background"
                             onClick={() => {
                               setIsProfileDropdownOpen(false);
                               setIsNavOpen(false);
                             }}
                           >
-                            Admin Proyectos
+                            Admin Historial de Servicios
                           </Link>
                           <Link
                             to="/admin/orders"
@@ -273,8 +273,8 @@ const Navbar = ({ toggleUserList, toggleNotificationSidebar }) => { // Accept to
               Home
             </NavLink>
             {user?.role === 'admin' && (
-              <NavLink to="/projects" className="hover:text-primary block py-2" onClick={() => setIsNavOpen(false)}>
-                Proyectos
+              <NavLink to="/service-history" className="hover:text-primary block py-2" onClick={() => setIsNavOpen(false)}>
+                Historial de Servicios
               </NavLink>
             )}
             {user?.role === 'admin' && (

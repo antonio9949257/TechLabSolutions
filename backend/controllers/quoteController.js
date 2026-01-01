@@ -47,3 +47,33 @@ exports.getQuotes = async (req, res) => {
     res.status(500).json({ message: 'Error interno del servidor.' });
   }
 };
+
+// @desc    Update quote status
+// @route   PUT /api/quotes/:id/status
+// @access  Private/Admin
+exports.updateQuoteStatus = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+
+    const quote = await Quote.findById(id);
+
+    if (!quote) {
+      return res.status(404).json({ message: 'Cotización no encontrada.' });
+    }
+
+    // Validate status
+    const allowedStatuses = ['Nuevo', 'Contactado', 'Cerrado'];
+    if (!allowedStatuses.includes(status)) {
+      return res.status(400).json({ message: 'Estado inválido.' });
+    }
+
+    quote.status = status;
+    await quote.save();
+
+    res.json({ message: 'Estado de la cotización actualizado con éxito.', quote });
+  } catch (error) {
+    console.error('Error al actualizar el estado de la cotización:', error);
+    res.status(500).json({ message: 'Error interno del servidor.' });
+  }
+};

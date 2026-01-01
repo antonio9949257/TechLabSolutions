@@ -65,7 +65,7 @@ app.use('/api/plc', require('./routes/plcRoutes'));
 app.use('/api/cart', require('./routes/cartRoutes'));
 app.use('/api/search', require('./routes/searchRoutes'));
 app.use('/api/quotes', require('./routes/quoteRoutes'));
-app.use('/api/projects', require('./routes/projectRoutes'));
+app.use('/api/service-history', require('./routes/serviceHistoryRoutes'));
 app.use('/api/categories', require('./routes/categoryRoutes'));
 app.use('/api/dashboard', require('./routes/dashboardRoutes'));
 app.use('/api/notifications', require('./routes/notificationRoutes')(io)); // Add notification routes and pass io

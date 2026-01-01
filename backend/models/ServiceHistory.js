@@ -22,7 +22,7 @@ const commentSchema = new mongoose.Schema(
   }
 );
 
-const projectSchema = new mongoose.Schema(
+const serviceHistorySchema = new mongoose.Schema(
   {
     user: {
       type: mongoose.Schema.Types.ObjectId,
@@ -64,4 +64,4 @@ const projectSchema = new mongoose.Schema(
   }
 );
 
-module.exports = mongoose.model('Project', projectSchema);
+module.exports = mongoose.model('ServiceHistory', serviceHistorySchema);

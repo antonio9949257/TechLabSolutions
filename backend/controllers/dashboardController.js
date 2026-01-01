@@ -1,7 +1,7 @@
 const User = require('../models/User');
 const Product = require('../models/Product');
 const Service = require('../models/Service');
-const Project = require('../models/Project');
+const ServiceHistory = require('../models/ServiceHistory');
 const Order = require('../models/Order');
 
 // @desc    Get dashboard statistics
@@ -12,14 +12,14 @@ const getStats = async (req, res) => {
     const userCount = await User.countDocuments();
     const productCount = await Product.countDocuments();
     const serviceCount = await Service.countDocuments();
-    const projectCount = await Project.countDocuments();
+    const serviceHistoryCount = await ServiceHistory.countDocuments();
     const orderCount = await Order.countDocuments();
 
     res.json({
       users: userCount,
       products: productCount,
       services: serviceCount,
-      projects: projectCount,
+      serviceHistory: serviceHistoryCount,
       orders: orderCount,
     });
   } catch (error) {

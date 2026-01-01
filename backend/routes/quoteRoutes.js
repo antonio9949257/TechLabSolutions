@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { createQuote, getQuotes } = require('../controllers/quoteController');
+const { createQuote, getQuotes, updateQuoteStatus } = require('../controllers/quoteController');
 const { protect, admin } = require('../middleware/authMiddleware');
 
 // @route   POST /api/quotes
@@ -12,5 +12,10 @@ router.post('/', createQuote);
 // @desc    Get all quote requests
 // @access  Private/Admin
 router.get('/', protect, admin, getQuotes);
+
+// @route   PUT /api/quotes/:id/status
+// @desc    Update quote status
+// @access  Private/Admin
+router.put('/:id/status', protect, admin, updateQuoteStatus);
 
 module.exports = router;

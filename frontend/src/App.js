@@ -14,8 +14,8 @@ import AdminUsers from './pages/AdminUsers'; // Import AdminUsers
 import Dashboard from './pages/Dashboard'; // Import Dashboard
 import AdminProducts from './pages/AdminProducts'; // Import AdminProducts
 import AdminServices from './pages/AdminServices';
-import AdminProjects from './pages/AdminProjects'; // Import AdminProjects
-import AdminProjectForm from './pages/AdminProjectForm'; // Import AdminProjectForm
+import AdminServiceHistory from './pages/AdminServiceHistory'; // Import AdminServiceHistory
+import AdminServiceHistoryForm from './pages/AdminServiceHistoryForm'; // Import AdminServiceHistoryForm
 import AdminCategories from './pages/AdminCategories'; // Import AdminCategories
 import AdminOrders from './pages/AdminOrders'; // Import AdminOrders
 import AdminBackups from './pages/AdminBackups'; // Import AdminBackups
@@ -28,8 +28,8 @@ import KitDetail from './pages/KitDetail'; // Import KitDetail
 import ProductDetail from './pages/ProductDetail'; // Import ProductDetail
 import ServiceDetail from './pages/ServiceDetail'; // Import ServiceDetail
 import Quote from './pages/Quote'; // Import Quote
-import Projects from './pages/Projects'; // Import Projects
-import ProjectDetail from './pages/ProjectDetail'; // Import ProjectDetail
+import ServiceHistory from './pages/ServiceHistory'; // Import ServiceHistory
+import ServiceHistoryDetail from './pages/ServiceHistoryDetail'; // Import ServiceHistoryDetail
 import CartSidebar from './components/CartSidebar'; // Import CartSidebar
 import FloatingCartButton from './components/FloatingCartButton'; // Import FloatingCartButton
 import FloatingUserListButton from './components/FloatingUserListButton'; // Import FloatingUserListButton
@@ -88,17 +88,17 @@ function App() {
                       <Route path="/admin-users" element={<AdminUsers />} />
                       <Route path="/admin-products" element={<AdminProducts />} />
                       <Route path="/admin-services" element={<AdminServices />} />
-                      <Route path="/admin-projects" element={<AdminProjects />} />
-                      <Route path="/admin-project-form" element={<AdminProjectForm />} />
-                      <Route path="/admin-project-form/:id" element={<AdminProjectForm />} />
+                      <Route path="/admin-service-history" element={<AdminServiceHistory />} />
+                      <Route path="/admin-service-history-form" element={<AdminServiceHistoryForm />} />
+                      <Route path="/admin-service-history-form/:id" element={<AdminServiceHistoryForm />} />
                       <Route path="/admin-categories" element={<AdminCategories />} />
                       <Route path="/admin/orders" element={<AdminOrders />} /> {/* New Admin Orders Route */}
                       <Route path="/admin/backups" element={<AdminBackups />} />
                       <Route path="/admin/create-kit" element={<AdminCreateKit />} />
                       <Route path="/admin/kits" element={<AdminKits />} />
-                      {/* Project routes moved to admin only */}
-                      <Route path="/projects" element={<Projects />} />
-                      <Route path="/projects/:id" element={<ProjectDetail />} />
+                      {/* Service History routes moved to admin only */}
+                      <Route path="/service-history" element={<ServiceHistory />} />
+                      <Route path="/service-history/:id" element={<ServiceHistoryDetail />} />
                     </Route>
 
                   </Routes>

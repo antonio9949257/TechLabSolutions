@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { authenticatedFetch, publicFetch } from '../utils/api';
 import ImageUpload from '../components/ImageUpload'; // Import the new component
 
-const AdminProjectForm = () => {
+const AdminServiceHistoryForm = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [title, setTitle] = useState('');
@@ -19,9 +19,9 @@ const AdminProjectForm = () => {
     if (isEditMode) {
       const fetchProject = async () => {
         try {
-          const response = await publicFetch(`/projects/${id}`);
+          const response = await publicFetch(`/service-history/${id}`);
           if (!response.ok) {
-            throw new Error('No se pudo cargar el proyecto para editar.');
+            throw new Error('No se pudo cargar el historial de servicio para editar.');
           }
           const data = await response.json();
           setTitle(data.title);
@@ -47,7 +47,7 @@ const AdminProjectForm = () => {
       formData.append('image', imageFile);
     }
 
-    const url = isEditMode ? `/projects/${id}` : '/projects';
+    const url = isEditMode ? `/service-history/${id}` : '/service-history';
     const method = isEditMode ? 'PUT' : 'POST';
 
     try {
@@ -59,10 +59,10 @@ const AdminProjectForm = () => {
 
       if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.message || 'Error al guardar el proyecto.');
+        throw new Error(errorData.message || 'Error al guardar el historial de servicio.');
       }
 
-      navigate('/admin-projects');
+      navigate('/admin-service-history');
     } catch (err) {
       setError(err.message);
     } finally {
@@ -72,7 +72,7 @@ const AdminProjectForm = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-6">{isEditMode ? 'Editar Proyecto' : 'Crear Nuevo Proyecto'}</h1>
+      <h1 className="text-3xl font-bold mb-6">{isEditMode ? 'Editar Historial de Servicio' : 'Crear Nuevo Historial de Servicio'}</h1>
       {error && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative my-4">{error}</div>}
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
@@ -104,11 +104,11 @@ const AdminProjectForm = () => {
           />
         </div>
         <button type="submit" className="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition duration-300" disabled={isSubmitting}>
-          {isSubmitting ? 'Guardando...' : 'Guardar Proyecto'}
+          {isSubmitting ? 'Guardando...' : 'Guardar Historial de Servicio'}
         </button>
       </form>
     </div>
   );
 };
 
-export default AdminProjectForm;
+export default AdminServiceHistoryForm;
